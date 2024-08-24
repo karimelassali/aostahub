@@ -1,0 +1,234 @@
+
+"use client"
+
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+
+export default function Landing() {
+  const [language, setLanguage] = useState("en")
+  const handleLanguageChange = (lang) => {
+    setLanguage(lang)
+  }
+  return (
+    (<div className="flex flex-col min-h-[100dvh] bg-[#f5f5f5] text-[#333]">
+      <header
+        className="bg-[#3B82F6] text-white py-6 px-4 md:px-8 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <AsteriskIcon className="h-8 w-8" />
+          <h1 className="text-2xl font-bold">AostaHub</h1>
+        </div>
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            className={`text-white hover:bg-[#00a185] ${language === "en" ? "font-bold" : ""}`}
+            onClick={() => handleLanguageChange("en")}>
+            English
+          </Button>
+          <Button
+            variant="ghost"
+            className={`text-white hover:bg-[#00a185] ${language === "it" ? "font-bold" : ""}`}
+            onClick={() => handleLanguageChange("it")}>
+            Italiano
+          </Button>
+        </div>
+      </header>
+      <main className="flex-1 py-12 md:py-20">
+        <div className="container mx-auto px-4 md:px-8">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                {language === "en" ? "Connect and Share with AostaHub" : "Connetti e condividi con AostaHub"}
+              </h2>
+              <p className="text-lg text-[#555] mb-6">
+                {language === "en"
+                  ? "Securely connect and share your Instagram and other social profiles to make new friends."
+                  : "Connetti in modo sicuro e condividi i tuoi profili Instagram e altri social per fare nuovi amici."}
+              </p>
+              <div className="flex gap-4">
+                <Button className="bg-[#3B82F6] text-white hover:bg-[#00a185]">
+                  {language === "en" ? "Sign Up" : "Iscriviti"}
+                </Button>
+                <Link
+                  href={'/explore'}
+                  variant="secondary"
+                  className="border-[#00b894] text-black hover: hover:bg-[#3B82F6]">
+                  {language === "en" ? "Start Exploring" : "Inizia a esplorare"}
+                </Link>
+              </div>
+            </div>
+            <div>
+              <img
+                src="/ass/aosta.jpg"
+                width="550"
+                height="400"
+                alt="AostaHub"
+                className="rounded-lg"
+                style={{ aspectRatio: "550/400", objectFit: "cover" }} />
+            </div>
+          </div>
+        </div>
+      </main>
+      <section className=" text-white py-12 md:py-20">
+        <div className="container mx-auto px-4 md:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
+            {language === "en" ? "Key Features" : "Caratteristiche principali"}
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div
+              className="bg-[#3B82F6] rounded-lg p-6 flex flex-col items-center text-center">
+              <SearchIcon className="h-12 w-12 mb-4" />
+              <h3 className="text-xl font-bold mb-2">
+                {language === "en" ? "Discover New Connections" : "Scopri nuove connessioni"}
+              </h3>
+              <p className="text-lg">
+                {language === "en"
+                  ? "Easily find and connect with new friends who share your interests."
+                  : "Trova e connetti facilmente con nuovi amici che condividono i tuoi interessi."}
+              </p>
+            </div>
+            <div
+              className="bg-[#3B82F6] rounded-lg p-6 flex flex-col items-center text-center">
+              <ShareIcon className="h-12 w-12 mb-4" />
+              <h3 className="text-xl font-bold mb-2">
+                {language === "en" ? "Securely Share Profiles" : "Condividi i profili in modo sicuro"}
+              </h3>
+              <p className="text-lg">
+                {language === "en"
+                  ? "Share your Instagram and other social profiles in a safe and controlled way."
+                  : "Condividi i tuoi profili Instagram e altri social in modo sicuro e controllato."}
+              </p>
+            </div>
+            <div
+              className="bg-[#3B82F6] rounded-lg p-6 flex flex-col items-center text-center">
+              <WebcamIcon className="h-12 w-12 mb-4" />
+              <h3 className="text-xl font-bold mb-2">{language === "en" ? "Connect and Chat" : "Connetti e chatta"}</h3>
+              <p className="text-lg">
+                {language === "en"
+                  ? "Start conversations and build new friendships with like-minded individuals."
+                  : "Avvia conversazioni e crea nuove amicizie con persone che condividono i tuoi interessi."}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="py-12 md:py-20">
+        <div className="container mx-auto px-4 md:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            {language === "en" ? "Join AostaHub Today" : "Unisciti ad AostaHub oggi"}
+          </h2>
+          <p className="text-lg text-[#555] mb-8">
+            {language === "en"
+              ? "Connect, share, and make new friends in a secure and friendly environment."
+              : "Connetti, condividi e fai nuovi amici in un ambiente sicuro e amichevole."}
+          </p>
+          <Button className="bg-[#3B82F6] text-white hover:bg-[#00a185]">
+            {language === "en" ? "Sign Up Now" : "Iscriviti ora"}
+          </Button>
+        </div>
+      </section>
+      <footer className="bg-[#3B82F6] text-white py-6 px-4 md:px-8">
+        <div className="container mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <AsteriskIcon className="h-6 w-6" />
+            <span>&copy; 2024 AostaHub. All rights reserved.</span>
+          </div>
+          <nav className="flex items-center gap-4">
+            <Link href="#" className="hover:underline" prefetch={false}>
+              {language === "en" ? "Privacy Policy" : "Informativa sulla privacy"}
+            </Link>
+            <Link href="#" className="hover:underline" prefetch={false}>
+              {language === "en" ? "Terms of Service" : "Termini di servizio"}
+            </Link>
+            <Link href="#" className="hover:underline" prefetch={false}>
+              {language === "en" ? "Contact Us" : "Contattaci"}
+            </Link>
+          </nav>
+        </div>
+      </footer>
+    </div>)
+  );
+}
+
+function AsteriskIcon(props) {
+  return (
+    (<svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round">
+      <path d="M12 6v12" />
+      <path d="M17.196 9 6.804 15" />
+      <path d="m6.804 9 10.392 6" />
+    </svg>)
+  );
+}
+
+
+function SearchIcon(props) {
+  return (
+    (<svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round">
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.3-4.3" />
+    </svg>)
+  );
+}
+
+
+function ShareIcon(props) {
+  return (
+    (<svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round">
+      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+      <polyline points="16 6 12 2 8 6" />
+      <line x1="12" x2="12" y1="2" y2="15" />
+    </svg>)
+  );
+}
+
+
+function WebcamIcon(props) {
+  return (
+    (<svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round">
+      <circle cx="12" cy="10" r="8" />
+      <circle cx="12" cy="10" r="3" />
+      <path d="M7 22h10" />
+      <path d="M12 22v-4" />
+    </svg>)
+  );
+}
