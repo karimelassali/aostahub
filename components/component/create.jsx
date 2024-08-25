@@ -4,29 +4,102 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react"
+import { createClient } from "@/utils/supabase/client"
+import { toast, Toaster } from 'sonner';
+import { useRouter } from "next/navigation"
+import { useUser } from "@clerk/nextjs"
+
 
 export default function Create() {
+  const [fname,setFname] = useState('');
+  const [lname,setLname] = useState('');
+  const [age,setAge] = useState(0);
+  const [description,setDescription] = useState('');
+  const [profilePic,setUserp] = useState('');
+  
+  const [instagram,setInstagram] = useState('');
+  const [facebook,setFacebook] = useState('');
+  const [number,setNumber] = useState(''); 
+
+  const supabase = createClient();
+  const router = useRouter();
+
+  const {user,isLoaded} = useUser();
+
+
+  async function create(e) {
+    e.preventDefault();
+  
+    // Input validation (optional but recommended)
+    if (!fname || !lname || !age || !description) {
+      toast.error('Please fill in all required fields.');
+      return;
+    }
+  
+    // Show a loading indicator if necessary (optional)
+  
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .insert([{ fname, lname, age, description, instagram, facebook, number,profilePic }])
+        .single();
+
+        toast.success(lname +' ' +  fname + ' added succefully');
+        setTimeout(()=>{
+          router.push('/explore')
+        },3000)
+        
+      // Check if there's an error from Supabase
+      if (error) {
+        console.error('Supabase error details:', error);
+        toast.error(`Error: ${error.message}`);
+        return;
+      }
+  
+      // Check if the data is returned successfully
+      if (data) {
+        console.log('Data inserted successfully:', data); // Debugging line
+        toast.success(`${lname} ${fname} added successfully!`);
+      } else {
+        console.error('Unexpected response format:', data); // Debugging line
+        // toast.error('An unexpected error occurred. Please try again.');
+      }
+    } catch (err) {
+      // Catch any unexpected errors
+      console.error('Unexpected error details:', err);
+      // toast.error('An unexpected error occurred. Please try again.');
+    } finally {
+      // Hide loading indicator if you showed one (optional)
+    }
+  }
+  
+  useEffect(()=>{
+    setUserp(user.imageUrl);
+  },[isLoaded])
   return (
     (<div className="container mx-auto max-w-md py-12 px-4 sm:px-6 lg:px-8">
       <div className="space-y-6">
+        <Toaster richColors />
         <div>
           <h1 className="text-3xl font-bold">Create Your Box Profile</h1>
           <p className="mt-2 text-muted-foreground">Fill out the form below to create your profile.</p>
         </div>
-        <Card>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
+        <Card >
+          <CardContent className="space-y-6 bg-red-300">
+            <form onSubmit={create}>
+            <div className="grid grid-cols-2 gap-4 p-2">
               <div className="grid gap-2">
                 <Label htmlFor="name">Name</Label>
                 <div className="flex items-center gap-2">
-                  <Input id="name" placeholder="Enter your name" />
+                  <Input required  onChange={(e)=>{setFname(e.target.value)}}   id="name" placeholder="Enter your name" />
                   <UserIcon className="h-5 w-5 text-muted-foreground" />
                 </div>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="lastname">Last Name</Label>
                 <div className="flex items-center gap-2">
-                  <Input id="lastname" placeholder="Enter your last name" />
+                  <Input  required onChange={(e)=>{setLname(e.target.value)}}  id="lastname" placeholder="Enter your last name" />
                   <UserIcon className="h-5 w-5 text-muted-foreground" />
                 </div>
               </div>
@@ -34,44 +107,48 @@ export default function Create() {
             <div className="grid gap-2">
               <Label htmlFor="age">Age</Label>
               <div className="flex items-center gap-2">
-                <Input id="age" type="number" placeholder="Enter your age" />
+                <Input  required onChange={(e)=>{setAge(e.target.value)}}  id="age" type="number" placeholder="Enter your age" />
                 <CalendarIcon className="h-5 w-5 text-muted-foreground" />
               </div>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
+              <Label  required htmlFor="description">Description</Label>
+              <Textarea  required
                 id="description"
                 placeholder="Tell us about yourself"
-                className="min-h-[100px]" />
+                className="min-h-[100px]" 
+                onChange={(e)=>{setDescription(e.target.value)}} 
+                />
             </div>
             <div className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="instagram">Instagram</Label>
                 <div className="flex items-center gap-2">
-                  <Input id="instagram" placeholder="Enter your Instagram" className="w-full" />
+                  <Input onChange={(e)=>{setInstagram(e.target.value)}}  id="instagram" placeholder="Enter your Instagram" className="w-full" />
                   <InstagramIcon className="h-5 w-5 text-muted-foreground" />
                 </div>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="facebook">Facebook</Label>
                 <div className="flex items-center gap-2">
-                  <Input id="facebook" placeholder="Enter your Facebook" className="w-full" />
+                  <Input onChange={(e)=>{setFacebook(e.target.value)}}  id="facebook" placeholder="Enter your Facebook" className="w-full" />
                   <FacebookIcon className="h-5 w-5 text-muted-foreground" />
                 </div>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="phone">Phone</Label>
                 <div className="flex items-center gap-2">
-                  <Input id="phone" placeholder="Enter your Phone Number" className="w-full" />
+                  <Input onChange={(e)=>{setNumber(e.target.value)}}  id="phone" placeholder="Enter your Phone Number" className="w-full" />
                   <PhoneIcon className="h-5 w-5 text-muted-foreground" />
                 </div>
               </div>
             </div>
+            <CardFooter>
+            <button type="submit" style={{backgroundColor:'#382bf0',color:'white'}}  className="ml-auto mt-4  p-2 rounded-sm text-l font-bold"  >Create Profile</button>
+          </CardFooter>   
+            </form>
           </CardContent>
-          <CardFooter>
-            <Button className="ml-auto">Create Profile</Button>
-          </CardFooter>
+          
         </Card>
       </div>
     </div>)
