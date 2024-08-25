@@ -34,7 +34,7 @@ export default function Landing() {
                   : "Connetti in modo sicuro e condividi i tuoi profili Instagram e altri social per fare nuovi amici."}
               </p>
               <p style={{color:'gray'}} className="text-xl font-semibold">
-              Discover a unique way to connect in Aosta, Italy! Aosta Hub addresses the local trend of people sharing their social media and contacts on public walls and spaces by offering a safer and more organized platform. Start browsing now and make meaningful connections securely."
+              Discover a unique way to connect in Aosta, Italy! Aosta Hub addresses the local trend of people sharing their social media and contacts on public walls and spaces by offering a safer and more organized platform. Start browsing now and make meaningful connections securely.
               </p>
               <br />
               <hr />

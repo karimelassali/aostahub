@@ -42,15 +42,15 @@ export default function Explore() {
         users.map(user=>(
           <>
           
-            <div className="bg-background rounded-lg shadow-md overflow-hidden">
+            <div key={user.id} className="bg-background rounded-lg shadow-md overflow-hidden">
               <Link href="#" className="block" prefetch={false}>
                 <div className="relative">
-                  <img
+                  <Image
                     src={user.profilePic}
-                    alt="John Doe"
+                    alt={user.lname}
                     width={400}
                     height={400}
-                    className="w-full h-48 object-cover"
+                    className=" object-cover"
                     style={{ aspectRatio: "400/400", objectFit: "cover" }} />
                   <div
                   style={{backdropFilter:'blur(20px)'}}
