@@ -3,6 +3,11 @@ import './globals.css'
 import { Button } from "@/components/ui/button"
 import Image from 'next/image'
 
+export const metadata = {
+  title: 'Welcome to aosta hub',
+  description: 'aosta hub,aosta friends',
+};
+
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
@@ -12,7 +17,7 @@ export default function RootLayout({ children }) {
           <header
               className="bg-[#382bf0] text-white py-6 px-4 md:px-8 flex items-center justify-between">
               <div className="flex items-center gap-4">
-              <Image width={220} height={220} src={'/ass/logo.png'} />
+              <Image alt='logo' width={220} height={220} src={'/ass/logo.png'} />
               </div>
               {/* <div className="flex items-center gap-4">
                   <Button

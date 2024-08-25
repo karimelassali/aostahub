@@ -8,7 +8,9 @@ import { Toaster, toast } from 'sonner'
 import { useUser } from "@clerk/nextjs";
 
 
+
 export default function Explore() {
+  // console.log('clg me ' , cme );
   const supabase = createClient();
 
   const [users,setUsers] = useState([]);

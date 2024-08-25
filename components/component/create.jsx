@@ -10,6 +10,10 @@ import { toast, Toaster } from 'sonner';
 import { useRouter } from "next/navigation"
 import { useUser } from "@clerk/nextjs"
 
+export const metadata = {
+  title: 'create',
+  description: 'Welcome to Next.js',
+};
 
 export default function Create() {
   const [fname,setFname] = useState('');
@@ -17,7 +21,11 @@ export default function Create() {
   const [age,setAge] = useState(0);
   const [description,setDescription] = useState('');
   const [profilePic,setUserp] = useState('');
-  
+  // const [username,setUsername] = useState('');
+  const [inlist,setInlist] = useState(false);
+  const [email,setEmail] = useState('');
+  const [uid,setUid] = useState('');
+
   const [instagram,setInstagram] = useState('');
   const [facebook,setFacebook] = useState('');
   const [number,setNumber] = useState(''); 
@@ -26,7 +34,6 @@ export default function Create() {
   const router = useRouter();
 
   const {user,isLoaded} = useUser();
-
 
   async function create(e) {
     e.preventDefault();
@@ -40,15 +47,16 @@ export default function Create() {
     // Show a loading indicator if necessary (optional)
   
     try {
+      const username = user.fullName;
       const { data, error } = await supabase
         .from('users')
-        .insert([{ fname, lname, age, description, instagram, facebook, number,profilePic }])
+        .insert([{ fname, lname, age, description, instagram, facebook, number,profilePic,username ,uid, email }])
         .single();
 
-        toast.success(lname +' ' +  fname + ' added succefully');
-        setTimeout(()=>{
-          router.push('/explore')
-        },3000)
+        // toast.success(lname +' ' +  fname + ' added succefully');
+        // setTimeout(()=>{
+        //   router.push('/explore')
+        // },3000)
         
       // Check if there's an error from Supabase
       if (error) {
@@ -74,11 +82,38 @@ export default function Create() {
     }
   }
   
-  useEffect(()=>{
-    setUserp(user.imageUrl);
-  },[isLoaded])
+  async function chck() {
+    const {data,error} = await supabase.from('users').select().eq('username',user.fullName).single();
+    console.log(user.fullName);
+
+    if(data){
+      toast.warning('You are already in list');
+      setInlist(true);
+    }else{
+      toast.success('You are not in list');
+    }
+    // console.log(data.length)
+  }
+  useEffect(() => {
+    if (isLoaded && user) {
+      setUserp(user.imageUrl);
+      setUid(user.id);
+      setEmail(user.emailAddresses[0]);
+      // setUsername(user.username);
+      chck();
+    }
+  }, [isLoaded, user,fname]);
+  
   return (
-    (<div className="container mx-auto max-w-md py-12 px-4 sm:px-6 lg:px-8">
+    (
+    <div className="container mx-auto max-w-md py-12 px-4 sm:px-6 lg:px-8">
+      {
+      inlist ? (
+        <h1> hello </h1>
+      )  : (
+        <></>
+      )
+    }
       <div className="space-y-6">
         <Toaster richColors />
         <div>

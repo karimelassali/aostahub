@@ -5,14 +5,25 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
+import Head from "next/head"
+
+export const metadata = {
+  title: 'Home',
+  description: 'Welcome to Next.js',
+};
 
 export default function Landing() {
   const [language, setLanguage] = useState("en")
   const handleLanguageChange = (lang) => {
     setLanguage(lang)
   }
+
   return (
-    (<div className="flex flex-col min-h-[100dvh] bg-[#f5f5f5] text-[#333]">
+    
+    (
+      <>
+      
+    <div className="flex flex-col min-h-[100dvh] bg-[#f5f5f5] text-[#333]">
       {/* <header
         className="bg-[#3B82F6] text-white py-6 px-4 md:px-8 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -38,6 +49,7 @@ export default function Landing() {
               </p>
               <br />
               <hr />
+              <br />
               <div className="flex gap-4">
                 <Button className="bg-[#3B82F6] text-white hover:bg-[#00a185]">
                   {language === "en" ? "Sign Up" : "Iscriviti"}
@@ -165,7 +177,10 @@ export default function Landing() {
               : "Connetti, condividi e fai nuovi amici in un ambiente sicuro e amichevole."}
           </p>
           <Button className="bg-[#3B82F6] text-white hover:bg-[#00a185]">
+           <Link href={'/explore'}>
             {language === "en" ? "Sign Up Now" : "Iscriviti ora"}
+           </Link>
+
           </Button>
         </div>
       </section>
@@ -188,7 +203,8 @@ export default function Landing() {
           </nav>
         </div>
       </footer>
-    </div>)
+    </div>
+    </>)
   );
 }
 
