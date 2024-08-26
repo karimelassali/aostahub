@@ -5,6 +5,8 @@ import Landing from "@/components/component/landing";
 export const metadata = {
     title:'Welcome to Aosta Hub',
     description: 'Discover Aosta Hub, a unique hub where people come together to share their stories',
+    
+    keywords: 'Aosta Hub, Story Sharing, Community, Valle di Aosta, amici, storytelling, social platform, local community', 
     icons:{
         icon:'/ass/logo.png'
     },
