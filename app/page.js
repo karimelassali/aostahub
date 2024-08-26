@@ -10,6 +10,13 @@ export const metadata = {
     },
     openGraph:{
         title:'Welcome to Aosta Hub',
+        description:'Discover Aosta Hub, a unique hub where people come together to share their stories',
+        url:'https://aostahub.vercel.app',
+        images:{
+            url:'/ass/logo.png',
+            width:800,
+            height:600,
+        }
     }
 
 }
