@@ -19,7 +19,49 @@ export default function Explore() {
 
   const { user } = useUser();
   const currentUserId = user?.id;
+
+  const [searchTerm, setSearchTerm] = useState('');
   
+
+
+  // search func
+ async function search() {
+  if (searchTerm.length > 0) {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .like('fname', `%${searchTerm}%`);
+    
+    if (error) {
+      console.error('Error fetching users:', error);
+      alert('An error occurred while searching for users.');
+    } else if (data == '') {
+        toast.message('No user found.');
+        const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .order('id', { ascending: false });
+    } else {
+      setUsers(data);
+    }
+  } else {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .order('id', { ascending: false });
+    
+    if (error) {
+      console.error('Error fetching users:', error);
+      alert('An error occurred while fetching users.');
+    } else if (data.length === 0) {
+      alert('No user found.');
+    } else {
+      setUsers(data);
+    }
+  }
+}
+
+  //end search fuunc
 
   async function delAno(id) {
     try {
@@ -52,7 +94,9 @@ export default function Explore() {
   },[])
 
   return (
-    (<div style={{backgroundColor:''}} className="container  mx-auto px-4 py-8 md:px-6 lg:px-8">
+    (
+      <>
+        <div style={{backgroundColor:''}} className="container  mx-auto px-4 py-8 md:px-6 lg:px-8">
        {/* <div className="mb-6 flex bg-[#10B981] p-4 rounded-lg">
         {users.lname}
         <br />
@@ -61,19 +105,20 @@ export default function Explore() {
       <div className="mb-8">
       <p className="text-muted-foreground">Find new friends and connect with people in your community.</p><br />
         <Input
+          onChange={(e)=>{setSearchTerm(e.target.value),search() }}
           placeholder="Search for users..."
           className="w-full max-w-md bg-muted rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
       </div>
 
       <div
-            style={{boxShadow:'0 0 40px gray'}}
+            
             className="grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6  rounded-lg p-4">
 
 {
         users.map(user=>(
           <>
           
-            <div key={user.id} className="bg-background rounded-lg shadow-md overflow-hidden">
+            <div key={user.id} className="bg-background rounded-lg shadow-lg overflow-hidden">
               <Link href="#" className="block" prefetch={false}>
                 <div className="relative">
                   <Image
@@ -86,8 +131,8 @@ export default function Explore() {
                   <div
                   style={{backdropFilter:'blur(20px)'}}
                     className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                    <h3 style={{color:'#F2EFDC'}} className=" font-semibold text-lg">{user.lname} {user.fname}</h3>
-                    <p style={{color:'#A79986'}} className=" text-sm">@{user.fname + user.lname} - {user.age} years old   </p>
+                    <h3 style={{color:'#F2EFDC'}} className="first-letter:uppercase font-semibold text-lg">{user.lname} {user.fname}</h3>
+                    <p style={{color:'#A79986'}} className="first-letter:uppercase text-sm">@{user.fname + user.lname} - {user.age} years old   </p>
                   </div>
                 </div>
                 <div className="p-4">
@@ -139,13 +184,21 @@ export default function Explore() {
         ))
       }
 
-      </div>        
-     
-      
-        <Link href={'/create'}  className="fixed bottom-0 right-0 p-4 mr-2 mb-2 rounded-md text-white w-30 font-semibold" style={{backgroundColor:'#382bf0',color:'white',width:'10%'}}>
+      </div> 
+    </div>  
+    <footer className="flex justify-center p-4 w-full " style={{}}>
+      <div className="w-full p-2 rounded-md  flex justify-center m-2" style={{backdropFilter:'blur(30px)',border:'1px solid gray'}}> 
+        <Link href={'/create'}  className="  - p-4   rounded-md text-white w-30 font-semibold" style={{backgroundColor:'#382bf0',color:'white',width:'10%'}}>
           Create
         </Link>
-    </div>)
+        <Link href={'/profile'}  className=" - p-4   rounded-md text-white w-30 font-semibold" style={{backgroundColor:'#382bf0',color:'white',width:'10%'}}>
+          Chat with online peapole
+        </Link>
+      </div>
+    </footer>
+      </>
+  )
+    
   );
 }
 
