@@ -6,6 +6,8 @@ import { useState,useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Toaster, toast } from 'sonner'
 import { useUser } from "@clerk/nextjs";
+import { MdDeleteSweep } from "react-icons/md";
+
 
 
 
@@ -14,14 +16,41 @@ export default function Explore() {
   const supabase = createClient();
 
   const [users,setUsers] = useState([]);
+
+  const { user } = useUser();
+  const currentUserId = user?.id;
   
+
+  async function delAno(id) {
+    try {
+      const { data, error } = await supabase.from('users').delete().eq('id', id);
+      if (error) throw error;
+      toast.success('User deleted successfully');
+    } catch (error) {
+      console.error('Error deleting user:', error.message);
+      toast.error('Failed to delete user');
+    }
+  }
+  
+
   useEffect(()=>{
       async function fetchUsers(){
-        const {data,error} = await supabase.from('users').select('*');
+        const {data,error} = await supabase.from('users').select('*').order('id',{ascending:false});
         data ?  setUsers(data) : alert('no user');
       }
       fetchUsers();
+
+      async function realTimeFetchAnounces(){
+        const {data,error} = await supabase.channel('annListen').on('postgres_changes',{event:'*',schema:'public',table:'users'},(payload)=>{
+          const newCh = new Audio('/ass/ann.mp3');
+          newCh.play();
+          fetchUsers();
+        })
+        .subscribe();
+      }
+      realTimeFetchAnounces();
   },[])
+
   return (
     (<div style={{backgroundColor:''}} className="container  mx-auto px-4 py-8 md:px-6 lg:px-8">
        {/* <div className="mb-6 flex bg-[#10B981] p-4 rounded-lg">
@@ -68,27 +97,43 @@ export default function Explore() {
                   <br />
                   <hr />
                   <div className="flex justify-between mt-4 gap-2">
-                    <Link
-                      href="#"
+                    {
+                      user.facebook ? <Link
+                      href={`https://www.facebook.com/` + user.facebook}
                       className="text-muted-foreground hover:text-primary"
                       prefetch={false}>
                       <FacebookIcon className="h-5 w-5" />
-                    </Link>
-                    <Link
-                      href="#"
-                      className="text-muted-foreground hover:text-primary"
-                      prefetch={false}>
-                      <InstagramIcon className="h-5 w-5" />
-                    </Link>
-                    <Link
-                      href="#"
+                    </Link> : null
+                    }
+                    {
+                      user.instagram ?   <Link
+                                        href={`https://www.instagram.com/` + user.instagram}
+                                        className="text-muted-foreground hover:text-primary"
+                                        prefetch={false}>
+                                        <InstagramIcon className="h-5 w-5" />
+                                      </Link>
+                                     : null
+                    }
+                    {
+                      user.number ? <Link
+                      href={`https://www.wa.me/` + user.number}
                       className="text-muted-foreground hover:text-primary"
                       prefetch={false}>
                       <PhoneIcon className="h-5 w-5" />
-                    </Link>
+                    </Link>:null
+                    }
                   </div>
                 </div>
               </Link>
+              {
+                 user.uid == currentUserId  ? <div className="flex p-2 text-center font-semibold mt-2 rounded-md justify-between place-items-center "  style={{color:'white'}}>
+                                             <button onClick={()=>delAno(user.id)} className="flex justify-between  items-center rounded-md p-2 direction-reverse" style={{cursor:'hover',width:'100%',border:'1px solid red',backgroundColor:'crimson'}}>
+                                               <MdDeleteSweep size={24} />
+                                               Delete
+                                             </button>
+                                            </div> : console.log('you r not owner of this announce  ')
+                 
+              }
             </div>
           </>
         ))

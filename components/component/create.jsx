@@ -162,10 +162,11 @@ export default function Create() {
                   <Input onChange={(e)=>{setInstagram(e.target.value)}}  id="instagram" placeholder="Enter your Instagram" className="w-full" />
                   <InstagramIcon className="h-5 w-5 text-muted-foreground" />
                 </div>
+                <p style={{color:'gray',fontSize:'10px'}} className="gap-2">Without @</p>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="facebook">Facebook</Label>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center p-2">
                   <Input onChange={(e)=>{setFacebook(e.target.value)}}  id="facebook" placeholder="Enter your Facebook" className="w-full" />
                   <FacebookIcon className="h-5 w-5 text-muted-foreground" />
                 </div>
