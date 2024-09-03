@@ -91,7 +91,7 @@ export function Chat() {
             
             {
               users.map(user => (
-                <div className="flex items-center gap-3 p-4 hover:bg-muted transition">
+                <div key={user.id} className="flex items-center gap-3 p-4 hover:bg-muted transition">
                 <Avatar className="w-8 h-8">
                   <AvatarImage style={{border:'50%'}} src={user.profilePic} alt="User Avatar" />
                   <AvatarFallback>{user.id}</AvatarFallback>
