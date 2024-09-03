@@ -12,6 +12,9 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
+        <head>
+          <meta name="msvalidate.01" content="95C6FEA2336278D091BC03508F4221AF" />
+        </head>
         <body>
           <main>
           <header
@@ -29,21 +32,3 @@ export default function RootLayout({ children }) {
                   <Button
                     variant="ghost"
                     className={`text-white hover:bg-[#00a185] ${language === "it" ? "font-bold" : ""}`}
-                    onClick={() => handleLanguageChange("it")}>
-                    Italiano
-                  </Button>
-                </div> */}
-              <SignedOut>
-              <SignInButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-            </header>
-            {children}
-            </main>
-        </body>
-      </html>
-    </ClerkProvider>
-  )
-}
