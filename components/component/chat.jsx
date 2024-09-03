@@ -1,15 +1,17 @@
 'use client'
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { Textarea } from "@/components/ui/textarea";
-import { createClient } from "@/utils/supabase/client";
-import { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import { Textarea } from "@/components/ui/textarea"
+import { createClient } from "@/utils/supabase/client"
+import { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
-import { Toaster, toast } from "sonner";
+import { Toaster , toast } from "sonner"
 
 export function Chat() {
+
   const supabase = createClient();
+
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
   const [users, setUsers] = useState([]);
@@ -17,141 +19,214 @@ export function Chat() {
   const currentUserId = user?.id;
   const userProfile = user?.imageUrl;
   const currentUser = user?.fullName;
-  const messagesEndRef = useRef(null);
+
 
   useEffect(() => {
     async function fetchUsers() {
       const { data, error } = await supabase
-        .from('users')
-        .select()
-        .order('id', { ascending: false });
-      data ? setUsers(data) : toast.message('No online users now.');
+       .from('users')
+       .select()
+       .order('id', { ascending: false });
+      data? setUsers(data) : toast.message('No online users now .');
     }
     fetchUsers();
 
     async function fetchMessages() {
       const { data, error } = await supabase
-        .from('msgs')
-        .select('*')
-        .order('id', { ascending: true });
-      data ? setMessages(data) : toast.message('No messages yet.');
-      scrollToBottom();
+       .from('msgs')
+       .select('*')
+       .order('id', { ascending: false });
+      data? setMessages(data) : toast.message('No messages yet.');
     }
     fetchMessages();
 
     async function realTimeFetchMessages() {
       const { data, error } = await supabase
-        .channel('msgListen')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'msgs' }, (payload) => {
-          console.log(payload)
+       .channel('msgListen')
+       .on('postgres_changes', { event: '*', schema: 'public', table:'msgs' }, (payload) => {
           fetchMessages();
         })
-        .subscribe();
+       .subscribe();
     }
     realTimeFetchMessages();
-  }, []);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  },[])
 
   async function sendMessage() {
     if (message) {
       await supabase
-        .from('msgs')
-        .insert({
+       .from('msgs')
+       .insert({
           msgSenderUid: currentUserId,
           message,
           msgSender: currentUser,
-          msgSenderPicture: userProfile,
+          msgSenderPicture : userProfile,
+          // msgReceiverUid: users[0].id,
+          // msgReceiver: users[0].fullName,
+          // read: false,
+          // delivered: false,
+
+          // created_at: new Date().toISOString(),
         });
       setMessage('');
     }
   }
-
   return (
-    <div className="flex flex-col h-screen max-h-screen bg-background rounded-2xl shadow-lg">
-      <header className="flex items-center gap-4 bg-[#382bf0] p-4 border-b border-card-foreground/10">
+    (<div
+      className="flex flex-col h-auto max-h-[800px] bg-background rounded-2xl shadow-lg overflow-hidden">
+      <header
+        className="flex items-center gap-4 bg-[#382bf0] p-4 border-b border-card-foreground/10">
+        {/* <h2 className="text-xl font-bold text-primary-foreground">Aosta Hub Chat</h2> */}
         <div className="flex-1" />
         <Button variant="ghost" size="icon" className="rounded-full">
           <SettingsIcon className="w-5 h-5 text-primary-foreground" />
           <span className="sr-only">Settings</span>
         </Button>
       </header>
-      <div className="flex flex-1 overflow-hidden">
-        {/* Online Users Section */}
-        <div className="w-64 bg-card border-r border-card-foreground/10 overflow-y-auto">
-          <h2 className="p-4 text-sm font-medium">Online Users</h2>
-          <div className="p-4">
-            {users.map((user, index) => (
-              <DropdownMenu key={index}>
-                <DropdownMenuTrigger className="flex items-center gap-2 cursor-pointer mb-4">
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage src={user.profilePic} alt="User Avatar" />
-                    <AvatarFallback>{user.id}</AvatarFallback>
-                  </Avatar>
-                  <div className="text-sm font-medium">{user.lname} {user.fname}</div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>View Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Send Message</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu> 
-            ))}
+      <div
+        className="flex-1 grid grid-cols-1 lg:grid-cols-[260px_1fr] overflow-hidden">
+        <div
+          className="bg-card border-b lg:border-r border-card-foreground/10 overflow-auto">
+          <div className="p-4 text-sm font-medium text-card-foreground">Online Users</div>
+          <div className="divide-y divide-card-foreground/10">
+            
+            {
+              users.map(user => (
+                <div className="flex items-center gap-3 p-4 hover:bg-muted transition">
+                <Avatar className="w-8 h-8">
+                  <AvatarImage style={{border:'50%'}} src={user.profilePic} alt="User Avatar" />
+                  <AvatarFallback>{user.id}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 truncate">
+                  <div className="font-medium first-letter:uppercase">{user.lname} {user.fname} </div>
+                  <div className="text-xs text-muted-foreground">online</div>
+                </div>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <MessageCircleIcon className="w-4 h-4 text-[#382bf0]" />
+                  <span className="sr-only">Chat</span>
+                </Button>
+              </div>
+              ))
+            }
+           
           </div>
         </div>
-        {/* Chat Messages Section */}
-        <div className="flex flex-col flex-1 overflow-hidden">
-          <div className="flex-1 overflow-y-auto p-4">
-            <div className="grid gap-4">
-              {messages.map((message, index) => (
-                <div key={index} className={`flex items-start gap-4 ${message.msgSenderUid === currentUserId ? 'justify-end' : ''}`}>
-                  {message.msgSenderUid !== currentUserId && (
-                    <Avatar className="w-8 h-8">
-                      <AvatarImage src="/placeholder-user.jpg" alt="User Avatar" />
-                      <AvatarFallback>JD</AvatarFallback>
-                    </Avatar>
-                  )}
-                  <div className="grid gap-1 text-sm max-w-[80%]">
-                    <div className={`flex items-center justify-between ${message.msgSenderUid === currentUserId ? 'text-right' : ''}`}>
-                      <div className="font-medium">{message.msgSenderUid === currentUserId ? 'You' : 'John Doe'}</div>
-                      <div className="text-xs text-muted-foreground">10:35 AM</div>
-                    </div>
-                    <div className={`p-3 rounded-2xl ${message.msgSenderUid === currentUserId ? 'bg-[#382bf0] text-primary-foreground' : 'bg-muted'}`}>
-                      {message.message}
-                    </div>
-                  </div>
-                  {message.msgSenderUid === currentUserId && (
-                    <Avatar className="w-8 h-8">
-                      <AvatarImage src="/placeholder-user.jpg" alt="User Avatar" />
-                      <AvatarFallback>YO</AvatarFallback>
-                    </Avatar>
-                  )}
-                </div>
-              ))}
-              <div ref={messagesEndRef} />
+        <div className="flex flex-col">
+          <div className="bg-card p-4 border-b border-card-foreground/10">
+            <p className="text-sm text-muted-foreground">
+              All messages will be deleted after 24 hours. Any bad words or inappropriate content will result in a ban.
+            </p>
+          </div>
+          <div className="flex-1 overflow-auto max-h-[500px]">
+            <div className="grid gap-4 p-4">
+              {
+                messages.map(message => (
+                  <>
+                  {
+                        message.msgSenderUid === currentUserId ? 
+                        
+                        <div className="flex items-start gap-4 justify-end">
+                          <div className="grid gap-1 text-sm">
+                            <div className="flex items-center justify-between">
+                              <div className="font-medium text-right">You</div>
+                              <div className="text-xs text-muted-foreground">10:35 AM</div>
+                            </div>
+                            <div
+                              className="bg-[#382bf0] text-primary-foreground p-3 rounded-2xl max-w-[80%]">
+                              {message.message}
+                            </div>
+                            <div className="flex justify-end gap-2">
+                              <Button variant="ghost" size="icon" className="rounded-full">
+                                <ThumbsUpIcon className="w-4 h-4 text-[#382bf0]" />
+                                <span className="sr-only">Like</span>
+                              </Button>
+                              <Button variant="ghost" size="icon" className="rounded-full">
+                                <ThumbsDownIcon className="w-4 h-4 text-[#382bf0]" />
+                                <span className="sr-only">Dislike</span>
+                              </Button>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon" className="rounded-full">
+                                    <MoveVerticalIcon className="w-4 h-4 text-[#382bf0]" />
+                                    <span className="sr-only">More</span>
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem>Report</DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                          </div>
+                          <Avatar className="w-8 h-8">
+                            <AvatarImage src="/placeholder-user.jpg" alt="User Avatar" />
+                            <AvatarFallback>YO</AvatarFallback>
+                          </Avatar>
+                        </div> : <div className="flex items-start gap-4">
+                                      <Avatar className="w-8 h-8">
+                                        <AvatarImage src="/placeholder-user.jpg" alt="User Avatar" />
+                                        <AvatarFallback>JD</AvatarFallback>
+                                      </Avatar>
+                                      <div className="grid gap-1 text-sm">
+                                        <div className="flex items-center justify-between">
+                                          <div className="font-medium">John Doe</div>
+                                          <div className="text-xs text-muted-foreground">10:30 AM</div>
+                                        </div>
+                                        <div className="bg-muted p-3 rounded-2xl max-w-[80%]">
+                                          {message.message}
+                                        </div>
+                                        <div className="flex justify-end gap-2">
+                                          <Button variant="ghost" size="icon" className="rounded-full">
+                                            <ThumbsUpIcon className="w-4 h-4 text-[#382bf0]" />
+                                            <span className="sr-only">Like</span>
+                                          </Button>
+                                          <Button variant="ghost" size="icon" className="rounded-full">
+                                            <ThumbsDownIcon className="w-4 h-4 text-[#382bf0]" />
+                                            <span className="sr-only">Dislike</span>
+                                          </Button>
+                                          <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                              <Button variant="ghost" size="icon" className="rounded-full">
+                                                <MoveVerticalIcon className="w-4 h-4 text-[#382bf0]" />
+                                                <span className="sr-only">More</span>
+                                              </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                              <DropdownMenuItem>Report</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                          </DropdownMenu>
+                                        </div>
+                                      </div>
+                                    </div>
+                   }
+                     
+                  </>
+                ))
+              }
+              
+              
             </div>
           </div>
-          <div className="bg-card p-4 border-t border-card-foreground/10 sticky bottom-0">
-            <div className="relative">
-              <Textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Type your message..."
-                className="pr-16 rounded-2xl resize-none"
-              />
-              <Button onClick={sendMessage} type="submit" size="icon" className="absolute w-8 h-8 top-3 right-3">
-                <SendIcon className="w-4 h-4 text-[#382bf0]" />
-                <span className="sr-only">Send</span>
-              </Button>
-            </div>
+          <div className="bg-card p-4 border-t border-card-foreground/10">
+          <div className="relative">
+            <Textarea
+              
+              onChange={(e) => {
+                setMessage(e.target.value);
+                console.log(e.target.value);
+              }}
+              placeholder="Type your message..."
+              className="pr-16 rounded-2xl resize-none fixed "
+            />
+            <Button onClick={sendMessage} type="submit" size="icon" className="absolute w-8 h-8 top-3 right-3">
+              <SendIcon className="w-4 h-4 text-[#382bf0]" />
+              <span className="sr-only">Send</span>
+            </Button>
+          </div>
           </div>
         </div>
       </div>
-    </div>
+    </div>)
   );
 }
-
 
 function MessageCircleIcon(props) {
   return (  
@@ -274,3 +349,4 @@ function ThumbsUpIcon(props) {
     </svg>)
   );
 }
+

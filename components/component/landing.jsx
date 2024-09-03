@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
 import Head from "next/head"
+import { motion } from "framer-motion"
 
 export const metadata = {
   title: 'Home',
@@ -23,7 +24,19 @@ export default function Landing() {
     (
       <>
       
-    <div className="flex flex-col min-h-[100dvh] bg-[#f5f5f5] text-[#333]">
+    <motion.div
+    initial={{
+      opacity: 0,
+      y: -50,
+    }}
+    animate={{
+      opacity: 1,
+      y: 0,
+    }}
+    transition={{
+      delay: 0.5,
+    }}
+    className="flex flex-col min-h-[100dvh] bg-[#f5f5f5] text-[#333]">
       {/* <header
         className="bg-[#3B82F6] text-white py-6 px-4 md:px-8 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -35,7 +48,22 @@ export default function Landing() {
       <main className="flex-1 py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-8">
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
+            <motion.div
+              initial={{
+                opacity: 0,
+                x: -50,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              transition={{
+                duration: 0.3,
+                delay: 0.9,
+                ease:"easeIn"
+
+              }}
+            >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 {language === "en" ? "Connect and Share with AostaHub" : "Connetti e condividi con AostaHub"}
               </h2>
@@ -44,13 +72,40 @@ export default function Landing() {
                   ? "Securely connect and share your Instagram and other social profiles to make new friends."
                   : "Connetti in modo sicuro e condividi i tuoi profili Instagram e altri social per fare nuovi amici."}
               </p>
-              <p style={{color:'gray'}} className="text-xl font-semibold">
-              Discover a unique way to connect in Aosta, Italy! Aosta Hub addresses the local trend of people sharing their social media and contacts on public walls and spaces by offering a safer and more organized platform. Start browsing now and make meaningful connections securely.
-              </p>
+              <motion.p
+                initial={{
+                  opacity:0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                transition={{
+                  duration: 0.3,
+                  delay: 1.2,
+                  ease:"easeIn"
+                }}
+                style={{color:'gray'}} className="text-xl font-semibold">
+                Discover a unique way to connect in Aosta, Italy! Aosta Hub addresses the local trend of people sharing their social media and contacts on public walls and spaces by offering a safer and more organized platform. Start browsing now and make meaningful connections securely.
+              </motion.p>
               <br />
               <hr />
               <br />
-              <div className="flex gap-4">
+              <motion.div
+              initial={{
+                opacity: 0,
+                y: 50,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.3,
+                delay: 1.2,
+                ease:"easeIn"
+              }}
+
+              className="flex gap-4">
                 <Button className="bg-[#3B82F6] text-white hover:bg-[#00a185]">
                   {language === "en" ? "Sign Up" : "Iscriviti"}
                 </Button>
@@ -61,10 +116,21 @@ export default function Landing() {
                   className="rounded-lg p-2  text-black hover: hover:bg-[#00a185]">
                   {language === "en" ? "Start Exploring" : "Inizia a esplorare"}
                 </Link>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
             <div>
-              <img
+              <motion.img
+              initial={{
+                opacity: 0,
+                x: 50,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              transition={{
+                delay: 1.4,
+              }}
                 src="/ass/aosta.jpg"
                 width="550"
                 height="400"
@@ -203,7 +269,7 @@ export default function Landing() {
           </nav>
         </div>
       </footer>
-    </div>
+    </motion.div>
     </>)
   );
 }
