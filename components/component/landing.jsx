@@ -80,7 +80,7 @@ export default function Landing() {
                   opacity: 1,
                 }}
                 transition={{
-                  duration: 0.3,
+                  duration: 1.1,
                   delay: 1.2,
                   ease:"easeIn"
                 }}
