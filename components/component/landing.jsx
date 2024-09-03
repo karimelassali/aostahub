@@ -131,6 +131,9 @@ export default function Landing() {
               transition={{
                 delay: 1.4,
               }}
+                whileInView={{
+                  opacity:0.3
+                }}
                 src="/ass/aosta.jpg"
                 width="550"
                 height="400"
