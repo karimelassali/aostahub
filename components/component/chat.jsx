@@ -199,7 +199,7 @@ export function Chat() {
                       </div>
                     </div> : 
 
-                    <div className="grid gap-1 text-sm">
+                    <div key={msg.id} className="grid gap-1 text-sm">
                     <div className="flex items-center justify-between">
                       <div className="font-medium text-right">You</div>
                       <div className="text-xs text-muted-foreground">10:35 AM</div>
