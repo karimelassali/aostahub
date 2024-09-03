@@ -32,3 +32,21 @@ export default function RootLayout({ children }) {
                   <Button
                     variant="ghost"
                     className={`text-white hover:bg-[#00a185] ${language === "it" ? "font-bold" : ""}`}
+                    onClick={() => handleLanguageChange("it")}>
+                    Italiano
+                  </Button>
+                </div> */}
+              <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+            </header>
+            {children}
+            </main>
+        </body>
+      </html>
+    </ClerkProvider>
+  )
+}
