@@ -14,6 +14,7 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <head>
           <meta name="msvalidate.01" content="95C6FEA2336278D091BC03508F4221AF" />
+          <meta name="google-site-verification" content="TFC9KKJST9sPJHv4r0wz0xnmUb09ZFJFC8crGzgUSnk" />
         </head>
         <body>
           <main>
