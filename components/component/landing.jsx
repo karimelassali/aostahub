@@ -131,6 +131,7 @@ export default function Landing() {
               transition={{
                 delay: 1.4,
               }}
+              
                 src="/ass/aosta.jpg"
                 width="550"
                 height="400"
