@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
 import Head from "next/head"
-import { motion } from "framer-motion"
+import { color, motion } from "framer-motion"
 
 export const metadata = {
   title: 'Home',
@@ -106,7 +106,7 @@ export default function Landing() {
               }}
 
               className="flex gap-4">
-                <Button className="bg-[#3B82F6] text-white hover:bg-[#00a185]">
+                <Button className="bg-[#3B82F6] text-white hover:bg-[#00a185]" style={{color:'black'}}>
                   {language === "en" ? "Sign Up" : "Iscriviti"}
                 </Button>
                 <Link
@@ -131,7 +131,7 @@ export default function Landing() {
               transition={{
                 delay: 1.4,
               }}
-              
+                
                 src="/ass/aosta.jpg"
                 width="550"
                 height="400"
@@ -148,7 +148,20 @@ export default function Landing() {
             {language === "en" ? "Key Features" : "Caratteristiche principali"}
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <div
+            <motion.div
+            initial={{
+              opacity: 0,
+              y: -50,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.3,
+              delay: 0.6,
+              ease:"easeIn"
+            }}
               className="bg-[#3B82F6] rounded-lg p-6 flex flex-col items-center text-center">
               <SearchIcon className="h-12 w-12 mb-4" />
               <h3 className="text-xl font-bold mb-2">
@@ -159,7 +172,7 @@ export default function Landing() {
                   ? "Easily find and connect with new friends who share your interests."
                   : "Trova e connetti facilmente con nuovi amici che condividono i tuoi interessi."}
               </p>
-            </div>
+            </motion.div>
             <div
               className="bg-[#3B82F6] rounded-lg p-6 flex flex-col items-center text-center">
               <ShareIcon className="h-12 w-12 mb-4" />
@@ -186,14 +199,16 @@ export default function Landing() {
         </div>
       </section>
       {/* -----------for pictures ------------ */}
-      <section className=" text-white py-12 md:py-20">
+      <motion.section
+      dropping="in"
+      className=" text-white py-12 md:py-20">
         <h1 className="text-center font-bold text-2xl ">New Friends <span className="text-3xl" style={{color:'#3B82F6'}}>=</span> New place to visit</h1>
         <div className="container mx-auto px-4 md:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div
-            style={{border:'5px double gray'}}
+            style={{border: '1px solid black'}}
               className=" rounded-lg p-6 flex flex-col items-center text-center">
               <Image src={'/ass/roman.jpg'} height={500} width={500} className=" rounded-lg mb-4" />
               <h3 className="text-xl font-bold mb-2">
@@ -206,7 +221,7 @@ export default function Landing() {
               </p>
             </div>
             <div
-            style={{border:'5px double gray'}}
+            style={{border: '1px solid black'}}
               className=" rounded-lg p-6 flex flex-col items-center text-center">
               <Image src={'/ass/snow.jpg'} height={500} width={500} className=" rounded-lg mb-4" />
               <h3 className="text-xl font-bold mb-2">
@@ -219,7 +234,7 @@ export default function Landing() {
               </p>
             </div>
             <div
-            style={{border:'5px double gray'}}
+            style={{border: '1px solid black'}}
               className=" rounded-lg p-6 flex flex-col items-center text-center">
               <Image src={'/ass/lago.jpg'} width={400} height={400}  className=" rounded-lg mb-4" />
               <h3 className="text-xl font-bold mb-2">{language === "en" ? "Connect and Chat Amidst Aosta's Natural Wonders" : "Connetti e chatta"}</h3>
@@ -231,7 +246,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
       {/* ---------- */}
       <section className="py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-8 text-center">
@@ -243,8 +258,8 @@ export default function Landing() {
               ? "Connect, share, and make new friends in a secure and friendly environment."
               : "Connetti, condividi e fai nuovi amici in un ambiente sicuro e amichevole."}
           </p>
-          <Button className="bg-[#3B82F6] text-white hover:bg-[#00a185]">
-           <Link href={'/explore'}>
+          <Button className="bg-[#3B82F6] text-white hover:bg-[#00a185]" style={{color:'black'}}>
+           <Link style={{color:'black'}} href={'/explore'}>
             {language === "en" ? "Sign Up Now" : "Iscriviti ora"}
            </Link>
 

@@ -1,24 +1,28 @@
 'use client'
 import { Input } from "@/components/ui/input"
+import { Cards } from "@/components/component/cards";
 import Link from "next/link"
 import Image from "next/image";
 import { useState,useEffect } from "react";
-import { createClient } from "@/utils/supabase/client";
 import { Toaster, toast } from 'sonner'
 import { useUser } from "@clerk/nextjs";
 import { MdDeleteSweep } from "react-icons/md";
+import { IoChatboxOutline } from "react-icons/io5";
+import { IoCreateOutline } from "react-icons/io5";
+import {motion} from 'framer-motion'
+
+
+
+
+
 
 
 
 
 export default function Explore() {
   // console.log('clg me ' , cme );
-  const supabase = createClient();
 
-  const [users,setUsers] = useState([]);
-
-  const { user } = useUser();
-  const currentUserId = user?.id;
+  
 
   const [searchTerm, setSearchTerm] = useState('');
   
@@ -63,137 +67,28 @@ export default function Explore() {
 
   //end search fuunc
 
-  async function delAno(id) {
-    try {
-      const { data, error } = await supabase.from('users').delete().eq('id', id);
-      if (error) throw error;
-      toast.success('User deleted successfully');
-    } catch (error) {
-      console.error('Error deleting user:', error.message);
-      toast.error('Failed to delete user');
-    }
-  }
+  
   
 
-  useEffect(()=>{
-      async function fetchUsers(){
-        const {data,error} = await supabase.from('users').select('*').order('id',{ascending:false});
-        data ?  setUsers(data) : alert('no user');
-      }
-      fetchUsers();
-
-      async function realTimeFetchAnounces(){
-        const {data,error} = await supabase.channel('annListen').on('postgres_changes',{event:'*',schema:'public',table:'users'},(payload)=>{
-          const newCh = new Audio('/ass/ann.mp3');
-          newCh.play();
-          fetchUsers();
-        })
-        .subscribe();
-      }
-      realTimeFetchAnounces();
-  },[])
+ 
 
   return (
     (
       <>
-        <div style={{backgroundColor:''}} className="container  mx-auto px-4 py-8 md:px-6 lg:px-8">
-       {/* <div className="mb-6 flex bg-[#10B981] p-4 rounded-lg">
-        {users.lname}
-        <br />
-      </div> */}
-      <Toaster />
-      <div className="mb-8">
-      <p className="text-muted-foreground">Find new friends and connect with people in your community.</p><br />
-        <Input
-          onChange={(e)=>{setSearchTerm(e.target.value),search() }}
-          placeholder="Search for users..."
-          className="w-full max-w-md bg-muted rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-      </div>
-
-      <div
-            
-            className="grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6  rounded-lg p-4">
-
-{
-        users.map(user=>(
-          <>
-          
-            <div key={user.id} className="bg-background rounded-lg shadow-lg overflow-hidden">
-              <Link href="#" className="block" prefetch={false}>
-                <div className="relative">
-                  <Image
-                    src={user.profilePic}
-                    alt={user.lname}
-                    width={400}
-                    height={400}
-                    className=" object-cover"
-                    style={{ aspectRatio: "400/400", objectFit: "cover" }} />
-                  <div
-                  style={{backdropFilter:'blur(20px)'}}
-                    className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                    <h3 style={{color:'#F2EFDC'}} className="first-letter:uppercase font-semibold text-lg">{user.lname} {user.fname}</h3>
-                    <p style={{color:'#A79986'}} className="first-letter:uppercase text-sm">@{user.fname + user.lname} - {user.age} years old   </p>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <p className="text-muted-foreground">
-                    {user.description}
-                  </p>
-                  <br />
-                  <hr />
-                  <div className="flex justify-between mt-4 gap-2">
-                    {
-                      user.facebook ? <Link
-                      href={`https://www.facebook.com/` + user.facebook}
-                      className="text-muted-foreground hover:text-primary"
-                      prefetch={false}>
-                      <FacebookIcon className="h-5 w-5" />
-                    </Link> : null
-                    }
-                    {
-                      user.instagram ?   <Link
-                                        href={`https://www.instagram.com/` + user.instagram}
-                                        className="text-muted-foreground hover:text-primary"
-                                        prefetch={false}>
-                                        <InstagramIcon className="h-5 w-5" />
-                                      </Link>
-                                     : null
-                    }
-                    {
-                      user.number ? <Link
-                      href={`https://www.wa.me/` + user.number}
-                      className="text-muted-foreground hover:text-primary"
-                      prefetch={false}>
-                      <PhoneIcon className="h-5 w-5" />
-                    </Link>:null
-                    }
-                  </div>
-                </div>
-              </Link>
-              {
-                 user.uid == currentUserId  ? <div className="flex p-2 text-center font-semibold mt-2 rounded-md justify-between place-items-center "  style={{color:'white'}}>
-                                             <button onClick={()=>delAno(user.id)} className="flex justify-between  items-center rounded-md p-2 direction-reverse" style={{cursor:'hover',width:'100%',border:'1px solid red',backgroundColor:'crimson'}}>
-                                               <MdDeleteSweep size={24} />
-                                               Delete
-                                             </button>
-                                            </div> : console.log('you r not owner of this announce  ')
-                 
-              }
-            </div>
-          </>
-        ))
-      }
-
-      </div> 
-    </div>  
-    <footer className="flex justify-center p-4 w-full " style={{}}>
-      <div className="w-full p-2 rounded-md  flex justify-center m-2" style={{backdropFilter:'blur(30px)',border:'1px solid gray'}}> 
-        <Link href={'/create'}  className="  - p-4   rounded-md text-white w-30 font-semibold" style={{backgroundColor:'#382bf0',color:'white',width:'10%'}}>
-          Create
-        </Link>
-        <Link href={'/profile'}  className=" - p-4   rounded-md text-white w-30 font-semibold" style={{backgroundColor:'#382bf0',color:'white',width:'10%'}}>
-          Chat with online peapole
-        </Link>
+      <Cards />
+      <footer className="flex justify-center p-4 w-full bg-gray-900">
+      <div className="w-full max-w-4xl p-4 rounded-lg flex justify-center gap-8" style={{ backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
+        <motion.Link
+       
+        href={'/create'} className="flex items-center justify-center p-3 rounded-lg text-white font-semibold transition-colors duration-300 transform hover:bg-purple-600 hover:scale-105" style={{ backgroundColor: '#38bdf8' }}>
+          <IoCreateOutline size={24} />
+          <span className="ml-2">Create</span>
+        </motion.Link>
+        <motion.Link
+        href={'/profile'} className="flex items-center justify-center p-3 rounded-lg text-white font-semibold transition-colors duration-300 transform hover:bg-purple-600 hover:scale-105" style={{ backgroundColor: '#38bdf8' }}>
+          <IoChatboxOutline size={24} />
+          <span className="ml-2">Profile</span>
+        </motion.Link>
       </div>
     </footer>
       </>
