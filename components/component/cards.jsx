@@ -9,12 +9,14 @@ import { MdOutlineVerified } from "react-icons/md";
 import { Skeleton } from "../ui/skeleton"
 import {motion} from 'framer-motion'
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 import { useUser } from "@clerk/nextjs";
 
 
 
 export function Cards() {
+  const router = useRouter();
 
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
@@ -69,6 +71,7 @@ export function Cards() {
 
 
 return (
+  <>
   <div className="grid p-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
     {
       loading ? (
@@ -88,13 +91,14 @@ return (
         ))
       ) : (
         // عرض بيانات المستخدمين بعد انتهاء التحميل
+        
         users.map(user => (
-          <Card key={user.id} className="bg-background rounded-lg overflow-hidden shadow-lg">
+          <Card onClick={(e)=>{router.push('profile/'+user.id)  }} key={user.id} className="bg-background rounded-lg overflow-hidden shadow-lg">
             <div style={{ backdropFilter: 'blur(30px)' }}>
               {
                 console.log(user.imgName)
               }
-              <div className="relative h-32 flex items-end justify-end p-4" style={{ backgroundImage: `url(https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName})`, backgroundSize: 'cover' }}>
+              <div className="relative h-32 flex items-end justify-end p-4" style={{ backgroundSize: 'cover' }}>
               <img  className="w-full h-full object-cover" style={{border:'1px solid red'}} src={user.profilePic} alt="bgImage" />
                 <Avatar className="absolute top-[70%] left-4 w-20 h-20 border-4 border-background rounded-lg">
                   <AvatarImage className="hover:scale-150 hover:cursor-pointer" src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`} alt="User Avatar" />
@@ -168,6 +172,7 @@ return (
       )
     }
   </div>
+  </>
 );
 
 function FacebookIcon(props) {
