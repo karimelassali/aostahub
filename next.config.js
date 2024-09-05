@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['img.clerk.com'], // Add any additional domains as needed
+    domains: ['img.clerk.com','giyrlrcehqsypefjoayv.supabase.co'], // Add any additional domains as needed
   },
   async headers() {
     return [

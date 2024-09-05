@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { MdOutlineVerified } from "react-icons/md";
 import { Skeleton } from "../ui/skeleton"
 import {motion} from 'framer-motion'
+import Image from "next/image"
 
 import { useUser } from "@clerk/nextjs";
 
@@ -90,9 +91,13 @@ return (
         users.map(user => (
           <Card key={user.id} className="bg-background rounded-lg overflow-hidden shadow-lg">
             <div style={{ backdropFilter: 'blur(30px)' }}>
-              <div className="relative h-32 flex items-end justify-end p-4" style={{ backgroundImage: 'url(/ass/logo.png)', backgroundSize: 'cover' }}>
+              {
+                console.log(user.imgName)
+              }
+              <div className="relative h-32 flex items-end justify-end p-4" style={{ backgroundImage: `url(https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName})`, backgroundSize: 'cover' }}>
+              <img  className="w-full h-full object-cover" style={{border:'1px solid red'}} src={user.profilePic} alt="bgImage" />
                 <Avatar className="absolute top-[70%] left-4 w-20 h-20 border-4 border-background rounded-lg">
-                  <AvatarImage src={user.profilePic} alt="User Avatar" />
+                  <AvatarImage className="hover:scale-150 hover:cursor-pointer" src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`} alt="User Avatar" />
                   <AvatarFallback>{user.id}</AvatarFallback>
                 </Avatar>
               </div>

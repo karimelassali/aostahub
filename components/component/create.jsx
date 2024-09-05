@@ -9,6 +9,10 @@ import { createClient } from "@/utils/supabase/client"
 import { toast, Toaster } from 'sonner';
 import { useRouter } from "next/navigation"
 import { useUser } from "@clerk/nextjs"
+import { MdOutlineLinkedCamera } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
+
+
 
 export const metadata = {
   title: 'create',
@@ -21,6 +25,10 @@ export default function Create() {
   const [age,setAge] = useState(0);
   const [description,setDescription] = useState('');
   const [profilePic,setUserp] = useState('');
+  const [imgInp,setImgInp] = useState();
+  const [imgName,setImgName] = useState('');
+  const [bg,setBg] = useState(false);
+
   // const [username,setUsername] = useState('');
   const [inlist,setInlist] = useState(false);
   const [email,setEmail] = useState('');
@@ -50,13 +58,13 @@ export default function Create() {
       const username = user.fullName;
       const { data, error } = await supabase
         .from('users')
-        .insert([{ fname, lname, age, description, instagram, facebook, number,profilePic,username ,uid, email }])
+        .insert([{ fname, lname, age, description, instagram, facebook, number,profilePic,username ,uid, email,imgName }])
         .single();
 
-        // toast.success(lname +' ' +  fname + ' added succefully');
-        // setTimeout(()=>{
-        //   router.push('/explore')
-        // },3000)
+        toast.success(lname +' ' +  fname + ' added succefully');
+        setTimeout(()=>{
+          router.push('/explore')
+        },3000)
         
       // Check if there's an error from Supabase
       if (error) {
@@ -94,6 +102,22 @@ export default function Create() {
     }
     // console.log(data.length)
   }
+  
+  
+  function clickHandle(){
+    document.getElementById('imgInp').click();
+  }
+  async  function handleImgInput(e){
+    const img = e.target.files[0];
+    const imgName = `${Date.now()}${e.target.files[0].name}`;
+    setImgName(imgName);
+    setBg(true);
+    const {data,error} = await 
+    supabase.storage.from('images').upload(`imgs/${imgName}`,img)
+    data ? toast.success('Profile picture uploaded successfully') : toast.error('Error uploading profile picture');
+
+  }
+  //----------------------------------------------------------------
   useEffect(() => {
     if (isLoaded && user) {
       setUserp(user.imageUrl);
@@ -109,7 +133,7 @@ export default function Create() {
     <div className="container mx-auto max-w-md py-12 px-4 sm:px-6 lg:px-8">
       {
       inlist ? (
-        <h1> hello </h1>
+        null
       )  : (
         <></>
       )
@@ -122,7 +146,20 @@ export default function Create() {
         </div>
         <Card >
           <CardContent className="space-y-6 bg-red-300">
-            <form onSubmit={create}>
+            <form className="overflow-hidden " onSubmit={create}>
+              <input type="file" id="imgInp" hidden onChange={handleImgInput}  />
+              <br />
+              <Button type="button" onClick={clickHandle}  className="flex p-2 items-center gap-2  text-sm hover:scale-150 " style={{width:'100%',backgroundColor:'transparent'}}>
+                <MdOutlineLinkedCamera color="#06b6d4" size={100} />
+              </Button>
+              <br />
+              <p className="text-center mt-3 font-semibold" style={{color:'#10b981'}}>
+                {
+                  bg === true ?  'Image selected' : <span style={{color:"#e11d48"}}>Pleaze select a picture of you !</span>
+                }
+              </p>
+              <br />
+              <br />
             <div className="grid grid-cols-2 gap-4 p-2">
               <div className="grid gap-2">
                 <Label htmlFor="name">Name</Label>
@@ -180,7 +217,8 @@ export default function Create() {
               </div>
             </div>
             <CardFooter>
-            <button type="submit" style={{backgroundColor:'#382bf0',color:'white'}}  className="ml-auto mt-4  p-2 rounded-sm text-l font-bold"  >Create Profile</button>
+            <button type="submit" style={{backgroundColor:'#06b6d4',color:'white'}}  className="ml-auto mt-4 flex items-center justify-center gap-2 p-1  p-2 rounded-sm text-l font-bold"  >Create <FaCheck />
+            </button>
           </CardFooter>   
             </form>
           </CardContent>
