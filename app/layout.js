@@ -2,6 +2,7 @@ import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@c
 import './globals.css'
 import { Button } from "@/components/ui/button"
 import Image from 'next/image'
+import Link from 'next/link';
 
 export const metadata = {
   title: 'Welcome to aosta hub',
@@ -22,7 +23,9 @@ export default function RootLayout({ children }) {
           <header
               className="bg-[#475569] text-white py-3 px-4 md:px-8 flex items-center justify-between">
               <div className="flex items-center gap-4">
-              <Image  alt='logo' width={220} height={220} src={'/ass/logo.png'} />
+                <Link href="/">
+                  <Image  alt='logo' width={220} height={220} src={'/ass/logo.png'} />
+                </Link>
               </div>
               {/* <div className="flex items-center gap-4">
                   <Button

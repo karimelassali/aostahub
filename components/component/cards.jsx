@@ -93,14 +93,18 @@ return (
         // عرض بيانات المستخدمين بعد انتهاء التحميل
         
         users.map(user => (
-          <Card onClick={(e)=>{router.push('profile/'+user.id)  }} key={user.id} className="bg-background rounded-lg overflow-hidden shadow-lg">
+          <motion.Card 
+          whileHover={{ shadow: '0 10px 20px red'}}
+          onHoverStart={e => {}}
+          onHoverEnd={e => {}}
+          onClick={(e)=>{router.push('profile/'+user.id)  }} key={user.id} className="bg-background rounded-lg overflow-hidden shadow-lg hover:cursor-pointer ">
             <div style={{ backdropFilter: 'blur(30px)' }}>
               {
                 console.log(user.imgName)
               }
-              <div className="relative h-32 flex items-end justify-end p-4" style={{ backgroundSize: 'cover' }}>
-              <img  className="w-full h-full object-cover" style={{border:'1px solid red'}} src={user.profilePic} alt="bgImage" />
-                <Avatar className="absolute top-[70%] left-4 w-20 h-20 border-4 border-background rounded-lg">
+              <div className="relative h-32 flex items-end justify-end p-1" style={{ backgroundSize: 'cover' }}>
+              <img  className="w-full h-full object-cover rounded-sm" style={{border:''}} src={user.profilePic} alt="bgImage" />
+                <Avatar style={{borderRadius:'50px'}} className="absolute top-[70%] left-4 w-20 h-20 border-4 border-background rounded-lg ">
                   <AvatarImage className="hover:scale-150 hover:cursor-pointer" src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`} alt="User Avatar" />
                   <AvatarFallback>{user.id}</AvatarFallback>
                 </Avatar>
@@ -134,6 +138,7 @@ return (
                 </div>
               </div>
               <hr />
+              via rue abbe ame gorret
               <p className="text-sm text-muted-foreground">
                 {user.description}
               </p>
@@ -167,7 +172,7 @@ return (
                }
               </div> */}
             </CardContent>
-          </Card>
+          </motion.Card>
         ))
       )
     }

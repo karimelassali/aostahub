@@ -76,19 +76,19 @@ export default function Explore() {
     (
       <>
       <Cards />
-      <footer className="flex justify-center p-4 w-full bg-gray-900">
-      <div className="w-full max-w-4xl p-4 rounded-lg flex justify-center gap-8" style={{ backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
-        <motion.Link
+      <footer className="flex justify-center p-4 w-full bg-gray-900 fixed bottom-0 " style={{}}>
+      <div className="w-full max-w-4xl p-4 rounded-lg flex justify-center gap-8 rounded-sm" style={{ backdropFilter: 'blur(30px)' }}>
+        <Link
        
-        href={'/create'} className="flex items-center justify-center p-3 rounded-lg text-white font-semibold transition-colors duration-300 transform hover:bg-purple-600 hover:scale-105" style={{ backgroundColor: '#38bdf8' }}>
+        href={'/create'} className="flex items-center justify-center p-3 rounded-lg text-white font-semibold transition-colors duration-300 transform hover:bg-purple-600 hover:scale-105 hover:cursor-pointer" style={{ backgroundColor: '#38bdf8' }}>
           <IoCreateOutline size={24} />
           <span className="ml-2">Create</span>
-        </motion.Link>
-        <motion.Link
-        href={'/profile'} className="flex items-center justify-center p-3 rounded-lg text-white font-semibold transition-colors duration-300 transform hover:bg-purple-600 hover:scale-105" style={{ backgroundColor: '#38bdf8' }}>
+        </Link>
+        <Link
+        href={'/profile'} className="flex items-center justify-center p-3 rounded-lg text-white font-semibold transition-colors duration-300 transform hover:bg-purple-600 hover:scale-105 hover:cursor-pointer" style={{ backgroundColor: '#38bdf8' }}>
           <IoChatboxOutline size={24} />
           <span className="ml-2">Profile</span>
-        </motion.Link>
+        </Link>
       </div>
     </footer>
       </>
