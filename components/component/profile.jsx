@@ -10,7 +10,7 @@ import { useUser } from "@clerk/nextjs";
 import { color, motion } from 'framer-motion'
 import { useState, useEffect } from "react";
 import { IoLocationOutline } from "react-icons/io5";
-import {ProfileSkeleton } from "@/components/component/profileSkeleton"
+import  ProfileSkeleton from "@/components/component/profileSkeleton"
 import { FiActivity } from "react-icons/fi";
 
 import {sonner} from 'sonner'

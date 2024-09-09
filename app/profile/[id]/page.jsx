@@ -9,7 +9,6 @@ function Page({params}) {
   return (
     <>
       <Profile userId={id} />
-      <h1>jj</h1>
     </>
   )
 }

@@ -7,6 +7,9 @@ import Link from "next/link"
 import Image from "next/image"
 import Head from "next/head"
 import { color, motion } from "framer-motion"
+import AOS from 'aos';
+import { ContainerScroll } from "../ui/background-beams-with-collision"
+import { HoverBorderGradient } from "../ui/hover-border-gradient"
 
 export const metadata = {
   title: 'Home',
@@ -23,7 +26,29 @@ export default function Landing() {
     
     (
       <>
-      
+       <div className="flex flex-col overflow-hidden">
+      <ContainerScroll
+        titleComponent={
+          <>
+            <h1 className="text-4xl font-semibold text-black dark:text-white">
+              Ciao, Bienvenute a <br />
+              <span className="text-4xl md:text-[6rem] font-bold mt-1 leading-none">
+                AostaHub
+              </span>
+            </h1>
+          </>
+        }
+      >
+        <Image
+          src={`/ass/aosta.jpg`}
+          alt="hero"
+          height={720}
+          width={1400}
+          className="mx-auto rounded-2xl object-cover h-full object-left-top"
+          draggable={false}
+        />
+      </ContainerScroll>
+    </div>
     <motion.div
     initial={{
       opacity: 0,
@@ -49,6 +74,7 @@ export default function Landing() {
         <div className="container mx-auto px-4 md:px-8">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <motion.div
+
               initial={{
                 opacity: 0,
                 x: -50,
@@ -106,9 +132,13 @@ export default function Landing() {
               }}
 
               className="flex gap-4">
-                <Button className="bg-[#3B82F6] text-white hover:bg-[#00a185]" style={{color:'black'}}>
-                  {language === "en" ? "Sign Up" : "Iscriviti"}
-                </Button>
+                <HoverBorderGradient
+        containerClassName="rounded-full"
+        as="button"
+        className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+      >
+        <span>Aceternity UI</span>
+      </HoverBorderGradient>
                 <Link
                   href={'/explore'}
                   variant="secondary"
@@ -174,6 +204,7 @@ export default function Landing() {
               </p>
             </motion.div>
             <div
+              
               className="bg-[#3B82F6] rounded-lg p-6 flex flex-col items-center text-center">
               <ShareIcon className="h-12 w-12 mb-4" />
               <h3 className="text-xl font-bold mb-2">
