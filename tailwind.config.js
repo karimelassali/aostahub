@@ -12,6 +12,11 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      animation:{
+        scroll:
+        "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
+    
+      }
     },
       colors: {
             "border": "hsl(var(--border))",
@@ -54,6 +59,11 @@ module.exports = {
             "sm": "calc(var(--radius) - 4px)"
           },
       keyframes: {
+            scroll: {
+              to: {
+                transform: "translate(calc(-50% - 0.5rem))",
+              },
+            },
             "accordion-down": {
               "from": {
                 "height": "0"
@@ -70,7 +80,20 @@ module.exports = {
                 "height": "0"
               }
             }
+            
           }
 },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"),[addVariablesForColors]]
 };
+
+// This plugin adds each Tailwind color as a global CSS variable, e.g. var(--gray-200).
+function addVariablesForColors({ addBase, theme }) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+ 
+  addBase({
+    ":root": newVars,
+  });
+}

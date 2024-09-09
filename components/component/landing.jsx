@@ -10,12 +10,91 @@ import { color, motion } from "framer-motion"
 import AOS from 'aos';
 import { ContainerScroll } from "../ui/background-beams-with-collision"
 import { HoverBorderGradient } from "../ui/hover-border-gradient"
+import { StickyScroll } from "../ui/sticky-scroll-reveal"
+import { ButtonBo } from "../ui/moving-border";
+import { InfiniteMovingCards } from "../ui/cardsmoving"
 
 export const metadata = {
   title: 'Home',
   description: 'Welcome to Next.js',
 };
 
+
+
+
+
+
+
+const content = [
+  {
+    title: "Discover Aosta's Ancient Ruins",
+    description:
+        "Step back in time and explore the ancient ruins of Aosta. Discover the rich history and stunning landscapes of this beautiful region.",
+    content: (
+      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
+        <Image
+          src={'/ass/roman.jpg'}
+          width={300}
+          height={300}
+          className="h-full w-full object-cover"
+          alt="ruins"
+        />
+      </div>
+    ),
+  },
+
+  {
+    title: "Securely Share Your Alpine Adventures",
+    description:
+    "Capture the breathtaking beauty of the Aosta Valley and share your experiences safely. Let others see the stunning views you've encountered on your journey.",
+    content: (
+      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
+        <Image
+          src={'/ass/snow.jpg'}
+          width={300}
+          height={300}
+          className="h-full w-full object-cover"
+          alt="linear board demo"
+        />
+      </div>
+    ),
+  },
+  {
+    title: "Connect and Chat Amidst Aosta's Natural Wonders",
+    description:
+    "Immerse yourself in the serene beauty of Aosta's mountains and lakes. Connect with others who appreciate the same scenic landscapes and start conversations that inspire.",    content: (
+      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--orange-500),var(--yellow-500))] flex items-center justify-center text-white">
+        <Image
+          src={'/ass/lago.jpg'}
+          width={300}
+          height={300}
+          className="h-full w-full object-cover"
+          alt="linear board demo"
+        />
+      </div>
+    ),
+  },
+  
+];
+
+
+//for infos comp
+
+const infos = [
+  {
+    
+    quote:
+    "Easily find and connect with new friends who share your interests.",
+    name: "Charles Dickens",
+    title: "A Tale of Two Cities",
+  },
+  {
+    quote:
+    "Easily find and connect with new friends who share your interests.",
+    name: "Charles Dickens",
+    title: "A Tale of Two Cities",
+  }
+]
 export default function Landing() {
   const [language, setLanguage] = useState("en")
   const handleLanguageChange = (lang) => {
@@ -133,19 +212,22 @@ export default function Landing() {
 
               className="flex gap-4">
                 <HoverBorderGradient
-        containerClassName="rounded-full"
-        as="button"
-        className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
-      >
-        <span>Aceternity UI</span>
-      </HoverBorderGradient>
-                <Link
-                  href={'/explore'}
-                  variant="secondary"
-                  style={{border:'1px solid gray'}}
-                  className="rounded-lg p-2  text-black hover: hover:bg-[#00a185]">
-                  {language === "en" ? "Start Exploring" : "Inizia a esplorare"}
-                </Link>
+
+                    containerClassName="rounded-full"
+                    as="button"
+                    className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+                  >
+                    <span>Sign up </span>
+                  </HoverBorderGradient>
+
+                  <HoverBorderGradient
+                    duration={1}
+                    containerClassName="rounded-full"
+                    as="button"
+                    className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+                  >
+                    <span>Explore </span>
+                  </HoverBorderGradient>
               </motion.div>
             </motion.div>
             <div>
@@ -172,7 +254,15 @@ export default function Landing() {
           </div>
         </div>
       </main>
-      <section className=" text-white py-12 md:py-20">
+      <div  className="h-[40rem] rounded-md flex flex-col antialiased bg-white dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
+      <InfiniteMovingCards
+        items={infos}
+        direction="right"
+        speed="fast"
+      />
+    </div>
+      
+      {/* <section className=" text-white py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
             {language === "en" ? "Key Features" : "Caratteristiche principali"}
@@ -228,9 +318,10 @@ export default function Landing() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
       {/* -----------for pictures ------------ */}
-      <motion.section
+      <StickyScroll content={content} />
+      {/* <motion.section
       dropping="in"
       className=" text-white py-12 md:py-20">
         <h1 className="text-center font-bold text-2xl ">New Friends <span className="text-3xl" style={{color:'#3B82F6'}}>=</span> New place to visit</h1>
@@ -241,7 +332,6 @@ export default function Landing() {
             <div
             style={{border: '1px solid black'}}
               className=" rounded-lg p-6 flex flex-col items-center text-center">
-              <Image src={'/ass/roman.jpg'} height={500} width={500} className=" rounded-lg mb-4" />
               <h3 className="text-xl font-bold mb-2">
                 {language === "en" ? "Discover Aosta's Ancient Ruins" : "Scopri nuove connessioni"}
               </h3>
@@ -277,7 +367,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-      </motion.section>
+      </motion.section> */}
       {/* ---------- */}
       <section className="py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-8 text-center">
