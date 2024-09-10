@@ -22,10 +22,11 @@ const FloatingDockMobile = ({
 }) => {
   const [open, setOpen] = useState(false);
   return (
-    (<div className={cn("relative block md:hidden", className)}>
+    (<div style={{backdropFilter:'blur(40px)'}}  className={cn("relative block md:hidden", className)}>
       <AnimatePresence>
         {open && (
           <motion.div
+          style={{backdropFilter:'blur(40px)'}} 
             layoutId="nav"
             className="absolute bottom-full mb-2 inset-x-0 flex flex-col gap-2">
             {items.map((item, idx) => (

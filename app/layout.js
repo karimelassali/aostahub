@@ -101,7 +101,9 @@ export default function RootLayout({ children }) {
                   <span className="ml-2">Profile</span>
                 </Link>
               </div> */}
-              <FloatingDock  items={links} />
+              <div className="p-2 rounded-lg" style={{backdropFilter:'blur(20px)',borderRadius:'5px'}}>
+                <FloatingDock style={{gap:'9'}}   items={links} />
+              </div>
             </footer>
         </body>
       </html>

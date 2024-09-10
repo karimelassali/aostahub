@@ -15,7 +15,6 @@ import { ButtonBo } from "../ui/moving-border";
 import { InfiniteMovingCards } from "../ui/cardsmoving"
 import { FocusCards } from "../ui/focusimg"
 import { FlipWords } from "../ui/flipWords"
-
 export const metadata = {
   title: 'Home',
   description: 'Welcome to Next.js',
@@ -35,6 +34,7 @@ const content = [
     content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
         <Image
+          style={{borderRadius:'5px'}}
           src={'/ass/roman.jpg'}
           width={300}
           height={300}
@@ -52,6 +52,7 @@ const content = [
     content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
         <Image
+          style={{borderRadius:'5px'}}
           src={'/ass/snow.jpg'}
           width={300}
           height={300}
@@ -67,6 +68,7 @@ const content = [
     "Immerse yourself in the serene beauty of Aosta's mountains and lakes. Connect with others who appreciate the same scenic landscapes and start conversations that inspire.",    content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--orange-500),var(--yellow-500))] flex items-center justify-center text-white">
         <Image
+          style={{borderRadius:'5px'}}
           src={'/ass/lago.jpg'}
           width={300}
           height={300}
@@ -128,28 +130,7 @@ export default function Landing() {
     
     (
       <>
-       <div className="flex flex-col overflow-hidden">
-      <ContainerScroll
-        titleComponent={
-          <>
-            <h1 className="text-4xl font-semibold text-black dark:text-white">
-              Ciao, Bienvenute a <br />
-              <span className="text-4xl md:text-[6rem] font-bold mt-1 leading-none">
-                AostaHub
-              </span>
-            </h1>
-          </>
-        }
-      >
-        <Image
-          src={`/ass/aosta.jpg`}
-          alt="hero"
-          height={720}
-          width={1400}
-          className="mx-auto rounded-2xl object-cover h-full object-left-top"
-          draggable={false}
-        />
-      </ContainerScroll>
+       <div  className="flex flex-col overflow-hidden">
     </div>
     <motion.div
     initial={{
@@ -277,21 +258,17 @@ export default function Landing() {
           </div>
         </div>
       </main>
-      <div  className="h-[40rem] rounded-md flex flex-col antialiased bg-white dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
-      <InfiniteMovingCards
-        items={infos}
-        direction="right"
-        speed="fast"
-      />
-    </div>
+      {/* <div  className="h-[40rem] rounded-md flex flex-col antialiased bg-white dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
+      
+    </div> */}
       <div className="h-[10rem] flex justify-center items-center px-4"  >
         <div className="text-4xl mx-auto text-neutral-600 dark:text-neutral-400 font-bold" style={{gap:'3rem'}}>
           Esplora
-          <FlipWords style={{color:'#06b6d4'}} words={aostaWords} /> <br />
+          <FlipWords style={{color:'#06b6d4'}} words={aostaWords} /> 
           Di Aosta
         </div>
       </div>
-      <FocusCards cards={focusImages} />
+      <FocusCards style={{borderRadius:'9px'}} cards={focusImages} />
       {/* <section className=" text-white py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
@@ -350,7 +327,17 @@ export default function Landing() {
         </div>
       </section> */}
       {/* -----------for pictures ------------ */}
+      <h1 className="text-center font-bold mt-9 text-3xl " >Perche <span style={{color:'#06b6d4'}} >Aosta Hub</span> ?</h1>
       <StickyScroll content={content} />
+      <br /><br />
+      <InfiniteMovingCards
+      style={{
+        marginTop:'1.4rem'
+      }}
+        items={infos}
+        direction="right"
+        speed="fast"
+      />
       {/* <motion.section
       dropping="in"
       className=" text-white py-12 md:py-20">

@@ -18,10 +18,11 @@ export const Card = React.memo(({
       hovered !== null && hovered !== index && "blur-sm scale-[0.98]"
     )}>
     <Image
+    style={{borderRadius:'5px'}}
       src={card.src}
       alt={card.title}
       fill
-      className="object-cover absolute inset-0" />
+      className="object-cover absolute inset-0 rounded-md" />
     <div
       className={cn(
         "absolute inset-0 bg-black/50 flex items-end py-8 px-4 transition-opacity duration-300",
