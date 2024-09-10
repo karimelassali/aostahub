@@ -13,6 +13,8 @@ import { HoverBorderGradient } from "../ui/hover-border-gradient"
 import { StickyScroll } from "../ui/sticky-scroll-reveal"
 import { ButtonBo } from "../ui/moving-border";
 import { InfiniteMovingCards } from "../ui/cardsmoving"
+import { FocusCards } from "../ui/focusimg"
+import { FlipWords } from "../ui/flipWords"
 
 export const metadata = {
   title: 'Home',
@@ -95,6 +97,27 @@ const infos = [
     title: "A Tale of Two Cities",
   }
 ]
+//for focus images annimation
+
+const focusImages = [
+  {
+    title:'Parco del gran paradiso',
+    src:'/ass/parcopa.jpg',
+    alt: 'parcopa',
+  },
+  {
+    title:'Architecture',
+    src:'/ass/aostaarch.jpg',
+    alt: 'arch',
+  },
+  {
+    title:'Aosta Chruch',
+    src:'/ass/aostacath.jpg',
+    alt: 'chruch',
+  }
+]
+// for uinue vsit aosta words
+const aostaWords = ["storica", "panoramica", "affascinante", "avventurosa"];
 export default function Landing() {
   const [language, setLanguage] = useState("en")
   const handleLanguageChange = (lang) => {
@@ -261,7 +284,14 @@ export default function Landing() {
         speed="fast"
       />
     </div>
-      
+      <div className="h-[10rem] flex justify-center items-center px-4"  >
+        <div className="text-4xl mx-auto text-neutral-600 dark:text-neutral-400 font-bold" style={{gap:'3rem'}}>
+          Esplora
+          <FlipWords style={{color:'#06b6d4'}} words={aostaWords} /> <br />
+          Di Aosta
+        </div>
+      </div>
+      <FocusCards cards={focusImages} />
       {/* <section className=" text-white py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
