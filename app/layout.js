@@ -58,6 +58,7 @@ export default function RootLayout({ children }) {
         <body>
           <main>
           <header
+          style={{zIndex:'999'}}
               className="bg-[#475569] text-white py-3 px-4 md:px-8 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <Link href="/">

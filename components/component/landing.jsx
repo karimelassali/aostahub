@@ -1,44 +1,39 @@
+"use client";
 
-"use client"
-
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import Image from "next/image"
-import Head from "next/head"
-import { color, motion } from "framer-motion"
-import AOS from 'aos';
-import { ContainerScroll } from "../ui/background-beams-with-collision"
-import { HoverBorderGradient } from "../ui/hover-border-gradient"
-import { StickyScroll } from "../ui/sticky-scroll-reveal"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Image from "next/image";
+import Head from "next/head";
+import { color, motion } from "framer-motion";
+import AOS from "aos";
+import { ContainerScroll } from "../ui/background-beams-with-collision";
+import { HoverBorderGradient } from "../ui/hover-border-gradient";
+import { StickyScroll } from "../ui/sticky-scroll-reveal";
 import { ButtonBo } from "../ui/moving-border";
-import { InfiniteMovingCards } from "../ui/cardsmoving"
-import { FocusCards } from "../ui/focusimg"
-import { FlipWords } from "../ui/flipWords"
+import { InfiniteMovingCards } from "../ui/cardsmoving";
+import { FocusCards } from "../ui/focusimg";
+import { FlipWords } from "../ui/flipWords";
+import { ShootingStars } from "../ui/stars";
+import { BackgroundBeams } from "../ui/beams";
 export const metadata = {
-  title: 'Home',
-  description: 'Welcome to Next.js',
+  title: "Home",
+  description: "Welcome to Next.js",
 };
-
-
-
-
-
-
 
 const content = [
   {
     title: "Discover Aosta's Ancient Ruins",
     description:
-        "Step back in time and explore the ancient ruins of Aosta. Discover the rich history and stunning landscapes of this beautiful region.",
+      "Step back in time and explore the ancient ruins of Aosta. Discover the rich history and stunning landscapes of this beautiful region.",
     content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
         <Image
-          style={{borderRadius:'5px'}}
-          src={'/ass/roman.jpg'}
+          style={{ borderRadius: "8px" }}
+          src={"/ass/roman.jpg"}
           width={300}
           height={300}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover rounded-md"
           alt="ruins"
         />
       </div>
@@ -48,12 +43,12 @@ const content = [
   {
     title: "Securely Share Your Alpine Adventures",
     description:
-    "Capture the breathtaking beauty of the Aosta Valley and share your experiences safely. Let others see the stunning views you've encountered on your journey.",
+      "Capture the breathtaking beauty of the Aosta Valley and share your experiences safely. Let others see the stunning views you've encountered on your journey.",
     content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
         <Image
-          style={{borderRadius:'5px'}}
-          src={'/ass/snow.jpg'}
+          style={{ borderRadius: "5px" }}
+          src={"/ass/snow.jpg"}
           width={300}
           height={300}
           className="h-full w-full object-cover"
@@ -65,11 +60,12 @@ const content = [
   {
     title: "Connect and Chat Amidst Aosta's Natural Wonders",
     description:
-    "Immerse yourself in the serene beauty of Aosta's mountains and lakes. Connect with others who appreciate the same scenic landscapes and start conversations that inspire.",    content: (
+      "Immerse yourself in the serene beauty of Aosta's mountains and lakes. Connect with others who appreciate the same scenic landscapes and start conversations that inspire.",
+    content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--orange-500),var(--yellow-500))] flex items-center justify-center text-white">
         <Image
-          style={{borderRadius:'5px'}}
-          src={'/ass/lago.jpg'}
+          style={{ borderRadius: "5px" }}
+          src={"/ass/lago.jpg"}
           width={300}
           height={300}
           className="h-full w-full object-cover"
@@ -78,74 +74,69 @@ const content = [
       </div>
     ),
   },
-  
 ];
-
 
 //for infos comp
 
 const infos = [
   {
-    
-    quote:
-    "Easily find and connect with new friends who share your interests.",
+    quote: "Easily find and connect with new friends who share your interests.",
     name: "Charles Dickens",
     title: "A Tale of Two Cities",
   },
   {
-    quote:
-    "Easily find and connect with new friends who share your interests.",
+    quote: "Easily find and connect with new friends who share your interests.",
     name: "Charles Dickens",
     title: "A Tale of Two Cities",
-  }
-]
+  },
+];
 //for focus images annimation
 
 const focusImages = [
   {
-    title:'Parco del gran paradiso',
-    src:'/ass/parcopa.jpg',
-    alt: 'parcopa',
+    title: "Parco del gran paradiso",
+    src: "/ass/parcopa.jpg",
+    alt: "parcopa",
   },
   {
-    title:'Architecture',
-    src:'/ass/aostaarch.jpg',
-    alt: 'arch',
+    title: "Architecture",
+    src: "/ass/aostaarch.jpg",
+    alt: "arch",
   },
   {
-    title:'Aosta Chruch',
-    src:'/ass/aostacath.jpg',
-    alt: 'chruch',
-  }
-]
+    title: "Aosta Chruch",
+    src: "/ass/aostacath.jpg",
+    alt: "chruch",
+  },
+];
 // for uinue vsit aosta words
 const aostaWords = ["storica", "panoramica", "affascinante", "avventurosa"];
+
 export default function Landing() {
-  const [language, setLanguage] = useState("en")
+  const [language, setLanguage] = useState("en");
   const handleLanguageChange = (lang) => {
-    setLanguage(lang)
-  }
+    setLanguage(lang);
+  };
 
   return (
-    
-    (
-      <>
-       <div  className="flex flex-col overflow-hidden">
-    </div>
-    <motion.div
-    initial={{
-      opacity: 0,
-      y: -50,
-    }}
-    animate={{
-      opacity: 1,
-      y: 0,
-    }}
-    transition={{
-      delay: 0.5,
-    }}
-    className="flex flex-col min-h-[100dvh] bg-[#f5f5f5] text-[#333]">
-      {/* <header
+    <>
+      <div className={`flex flex-col overflow-hidden mainFont `}>
+      </div>
+      <motion.div
+        initial={{
+          opacity: 0,
+          y: -50,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          delay: 0.5,
+        }}
+        className="flex flex-col min-h-[100dvh] bg-[#f5f5f5] text-[#333]"
+      >
+        {/* <header
         className="bg-[#3B82F6] text-white py-6 px-4 md:px-8 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <AsteriskIcon className="h-8 w-8" />
@@ -153,123 +144,137 @@ export default function Landing() {
         </div>
         
       </header> */}
-      <main className="flex-1 py-12 md:py-20">
-        <div className="container mx-auto px-4 md:px-8">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <motion.div
-
-              initial={{
-                opacity: 0,
-                x: -50,
-              }}
-              animate={{
-                opacity: 1,
-                x: 0,
-              }}
-              transition={{
-                duration: 0.3,
-                delay: 0.9,
-                ease:"easeIn"
-
-              }}
-            >
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {language === "en" ? "Connect and Share with AostaHub" : "Connetti e condividi con AostaHub"}
-              </h2>
-              <p className="text-lg text-[#555] mb-6">
-                {language === "en"
-                  ? "Securely connect and share your Instagram and other social profiles to make new friends."
-                  : "Connetti in modo sicuro e condividi i tuoi profili Instagram e altri social per fare nuovi amici."}
-              </p>
-              <motion.p
+        <main className="flex-1 py-12 md:py-20">
+          <div className="container mx-auto px-4 md:px-8">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <motion.div
                 initial={{
-                  opacity:0,
+                  opacity: 0,
+                  x: -50,
                 }}
                 animate={{
                   opacity: 1,
+                  x: 0,
                 }}
                 transition={{
-                  duration: 1.1,
-                  delay: 1.2,
-                  ease:"easeIn"
+                  duration: 0.3,
+                  delay: 0.9,
+                  ease: "easeIn",
                 }}
-                style={{color:'gray'}} className="text-xl font-semibold">
-                Discover a unique way to connect in Aosta, Italy! Aosta Hub addresses the local trend of people sharing their social media and contacts on public walls and spaces by offering a safer and more organized platform. Start browsing now and make meaningful connections securely.
-              </motion.p>
-              <br />
-              <hr />
-              <br />
-              <motion.div
-              initial={{
-                opacity: 0,
-                y: 50,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.3,
-                delay: 1.2,
-                ease:"easeIn"
-              }}
-
-              className="flex gap-4">
-                <HoverBorderGradient
-
+              >
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                  {language === "en"
+                    ? "Connect and Share with AostaHub"
+                    : "Connetti e condividi con AostaHub"}
+                </h2>
+                <p className="text-lg text-[#555] mb-6">
+                  {language === "en"
+                    ? "Securely connect and share your Instagram and other social profiles to make new friends."
+                    : "Connetti in modo sicuro e condividi i tuoi profili Instagram e altri social per fare nuovi amici."}
+                </p>
+                <motion.p
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                  }}
+                  transition={{
+                    duration: 1.1,
+                    delay: 1.2,
+                    ease: "easeIn",
+                  }}
+                  style={{ color: "gray" }}
+                  className="text-xl font-semibold"
+                >
+                  Discover a unique way to connect in Aosta, Italy! Aosta Hub
+                  addresses the local trend of people sharing their social media
+                  and contacts on public walls and spaces by offering a safer
+                  and more organized platform. Start browsing now and make
+                  meaningful connections securely.
+                </motion.p>
+                <br />
+                <hr />
+                <br />
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: 50,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    delay: 1.2,
+                    ease: "easeIn",
+                  }}
+                  className="flex gap-4"
+                >
+                  <HoverBorderGradient
+                    style={{ borderRadius: "4px" }}
                     containerClassName="rounded-full"
                     as="button"
                     className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
                   >
-                    <span>Sign up </span>
+                    <Link href={'/explore'}>Sign up </Link>
                   </HoverBorderGradient>
 
                   <HoverBorderGradient
+                    style={{ borderRadius: "4px" }}
                     duration={1}
                     containerClassName="rounded-full"
                     as="button"
                     className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
                   >
-                    <span>Explore </span>
-                  </HoverBorderGradient>
+                    <Link href={'/explore'}>Explore </Link>
+                    </HoverBorderGradient>
+                </motion.div>
               </motion.div>
-            </motion.div>
-            <div>
-              <motion.img
-              initial={{
-                opacity: 0,
-                x: 50,
-              }}
-              animate={{
-                opacity: 1,
-                x: 0,
-              }}
-              transition={{
-                delay: 1.4,
-              }}
-                
-                src="/ass/aosta.jpg"
-                width="550"
-                height="400"
-                alt="AostaHub"
-                className="rounded-lg"
-                style={{ aspectRatio: "550/400", objectFit: "cover" }} />
+              <div>
+                <motion.img
+                  initial={{
+                    opacity: 0,
+                    x: 50,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    x: 0,
+                  }}
+                  transition={{
+                    delay: 1.4,
+                  }}
+                  src="/ass/aosta.jpg"
+                  width="550"
+                  height="400"
+                  alt="AostaHub"
+                  className="rounded-lg"
+                  style={{
+                    aspectRatio: "550/400",
+                    objectFit: "cover",
+                    borderRadius: "6px",
+                  }}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </main>
-      {/* <div  className="h-[40rem] rounded-md flex flex-col antialiased bg-white dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
+        </main>
+        {/* <div  className="h-[40rem] rounded-md flex flex-col antialiased bg-white dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
       
     </div> */}
-      <div className="h-[10rem] flex justify-center items-center px-4"  >
-        <div className="text-4xl mx-auto text-neutral-600 dark:text-neutral-400 font-bold" style={{gap:'3rem'}}>
-          Esplora
-          <FlipWords style={{color:'#06b6d4'}} words={aostaWords} /> 
-          Di Aosta
+        <div className="h-[10rem] flex justify-center items-center px-4">
+          <div
+            className="text-4xl mx-auto text-neutral-600 dark:text-neutral-400 font-bold"
+            style={{ gap: "3rem" }}
+          >
+            Esplora
+            <FlipWords style={{ color: "#06b6d4" }} words={aostaWords} />
+            Di Aosta
+          </div>
         </div>
-      </div>
-      <FocusCards style={{borderRadius:'9px'}} cards={focusImages} />
-      {/* <section className=" text-white py-12 md:py-20">
+        <FocusCards style={{ borderRadius: "9px" }} cards={focusImages} />
+        {/* <section className=" text-white py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
             {language === "en" ? "Key Features" : "Caratteristiche principali"}
@@ -326,19 +331,22 @@ export default function Landing() {
           </div>
         </div>
       </section> */}
-      {/* -----------for pictures ------------ */}
-      <h1 className="text-center font-bold mt-9 text-3xl " >Perche <span style={{color:'#06b6d4'}} >Aosta Hub</span> ?</h1>
-      <StickyScroll content={content} />
-      <br /><br />
-      <InfiniteMovingCards
-      style={{
-        marginTop:'1.4rem'
-      }}
-        items={infos}
-        direction="right"
-        speed="fast"
-      />
-      {/* <motion.section
+        {/* -----------for pictures ------------ */}
+        <h1 className="text-center font-bold mt-9 text-3xl ">
+          Perche <span style={{ color: "#06b6d4" }}>Aosta Hub</span> ?
+        </h1>
+        <StickyScroll content={content} />
+        <br />
+        <br />
+        <InfiniteMovingCards
+          style={{
+            marginTop: "1.4rem",
+          }}
+          items={infos}
+          direction="right"
+          speed="fast"
+        />
+        {/* <motion.section
       dropping="in"
       className=" text-white py-12 md:py-20">
         <h1 className="text-center font-bold text-2xl ">New Friends <span className="text-3xl" style={{color:'#3B82F6'}}>=</span> New place to visit</h1>
@@ -385,52 +393,59 @@ export default function Landing() {
           </div>
         </div>
       </motion.section> */}
-      {/* ---------- */}
-      <section className="py-12 md:py-20">
-        <div className="container mx-auto px-4 md:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            {language === "en" ? "Join AostaHub Today" : "Unisciti ad AostaHub oggi"}
-          </h2>
-          <p className="text-lg text-[#555] mb-8">
-            {language === "en"
-              ? "Connect, share, and make new friends in a secure and friendly environment."
-              : "Connetti, condividi e fai nuovi amici in un ambiente sicuro e amichevole."}
-          </p>
-          <Button className="bg-[#3B82F6] text-white hover:bg-[#00a185]" style={{color:'black'}}>
-           <Link style={{color:'black'}} href={'/explore'}>
-            {language === "en" ? "Sign Up Now" : "Iscriviti ora"}
-           </Link>
-
-          </Button>
-        </div>
-      </section>
-      <footer className="bg-[#3B82F6] text-white py-6 px-4 md:px-8">
-        <div className="container mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <AsteriskIcon className="h-6 w-6" />
-            <span>&copy; 2024 AostaHub. All rights reserved.</span>
+        {/* ---------- */}
+        <section className="py-12 md:py-20">
+          <div className="container mx-auto px-4 md:px-8 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <ShootingStars minDelay={1000} minSpeed={4}/>
+              {language === "en"
+                ? "Join AostaHub Today"
+                : "Unisciti ad AostaHub oggi"}
+            </h2>
+            <p className="text-lg text-[#555] mb-8">
+              {language === "en"
+                ? "Connect, share, and make new friends in a secure and friendly environment."
+                : "Connetti, condividi e fai nuovi amici in un ambiente sicuro e amichevole."}
+            </p>
+            <Button
+              className="bg-[#3B82F6] text-white hover:bg-[#00a185]"
+              style={{ color: "black" }}
+            >
+              <Link style={{ color: "black" }} href={"/explore"}>
+                {language === "en" ? "Sign Up Now" : "Iscriviti ora"}
+              </Link>
+            </Button>
           </div>
-          <nav className="flex items-center gap-4">
-            <Link href="#" className="hover:underline" prefetch={false}>
-              {language === "en" ? "Privacy Policy" : "Informativa sulla privacy"}
-            </Link>
-            <Link href="#" className="hover:underline" prefetch={false}>
-              {language === "en" ? "Terms of Service" : "Termini di servizio"}
-            </Link>
-            <Link href="#" className="hover:underline" prefetch={false}>
-              {language === "en" ? "Contact Us" : "Contattaci"}
-            </Link>
-          </nav>
-        </div>
-      </footer>
-    </motion.div>
-    </>)
+        </section>
+        <section className="bg-[#3B82F6] text-white py-6 px-4 md:px-8">
+          <div className="container mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <AsteriskIcon className="h-6 w-6" />
+              <span>&copy; 2024 AostaHub. All rights reserved.</span>
+            </div>
+            <nav className="flex items-center gap-4">
+              <Link href="#" className="hover:underline" prefetch={false}>
+                {language === "en"
+                  ? "Privacy Policy"
+                  : "Informativa sulla privacy"}
+              </Link>
+              <Link href="#" className="hover:underline" prefetch={false}>
+                {language === "en" ? "Terms of Service" : "Termini di servizio"}
+              </Link>
+              <Link href="#" className="hover:underline" prefetch={false}>
+                {language === "en" ? "Contact Us" : "Contattaci"}
+              </Link>
+            </nav>
+          </div>
+        </section>
+      </motion.div>
+    </>
   );
 }
 
 function AsteriskIcon(props) {
   return (
-    (<svg
+    <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -440,18 +455,18 @@ function AsteriskIcon(props) {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round">
+      strokeLinejoin="round"
+    >
       <path d="M12 6v12" />
       <path d="M17.196 9 6.804 15" />
       <path d="m6.804 9 10.392 6" />
-    </svg>)
+    </svg>
   );
 }
-
 
 function SearchIcon(props) {
   return (
-    (<svg
+    <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -461,17 +476,17 @@ function SearchIcon(props) {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round">
+      strokeLinejoin="round"
+    >
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.3-4.3" />
-    </svg>)
+    </svg>
   );
 }
-
 
 function ShareIcon(props) {
   return (
-    (<svg
+    <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -481,18 +496,18 @@ function ShareIcon(props) {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round">
+      strokeLinejoin="round"
+    >
       <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
       <polyline points="16 6 12 2 8 6" />
       <line x1="12" x2="12" y1="2" y2="15" />
-    </svg>)
+    </svg>
   );
 }
 
-
 function WebcamIcon(props) {
   return (
-    (<svg
+    <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -502,11 +517,12 @@ function WebcamIcon(props) {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round">
+      strokeLinejoin="round"
+    >
       <circle cx="12" cy="10" r="8" />
       <circle cx="12" cy="10" r="3" />
       <path d="M7 22h10" />
       <path d="M12 22v-4" />
-    </svg>)
+    </svg>
   );
 }
