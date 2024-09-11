@@ -1,4 +1,4 @@
-'use clien'
+'use client'
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -10,6 +10,17 @@ import { Skeleton } from "../ui/skeleton"
 import {motion} from 'framer-motion'
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/modalProfile"
 
 import { useUser } from "@clerk/nextjs";
 
@@ -26,6 +37,15 @@ export function Cards() {
   const { user } = useUser();
   const currentUserId = user?.id;
 
+  let [isOpen, setIsOpen] = useState(true)
+
+  function open() {
+    setIsOpen(true)
+  }
+
+  function close() {
+    setIsOpen(false)
+  }
 
   async function delAno(id) {
     try {
@@ -69,10 +89,10 @@ export function Cards() {
 },[])
 
 
-
 return (
   <>
   <div className="grid p-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+  
     {
       loading ? (
         // عرض الـ Skeleton Loader أثناء التحميل
@@ -97,48 +117,66 @@ return (
           whileHover={{ shadow: '0 10px 20px red'}}
           onHoverStart={e => {}}
           onHoverEnd={e => {}}
-          onClick={(e)=>{router.push('profile/'+user.id)  }} key={user.id} className="bg-background rounded-lg overflow-hidden shadow-lg hover:cursor-pointer ">
-            <div style={{ backdropFilter: 'blur(30px)' }}>
-              {
-                console.log(user.imgName)
-              }
-              <div className="relative h-32 flex items-end justify-end p-1" style={{ backgroundSize: 'cover' }}>
-              <img  className="w-full h-full object-cover rounded-sm" style={{border:''}} src={user.profilePic} alt="bgImage" />
-                <Avatar style={{borderRadius:'50px'}} className="absolute top-[70%] left-4 w-20 h-20 border-4 border-background rounded-lg ">
-                  <AvatarImage className="hover:scale-150 hover:cursor-pointer" src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`} alt="User Avatar" />
-                  <AvatarFallback>{user.id}</AvatarFallback>
-                </Avatar>
+          onDoubleClick={(e)=>{router.push('profile/'+user.id)  }} key={user.id} className="bg-background rounded-lg overflow-hidden shadow-lg hover:cursor-pointer ">
+              <div style={{ backdropFilter: 'blur(30px)' }}>
+                {
+                  console.log(user.imgName)
+                }
+                <div className="relative h-32 flex items-end justify-end p-1" style={{ backgroundSize: 'cover' }}>
+                <Image width={100} height={100}  className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}} src={user.profilePic} alt="bgImage" />
+                  <Avatar style={{borderRadius:'50px'}} className="absolute top-[70%] left-4 w-20 h-20 border-4 border-background rounded-lg ">
+                    <span className="flex h-[100%] w-full items-center justify-center " style={{border:'1px solid red'}}>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <AvatarImage className="hover:scale-150 hover:cursor-pointer" src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`} alt="User Avatar" />
+                      </AlertDialogTrigger>
+                      <AlertDialogContent  style={{backdropFilter:'blur(40px)',border:'1px solid red'}}>
+                        <AlertDialogHeader>
+                          <AlertDialogDescription styl={{display:'flex'}}>
+                            <center>
+                              <Image style={{borderRadius:'4px'}} className=" w-full h-[200px] object-contain rounded-md" src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`} width={300} height={300} alt="profile pic" />
+                            </center>
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel style={{border:'1px solid red',borderRadius:'4px'}}>Chiuso</AlertDialogCancel>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                    </span>
+                    <AvatarFallback>{user.id}</AvatarFallback>
+                  </Avatar>
+                </div>
               </div>
-            </div>
             <CardContent className="p-6 pt-12 space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between lg:flex-col lg:items-start lg:gap-2 lg:justify-center">
                 <div className="space-y-1">
                   <h3 className="text-xl flex items-center gap-2 font-semibold">
-                    {user.fname + user.lname} 
+                    {user.fname + ' ' +  user.lname} 
                     {user.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
                   </h3>
                   <p className="text-sm text-muted-foreground">{user.age} years old</p>
                 </div>
-                <div className="flex items-center space-x-3 rounded-sm p-1" style={{ backdropFilter: 'blur(30px)', border: '0.2px solid #e2e8f0' }}>
+                <div className="flex items-center space-x-3 rounded-sm p-1" style={{ backdropFilter: 'blur(30px)', border: '0.2px solid #e2e8f0',borderRadius:'4px' }}>
                   {user.instagram && (
-                    <Link href="#" className="text-muted-foreground hover:text-primary" prefetch={false}>
+                    <Link href={"https://www.instagram.com/"+user.instagram} className="text-muted-foreground hover:text-primary" prefetch={false}>
                       <InstagramIcon className="w-5 h-5" style={{ color: '#c026d3' }} />
                     </Link>
                   )}
                   {user.facebook && (
-                    <Link href="#" className="text-muted-foreground hover:text-primary" prefetch={false}>
+                    <Link href={"https://www.facebook.com/"+user.facebook} className="text-muted-foreground hover:text-primary" prefetch={false}>
                       <FacebookIcon className="w-5 h-5" style={{ color: '#06b6d4' }} />
                     </Link>
                   )}
                   {user.number && (
-                    <Link href="#" className="text-muted-foreground hover:text-primary" prefetch={false}>
+                    <Link href={"tel:"+user.number} className="text-muted-foreground hover:text-primary" prefetch={false}>
                       <PhoneIcon className="w-5 h-5" style={{ color: '#4ade80' }} />
                     </Link>
                   )}
                 </div>
               </div>
               <hr />
-              via rue abbe ame gorret
+              {/* via rue abbe ame gorret */}
               <p className="text-sm text-muted-foreground">
                 {user.description}
               </p>
@@ -151,10 +189,10 @@ return (
                   transition={{ duration: 1.3 ,delay:3}}
                   className="flex items-center justify-end ">
                       <Button
-                        style={{border:'1px solid red'}}  
+                        style={{border:'1px solid red',borderRadius:'4px'}}  
                         variant="ghost"
                         size="icon"
-                        className=" w-[50%]  0 text-white hover:bg-red-500" onClick={()=>delAno(user.id)}>
+                        className=" w-[50%]  0 text-white hover:bg-red-500" onClick={()=>delAno(user.id)} >
                           <TrashIcon className="w-5 h-5" style={{ color: '#e11d48' }} />
                         </Button>
                   </motion.div>

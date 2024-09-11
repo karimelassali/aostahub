@@ -78,6 +78,7 @@ export default function Explore() {
      
       <FloatingDock  items={links} />
     </footer> */}
+    <div className="pt-16"></div>
       </>
   )
     
