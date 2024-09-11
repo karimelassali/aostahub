@@ -125,21 +125,21 @@ return (
                 <div className="relative h-32 flex items-end justify-end p-1" style={{ backgroundSize: 'cover' }}>
                 <Image width={100} height={100}  className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}} src={user.profilePic} alt="bgImage" />
                   <Avatar style={{borderRadius:'50px'}} className="absolute top-[70%] left-4 w-20 h-20 border-4 border-background rounded-lg ">
-                    <span className="flex h-[100%] w-full items-center justify-center " style={{border:'1px solid red'}}>
+                    <span className="flex h-[100%] w-full items-center justify-center " >
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <AvatarImage className="hover:scale-150 hover:cursor-pointer" src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`} alt="User Avatar" />
                       </AlertDialogTrigger>
-                      <AlertDialogContent  style={{backdropFilter:'blur(40px)',border:'1px solid red'}}>
+                      <AlertDialogContent  style={{backdropFilter:'blur(40px)'}}>
                         <AlertDialogHeader>
                           <AlertDialogDescription styl={{display:'flex'}}>
                             <center>
-                              <Image style={{borderRadius:'4px'}} className=" w-full h-[200px] object-contain rounded-md" src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`} width={300} height={300} alt="profile pic" />
+                              <Image style={{borderRadius:'9px'}} className="md:w-screen w-full h-[200px] object-contain rounded-md" src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`} width={300} height={300} alt="profile pic" />
                             </center>
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel style={{border:'1px solid red',borderRadius:'4px'}}>Chiuso</AlertDialogCancel>
+                          <AlertDialogCancel style={{borderRadius:'4px'}}>Chiuso</AlertDialogCancel>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
