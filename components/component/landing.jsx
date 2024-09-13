@@ -164,10 +164,13 @@ export default function Landing() {
               >
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
                   {language === "en"
-                    ? "Connect and Share with AostaHub"
-                    : "Connetti e condividi con AostaHub"}
+                    ? "Connect and Share with "
+                    : "Connetti e condividi con "}
+                    <span style={{fontWeight:'bold'}} className="text-primary">
+                      AostaHub
+                    </span>
                 </h2>
-                <p className="text-lg text-[#555] mb-6">
+                <p className="text-xl text mb-6">
                   {language === "en"
                     ? "Securely connect and share your Instagram and other social profiles to make new friends."
                     : "Connetti in modo sicuro e condividi i tuoi profili Instagram e altri social per fare nuovi amici."}
@@ -184,8 +187,7 @@ export default function Landing() {
                     delay: 1.2,
                     ease: "easeIn",
                   }}
-                  style={{ color: "gray" }}
-                  className="text-xl font-semibold"
+                  className="text-xl text-text font-body "
                 >
                   Discover a unique way to connect in Aosta, Italy! Aosta Hub
                   addresses the local trend of people sharing their social media
@@ -212,24 +214,24 @@ export default function Landing() {
                   }}
                   className="flex gap-4"
                 >
-                  <HoverBorderGradient
+                  <Button
                     style={{ borderRadius: "4px" }}
                     containerClassName="rounded-full"
                     as="button"
-                    className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+                    className="p-3 rounded-md bg-secondary w-max md:w-40 text-text text-lg"
                   >
                     <Link href={'/explore'}>Sign up </Link>
-                  </HoverBorderGradient>
+                  </Button>
 
-                  <HoverBorderGradient
+                  <Button
                     style={{ borderRadius: "4px" }}
                     duration={1}
                     containerClassName="rounded-full"
                     as="button"
-                    className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+                    className="p-3 rounded-md bg-primary w-max md:w-40 text-secondary text-lg" 
                   >
                     <Link href={'/explore'}>Explore </Link>
-                    </HoverBorderGradient>
+                    </Button>
                 </motion.div>
               </motion.div>
               <div>
@@ -333,7 +335,7 @@ export default function Landing() {
       </section> */}
         {/* -----------for pictures ------------ */}
         <h1 className="text-center font-bold mt-9 text-3xl ">
-          Perche <span style={{ color: "#06b6d4" }}>Aosta Hub</span> ?
+          Perche <span className="text-accent">Aosta Hub</span> ?
         </h1>
         <StickyScroll content={content} />
         <br />
@@ -399,40 +401,41 @@ export default function Landing() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
             <ShootingStars minDelay={1000} minSpeed={4}/>
               {language === "en"
-                ? "Join AostaHub Today"
+               
+                ? `Join AostaHub Today`
                 : "Unisciti ad AostaHub oggi"}
             </h2>
-            <p className="text-lg text-[#555] mb-8">
+            <p className="text-xl text-[#555] mb-8">
               {language === "en"
                 ? "Connect, share, and make new friends in a secure and friendly environment."
                 : "Connetti, condividi e fai nuovi amici in un ambiente sicuro e amichevole."}
             </p>
             <Button
-              className="bg-[#3B82F6] text-white hover:bg-[#00a185]"
-              style={{ color: "black" }}
+            style={{color: 'white',borderRadius: '5px'}}
+              className=" bg-accent   text-white hover:bg-secondary hover:text-text"
             >
-              <Link style={{ color: "black" }} href={"/explore"}>
+              <Link className="text-background hover:text-text" href={"/explore"}>
                 {language === "en" ? "Sign Up Now" : "Iscriviti ora"}
               </Link>
-            </Button>
+            </Button>     
           </div>
         </section>
-        <section className="bg-[#3B82F6] text-white py-6 px-4 md:px-8">
+        <section className="bg-accent text-white py-6 px-4 md:px-8">
           <div className="container mx-auto flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <AsteriskIcon className="h-6 w-6" />
-              <span>&copy; 2024 AostaHub. All rights reserved.</span>
+              <AsteriskIcon className="h-6 w-6 text-background" />
+              <span className="text-background">&copy; 2024 AostaHub. All rights reserved.</span>
             </div>
             <nav className="flex items-center gap-4">
-              <Link href="#" className="hover:underline" prefetch={false}>
+              <Link href="#" className="hover:underline text-[#ccc]" prefetch={false}>
                 {language === "en"
                   ? "Privacy Policy"
                   : "Informativa sulla privacy"}
               </Link>
-              <Link href="#" className="hover:underline" prefetch={false}>
+              <Link href="#" className="hover:underline text-[#ccc]" prefetch={false}>
                 {language === "en" ? "Terms of Service" : "Termini di servizio"}
               </Link>
-              <Link href="#" className="hover:underline" prefetch={false}>
+              <Link href="#" className="hover:underline text-[#ccc]" prefetch={false}>
                 {language === "en" ? "Contact Us" : "Contattaci"}
               </Link>
             </nav>

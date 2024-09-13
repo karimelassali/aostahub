@@ -4,6 +4,7 @@ import { IconLayoutNavbarCollapse } from "@tabler/icons-react";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const FloatingDock = ({
   items,
@@ -21,12 +22,24 @@ const FloatingDockMobile = ({
   className
 }) => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  // Define the routes where you want to hide the component
+  const hideOnRoutes = ['/'];
+
+  // Check if the current route is in the hideOnRoutes array
+ 
+
   return (
-    (<div style={{backdropFilter:'blur(40px)'}}  className={cn("relative block md:hidden", className)}>
+    <>
+    {
+      window.location.href === '/' && null
+    }
+      <div style={{ backdropFilter: 'blur(40px)' }} className={cn("relative block md:hidden", className)}>
       <AnimatePresence>
         {open && (
           <motion.div
-          style={{backdropFilter:'blur(40px)'}} 
+            style={{ backdropFilter: 'blur(40px)' }}
             layoutId="nav"
             className="absolute bottom-full mb-2 inset-x-0 flex flex-col gap-2">
             {items.map((item, idx) => (
@@ -61,7 +74,9 @@ const FloatingDockMobile = ({
         className="h-10 w-10 rounded-full bg-gray-50 dark:bg-neutral-800 flex items-center justify-center">
         <IconLayoutNavbarCollapse className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
       </button>
-    </div>)
+    </div>
+    </>
+    
   );
 };
 
@@ -71,7 +86,7 @@ const FloatingDockDesktop = ({
 }) => {
   let mouseX = useMotionValue(Infinity);
   return (
-    (<motion.div
+    <motion.div
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
@@ -81,7 +96,7 @@ const FloatingDockDesktop = ({
       {items.map((item) => (
         <IconContainer mouseX={mouseX} key={item.title} {...item} />
       ))}
-    </motion.div>)
+    </motion.div>
   );
 };
 
@@ -130,30 +145,17 @@ function IconContainer({
   const [hovered, setHovered] = useState(false);
 
   return (
-    (<Link href={href}>
+    <Link href={href}>
       <motion.div
         ref={ref}
         style={{ width, height }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="aspect-square rounded-full bg-gray-200 dark:bg-neutral-800 flex items-center justify-center relative">
-        <AnimatePresence>
-          {hovered && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, x: "-50%" }}
-              animate={{ opacity: 1, y: 0, x: "-50%" }}
-              exit={{ opacity: 0, y: 2, x: "-50%" }}
-              className="px-2 py-0.5 whitespace-pre rounded-md bg-gray-100 border dark:bg-neutral-800 dark:border-neutral-900 dark:text-white border-gray-200 text-neutral-700 absolute left-1/2 -translate-x-1/2 -top-8 w-fit text-xs">
-              {title}
-            </motion.div>
-          )}
-        </AnimatePresence>
-        <motion.div
-          style={{ width: widthIcon, height: heightIcon }}
-          className="flex items-center justify-center">
+        className="flex items-center justify-center">
+        <motion.div style={{ width: widthIcon, height: heightIcon }}>
           {icon}
         </motion.div>
       </motion.div>
-    </Link>)
+    </Link>
   );
 }

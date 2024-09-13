@@ -144,7 +144,10 @@ export default function Create() {
           <h1 className="text-3xl font-bold">Create Your Box Profile</h1>
           <p className="mt-2 text-muted-foreground">Fill out the form below to create your profile.</p>
         </div>
-        <Card >
+        <Card style={{
+          boxShadow:'0 0 30px #a1a1aa',
+          borderRadius:'30px'
+        }}>
           <CardContent className="space-y-6 bg-red-300">
             <form className="overflow-hidden " onSubmit={create}>
               <input type="file" id="imgInp" hidden onChange={handleImgInput}  />
@@ -155,7 +158,7 @@ export default function Create() {
               <br />
               <p className="text-center mt-3 font-semibold" style={{color:'#10b981'}}>
                 {
-                  bg === true ?  'Image selected' : <span style={{color:"#e11d48"}}>Pleaze select a picture of you !</span>
+                  bg === true ?  'Image selected' : <span style={{color:"#f87171"}}>Pleaze select a picture of you !</span>
                 }
               </p>
               <br />
@@ -164,14 +167,16 @@ export default function Create() {
               <div className="grid gap-2">
                 <Label htmlFor="name">Name</Label>
                 <div className="flex items-center gap-2">
-                  <Input required  onChange={(e)=>{setFname(e.target.value)}}   id="name" placeholder="Enter your name" />
+                  <Input style={{borderRadius:"5px"}} required  onChange={(e)=>{setFname(e.target.value)}}   id="name" placeholder="Enter your name" />
                   <UserIcon className="h-5 w-5 text-muted-foreground" />
                 </div>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="lastname">Last Name</Label>
                 <div className="flex items-center gap-2">
-                  <Input  required onChange={(e)=>{setLname(e.target.value)}}  id="lastname" placeholder="Enter your last name" />
+                  <Input  
+                  style={{borderRadius:"5px"}}
+                  required onChange={(e)=>{setLname(e.target.value)}}  id="lastname" placeholder="Enter your last name" />
                   <UserIcon className="h-5 w-5 text-muted-foreground" />
                 </div>
               </div>
@@ -179,13 +184,17 @@ export default function Create() {
             <div className="grid gap-2">
               <Label htmlFor="age">Age</Label>
               <div className="flex items-center gap-2">
-                <Input  required onChange={(e)=>{setAge(e.target.value)}}  id="age" type="number" placeholder="Enter your age" />
+                <Input  
+                style={{borderRadius:"5px"}}
+                required onChange={(e)=>{setAge(e.target.value)}}  id="age" type="number" placeholder="Enter your age" />
                 <CalendarIcon className="h-5 w-5 text-muted-foreground" />
               </div>
             </div>
             <div className="grid gap-2">
               <Label  required htmlFor="description">Description</Label>
-              <Textarea  required
+              <Textarea   
+              style={{borderRadius:"5px"}}
+              required
                 id="description"
                 placeholder="Tell us about yourself"
                 className="min-h-[100px]" 
@@ -196,7 +205,9 @@ export default function Create() {
               <div className="grid gap-2">
                 <Label htmlFor="instagram">Instagram</Label>
                 <div className="flex items-center gap-2">
-                  <Input onChange={(e)=>{setInstagram(e.target.value)}}  id="instagram" placeholder="Enter your Instagram" className="w-full" />
+                  <Input  
+                  style={{borderRadius:"5px"}}
+                  onChange={(e)=>{setInstagram(e.target.value)}}  id="instagram" placeholder="Enter your Instagram" className="w-full" />
                   <InstagramIcon className="h-5 w-5 text-muted-foreground" />
                 </div>
                 <p style={{color:'gray',fontSize:'10px'}} className="gap-2">Without @</p>
@@ -204,21 +215,25 @@ export default function Create() {
               <div className="grid gap-2">
                 <Label htmlFor="facebook">Facebook</Label>
                 <div className="flex items-center p-2">
-                  <Input onChange={(e)=>{setFacebook(e.target.value)}}  id="facebook" placeholder="Enter your Facebook" className="w-full" />
+                  <Input  
+                  style={{borderRadius:"5px"}}
+                  onChange={(e)=>{setFacebook(e.target.value)}}  id="facebook" placeholder="Enter your Facebook" className="w-full" />
                   <FacebookIcon className="h-5 w-5 text-muted-foreground" />
                 </div>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="phone">Phone</Label>
                 <div className="flex items-center gap-2">
-                  <Input onChange={(e)=>{setNumber(e.target.value)}}  id="phone" placeholder="Enter your Phone Number" className="w-full" />
+                  <Input  
+                  style={{borderRadius:"5px"}}
+                  onChange={(e)=>{setNumber(e.target.value)}}  id="phone" placeholder="Enter your Phone Number" className="w-full" />
                   <PhoneIcon className="h-5 w-5 text-muted-foreground" />
                 </div>
               </div>
             </div>
             <CardFooter>
-            <button type="submit" style={{backgroundColor:'#06b6d4',color:'white'}}  className="ml-auto mt-4 flex items-center justify-center gap-2 p-1  p-2 rounded-sm text-l font-bold"  >Create <FaCheck />
-            </button>
+            <Button type="submit" style={{backgroundColor:'#06b6d4',color:'white',borderRadius:'4px'}}  className="ml-auto mt-4 flex items-center justify-center gap-2 p-1  p-2 rounded-sm text-l font-bold"  >Create <FaCheck />
+            </Button>
           </CardFooter>   
             </form>
           </CardContent>

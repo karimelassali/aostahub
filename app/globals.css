@@ -1,15 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css?family=Sura:700|Sura:400');
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=SUSE:wght@100..800&display=swap');
 
-*{
-    font-family: "Roboto Mono", monospace;
-    font-optical-sizing: auto;
-}
 
-.mainFont{
-    font-family: "Roboto Mono", monospace;
-    font-optical-sizing: auto; 
-}
+

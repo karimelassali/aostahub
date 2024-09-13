@@ -55,11 +55,11 @@ export default function RootLayout({ children }) {
           <meta name="msvalidate.01" content="95C6FEA2336278D091BC03508F4221AF" />
           <meta name="google-site-verification" content="TFC9KKJST9sPJHv4r0wz0xnmUb09ZFJFC8crGzgUSnk" />
         </head>
-        <body>
+        <body className='bg-background'>
           <main>
           <header
           style={{zIndex:'999'}}
-              className="bg-[#475569] text-white py-3 px-4 md:px-8 flex items-center justify-between">
+              className="bg-accent text-white py-3 px-4 md:px-8 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <Link href="/">
                   <Image  alt='logo' width={220} height={220} src={'/ass/logo.png'} />
