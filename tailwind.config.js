@@ -12,36 +12,38 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        'text': '#050315',
+        'background': '#fbfbfe',
+        'primary': '#2f27ce',
+        'secondary': '#dedcff',
+        'accent': '#433bff',
+       },
       animation:{
         scroll:
         "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
     
       },
+      fontSize: {
+        sm: '0.750rem',
+        base: '1rem',
+        xl: '1.333rem',
+        '2xl': '1.777rem',
+        '3xl': '2.369rem',
+        '4xl': '3.158rem',
+        '5xl': '4.210rem',
+      },
+      fontFamily: {
+        heading: 'Righteous',
+        body: 'Righteous',
+      },
+      fontWeight: {
+        normal: '400',
+        bold: '700',
+      },
     },
-    colors: {
-      'text': '#050315',
-      'background': '#fbfbfe',
-      'primary': '#2f27ce',
-      'secondary': '#dedcff',
-      'accent': '#433bff',
-     },
-     fontSize: {
-      sm: '0.750rem',
-      base: '1rem',
-      xl: '1.333rem',
-      '2xl': '1.777rem',
-      '3xl': '2.369rem',
-      '4xl': '3.158rem',
-      '5xl': '4.210rem',
-    },
-    fontFamily: {
-      heading: 'Righteous',
-      body: 'Righteous',
-    },
-    fontWeight: {
-      normal: '400',
-      bold: '700',
-    },
+    
+     
       borderRadius: {
             "lg": "var(--radius)",
             "md": "calc(var(--radius) - 2px)",

@@ -25,21 +25,21 @@ const links = [
   {
     title:'Home',
     icon:(
-      <IconHome className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      <IconHome className="h-full w-full text-black " />
     ),
     href:'/explore'
   }
   ,{
     title:'Create',
     icon:(
-      <IoCreateOutline className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      <IoCreateOutline className="h-full w-full text-black " />
     ),
     href:'/create'
   },
   {
     title:'Chat',
     icon:(
-      <IoChatboxOutline className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      <IoChatboxOutline className="h-full w-full text-black " />
     ),
     href:'/chat'
   }
@@ -88,7 +88,7 @@ export default function RootLayout({ children }) {
             </header>
             {children}
             </main>
-            <footer className="flex justify-center p-4 w-full bg-gray-900 fixed bottom-0 lg:bg-gray-200 rounded-md " style={{}}>
+            <footer className="flex justify-center p-4 w-full  fixed bottom-0  rounded-md  " >
               {/* <div className="w-full max-w-4xl p-4 rounded-lg flex justify-center gap-8 rounded-sm" style={{ backdropFilter: 'blur(30px)' }}>
                 <Link
               
@@ -102,8 +102,8 @@ export default function RootLayout({ children }) {
                   <span className="ml-2">Profile</span>
                 </Link>
               </div> */}
-              <div className="p-2 rounded-lg" style={{backdropFilter:'blur(20px)',borderRadius:'5px'}}>
-                <FloatingDock style={{gap:'9'}}   items={links} />
+              <div className="p-2  rounded-lg" style={{backdropFilter:'blur(20px)',borderRadius:'5px'}}>
+                <FloatingDock mobileClassName='inset-x-0 p-4  ' style={{gap:'20 ',color:'black'}} items={links} />
               </div>
             </footer>
         </body>

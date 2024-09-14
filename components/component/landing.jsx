@@ -166,11 +166,11 @@ export default function Landing() {
                   {language === "en"
                     ? "Connect and Share with "
                     : "Connetti e condividi con "}
-                    <span style={{fontWeight:'bold'}} className="text-primary">
+                    <span style={{fontWeight:'bold'}} className="text-primary font-body ">
                       AostaHub
                     </span>
                 </h2>
-                <p className="text-xl text mb-6">
+                <p className="text-xl font-body mb-6">
                   {language === "en"
                     ? "Securely connect and share your Instagram and other social profiles to make new friends."
                     : "Connetti in modo sicuro e condividi i tuoi profili Instagram e altri social per fare nuovi amici."}
@@ -265,13 +265,13 @@ export default function Landing() {
         {/* <div  className="h-[40rem] rounded-md flex flex-col antialiased bg-white dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
       
     </div> */}
-        <div className="h-[10rem] flex justify-center items-center px-4">
+        <div className="h-[10rem] pb-9 flex justify-center items-center px-4">
           <div
-            className="text-4xl mx-auto text-neutral-600 dark:text-neutral-400 font-bold"
+            className="text-4xl mx-auto text-black font-heading  font-bold dark:text-neutral-400"
             style={{ gap: "3rem" }}
           >
             Esplora
-            <FlipWords style={{ color: "#06b6d4" }} words={aostaWords} />
+            <FlipWords  className='font-body' words={aostaWords} />
             Di Aosta
           </div>
         </div>

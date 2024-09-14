@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { IconLayoutNavbarCollapse } from "@tabler/icons-react";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export const FloatingDock = ({
@@ -11,10 +11,12 @@ export const FloatingDock = ({
   desktopClassName,
   mobileClassName
 }) => {
-  return (<>
-    <FloatingDockDesktop items={items} className={desktopClassName} />
-    <FloatingDockMobile items={items} className={mobileClassName} />
-  </>);
+  return (
+    <>
+      <FloatingDockDesktop items={items} className={desktopClassName} />
+      <FloatingDockMobile items={items} className={mobileClassName} />
+    </>
+  );
 };
 
 const FloatingDockMobile = ({
@@ -22,61 +24,64 @@ const FloatingDockMobile = ({
   className
 }) => {
   const [open, setOpen] = useState(false);
+  const [isHomeRoute, setIsHomeRoute] = useState(false);
   const router = useRouter();
 
   // Define the routes where you want to hide the component
   const hideOnRoutes = ['/'];
 
   // Check if the current route is in the hideOnRoutes array
- 
+  useEffect(() => {
+    const currentRoute = router.pathname;
+    if (hideOnRoutes.includes(currentRoute)) {
+      setIsHomeRoute(true);
+    } else {
+      setIsHomeRoute(false);
+    }
+  }, [router.pathname]);
+
+  // Return null if the current route should hide the FloatingDockMobile
+  if (isHomeRoute) {
+    return null;
+  }
 
   return (
     <>
-    {
-      window.location.href === '/' && null
-    }
       <div style={{ backdropFilter: 'blur(40px)' }} className={cn("relative block md:hidden", className)}>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            style={{ backdropFilter: 'blur(40px)' }}
-            layoutId="nav"
-            className="absolute bottom-full mb-2 inset-x-0 flex flex-col gap-2">
-            {items.map((item, idx) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  y: 10,
-                  transition: {
-                    delay: idx * 0.05,
-                  },
-                }}
-                transition={{ delay: (items.length - 1 - idx) * 0.05 }}>
-                <Link
-                  href={item.href}
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              style={{ backdropFilter: 'blur(40px)' }}
+              layoutId="nav"
+              className="absolute bottom-full mb-2 inset-x-0 flex flex-col gap-2"
+            >
+              {items.map((item, idx) => (
+                <motion.div
                   key={item.title}
-                  className="h-10 w-10 rounded-full bg-gray-50 dark:bg-neutral-900 flex items-center justify-center">
-                  <div className="h-4 w-4">{item.icon}</div>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <button
-        onClick={() => setOpen(!open)}
-        className="h-10 w-10 rounded-full bg-gray-50 dark:bg-neutral-800 flex items-center justify-center">
-        <IconLayoutNavbarCollapse className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
-      </button>
-    </div>
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10, transition: { delay: idx * 0.05 } }}
+                  transition={{ delay: (items.length - 1 - idx) * 0.05 }}
+                >
+                  <Link
+                    href={item.href}
+                    className="h-10 w-10 rounded-full bg-gray-50 flex items-center justify-center"
+                  >
+                    <div className="h-4 w-4">{item.icon}</div>
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <button
+          onClick={() => setOpen(!open)}
+          className="h-10 w-10 rounded-full bg-gray-50 dark:bg-neutral-800 flex items-center justify-center"
+        >
+          <IconLayoutNavbarCollapse className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
+        </button>
+      </div>
     </>
-    
   );
 };
 
@@ -90,9 +95,10 @@ const FloatingDockDesktop = ({
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "mx-auto hidden md:flex h-16 gap-4 items-end  rounded-2xl bg-gray-50 dark:bg-neutral-900 px-4 pb-3",
+        "mx-auto hidden md:flex h-16 gap-4 items-end rounded-2xl bg-gray-50 px-4 pb-3",
         className
-      )}>
+      )}
+    >
       {items.map((item) => (
         <IconContainer mouseX={mouseX} key={item.title} {...item} />
       ))}
@@ -110,7 +116,6 @@ function IconContainer({
 
   let distance = useTransform(mouseX, (val) => {
     let bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
-
     return val - bounds.x - bounds.width / 2;
   });
 
@@ -151,7 +156,8 @@ function IconContainer({
         style={{ width, height }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="flex items-center justify-center">
+        className="flex items-center justify-center"
+      >
         <motion.div style={{ width: widthIcon, height: heightIcon }}>
           {icon}
         </motion.div>
