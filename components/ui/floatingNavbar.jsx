@@ -1,167 +1,86 @@
-'use client'
+"use client";
+import React, { useEffect, useState } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useMotionValueEvent,
+} from "framer-motion";
 import { cn } from "@/lib/utils";
-import { IconLayoutNavbarCollapse } from "@tabler/icons-react";
-import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Link from "next/link";
-import { useRef, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 
-export const FloatingDock = ({
-  items,
-  desktopClassName,
-  mobileClassName
-}) => {
-  return (
-    <>
-      <FloatingDockDesktop items={items} className={desktopClassName} />
-      <FloatingDockMobile items={items} className={mobileClassName} />
-    </>
-  );
-};
-
-const FloatingDockMobile = ({
-  items,
+export const FloatingNav = ({
+  navItems,
   className
 }) => {
-  const [open, setOpen] = useState(false);
-  const [isHomeRoute, setIsHomeRoute] = useState(false);
-  const router = useRouter();
+  const { scrollYProgress } = useScroll();
 
-  // Define the routes where you want to hide the component
-  const hideOnRoutes = ['/'];
+  const [visible, setVisible] = useState(false);
 
-  // Check if the current route is in the hideOnRoutes array
-  useEffect(() => {
-    const currentRoute = router.pathname;
-    if (hideOnRoutes.includes(currentRoute)) {
-      setIsHomeRoute(true);
-    } else {
-      setIsHomeRoute(false);
+  useMotionValueEvent(scrollYProgress, "change", (current) => {
+    // Check if current is not undefined and is a number
+    if (typeof current === "number") {
+      let direction = current - scrollYProgress.getPrevious();
+
+      if (scrollYProgress.get() < 0.05) {
+        setVisible(false);
+      } else {
+        if (direction < 0) {
+          setVisible(true);
+        } else {
+          setVisible(false);
+        }
+      }
     }
-  }, [router.pathname]);
-
-  // Return null if the current route should hide the FloatingDockMobile
-  if (isHomeRoute) {
-    return null;
-  }
+  });
 
   return (
-    <>
-      <div style={{ backdropFilter: 'blur(40px)' }} className={cn("relative block md:hidden", className)}>
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              style={{ backdropFilter: 'blur(40px)' }}
-              layoutId="nav"
-              className="absolute bottom-full mb-2 inset-x-0 flex flex-col gap-2"
-            >
-              {items.map((item, idx) => (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10, transition: { delay: idx * 0.05 } }}
-                  transition={{ delay: (items.length - 1 - idx) * 0.05 }}
-                >
-                  <Link
-                    href={item.href}
-                    className="h-10 w-10 rounded-full bg-gray-50 flex items-center justify-center"
-                  >
-                    <div className="h-4 w-4">{item.icon}</div>
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-        <button
-          onClick={() => setOpen(!open)}
-          className="h-10 w-10 rounded-full bg-gray-50 dark:bg-neutral-800 flex items-center justify-center"
-        >
-          <IconLayoutNavbarCollapse className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
-        </button>
-      </div>
-    </>
-  );
-};
-
-const FloatingDockDesktop = ({
-  items,
-  className
-}) => {
-  let mouseX = useMotionValue(Infinity);
-  return (
-    <motion.div
-      onMouseMove={(e) => mouseX.set(e.pageX)}
-      onMouseLeave={() => mouseX.set(Infinity)}
-      className={cn(
-        "mx-auto hidden md:flex h-16 gap-4 items-end rounded-2xl bg-gray-50 px-4 pb-3",
-        className
-      )}
-    >
-      {items.map((item) => (
-        <IconContainer mouseX={mouseX} key={item.title} {...item} />
-      ))}
-    </motion.div>
-  );
-};
-
-function IconContainer({
-  mouseX,
-  title,
-  icon,
-  href
-}) {
-  let ref = useRef(null);
-
-  let distance = useTransform(mouseX, (val) => {
-    let bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
-    return val - bounds.x - bounds.width / 2;
-  });
-
-  let widthTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40]);
-  let heightTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40]);
-
-  let widthTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20]);
-  let heightTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20]);
-
-  let width = useSpring(widthTransform, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-  let height = useSpring(heightTransform, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-
-  let widthIcon = useSpring(widthTransformIcon, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-  let heightIcon = useSpring(heightTransformIcon, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <Link href={href}>
+    
+      <>
+        {
+          window.location.pathname == '/' ? null : (
+            <AnimatePresence mode="wait">
       <motion.div
-        ref={ref}
-        style={{ width, height }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        className="flex items-center justify-center"
-      >
-        <motion.div style={{ width: widthIcon, height: heightIcon }}>
-          {icon}
-        </motion.div>
+        initial={{
+          opacity: 1,
+          y: -100,
+        }}
+        animate={{
+          y: visible ? 0 : -100,
+          opacity: visible ? 1 : 0,
+        }}
+        transition={{
+          duration: 0.2,
+        }}
+        style={{borderRadius:'0.5rem',}}
+        className={cn(
+          "flex max-w-fit rounded-md fixed p-3 top-10 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full  bg-accent shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] pr-2 py-2  gap-5 items-center justify-center space-x-4 ",
+          className
+        )}>
+        {navItems.map((navItem, idx) => (
+          <Link
+            key={`link=${idx}`}
+            href={navItem.link}
+            className={cn(
+              "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+            )}>
+            <span className="block sm:hidden">{navItem.icon}</span>
+            <span className="hidden sm:block text-sm">{navItem.name}</span>
+          </Link>
+        ))}
+        {/* <Link
+        href={'/chat'}
+          className="border text-sm rounded-md font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full">
+          <span>Chat</span>
+          <span
+            className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-secondary to-transparent  h-px" />
+        </Link> */}
       </motion.div>
-    </Link>
+      </AnimatePresence>
+          )
+        }
+       
+      </>
+   
   );
-}
+};

@@ -3,7 +3,7 @@ import './globals.css'
 import { Button } from "@/components/ui/button"
 import Image from 'next/image'
 import Link from 'next/link';
-import { FloatingDock } from '@/components/ui/floatingNavbar';
+import { FloatingNav } from '@/components/ui/floatingNavbar';
 import {
   IconHome,
   IconNewSection,
@@ -23,25 +23,26 @@ export const metadata = {
 
 const links = [
   {
-    title:'Home',
+    name:'Home',
     icon:(
-      <IconHome className="h-full w-full text-black " />
+      <IconHome className="h-full w-full text-secondary " />
     ),
-    href:'/explore'
+    link:'/explore'
   }
-  ,{
-    title:'Create',
+  ,
+  {
+    name:'Create',
     icon:(
-      <IoCreateOutline className="h-full w-full text-black " />
+      <IoCreateOutline className="h-full w-full text-secondary " />
     ),
-    href:'/create'
+    link:'/create'
   },
   {
-    title:'Chat',
+    name:'Chat',
     icon:(
-      <IoChatboxOutline className="h-full w-full text-black " />
+      <IoChatboxOutline className="h-full w-full text-secondary " />
     ),
-    href:'/chat'
+    link:'/chat'
   }
 
 ]
@@ -88,7 +89,7 @@ export default function RootLayout({ children }) {
             </header>
             {children}
             </main>
-            <footer className="flex justify-center p-4 w-full  fixed bottom-0  rounded-md  " >
+            <footer className="flex justify-center p-4 w-full   bg-gray-100  rounded-md  " >
               {/* <div className="w-full max-w-4xl p-4 rounded-lg flex justify-center gap-8 rounded-sm" style={{ backdropFilter: 'blur(30px)' }}>
                 <Link
               
@@ -102,9 +103,9 @@ export default function RootLayout({ children }) {
                   <span className="ml-2">Profile</span>
                 </Link>
               </div> */}
-              <div className="p-2  rounded-lg" style={{backdropFilter:'blur(20px)',borderRadius:'5px'}}>
-                <FloatingDock mobileClassName='inset-x-0 p-4  ' style={{gap:'20 ',color:'black'}} items={links} />
-              </div>
+              {/* <div className="p-2 w-full flex   justify-center  rounded-lg sm:justify-end" style={{backdropFilter:'blur(20px)',borderRadius:'5px'}}> */}
+                <FloatingNav  className='rounded-lg '  style={{gap:'20 ',color:'black'}} navItems={links} />
+              {/* </div> */}
             </footer>
         </body>
       </html>

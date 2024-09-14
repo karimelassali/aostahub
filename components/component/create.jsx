@@ -148,7 +148,7 @@ export default function Create() {
           boxShadow:'0 0 30px #a1a1aa',
           borderRadius:'30px'
         }}>
-          <CardContent className="space-y-6 bg-red-300">
+          <CardContent className="space-y-6">
             <form className="overflow-hidden " onSubmit={create}>
               <input type="file" id="imgInp" hidden onChange={handleImgInput}  />
               <br />
@@ -232,7 +232,7 @@ export default function Create() {
               </div>
             </div>
             <CardFooter>
-            <Button type="submit" style={{backgroundColor:'#06b6d4',color:'white',borderRadius:'4px'}}  className="ml-auto mt-4 flex items-center justify-center gap-2 p-1  p-2 rounded-sm text-l font-bold"  >Create <FaCheck />
+            <Button type="submit" style={{borderRadius:'4px',color:'white'}}  className="ml-auto mt-4 flex items-center justify-center gap-2 bg-accent text-secondary  p-2 rounded-sm text-l font-bold"  >Create <FaCheck />
             </Button>
           </CardFooter>   
             </form>
