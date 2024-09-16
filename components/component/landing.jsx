@@ -7,7 +7,7 @@ import Image from "next/image";
 import Head from "next/head";
 import { color, motion } from "framer-motion";
 import AOS from "aos";
-import { ContainerScroll } from "../ui/background-beams-with-collision";
+import { A } from "../ui/background-beams-with-collision";
 import { HoverBorderGradient } from "../ui/hover-border-gradient";
 import { StickyScroll } from "../ui/sticky-scroll-reveal";
 import { ButtonBo } from "../ui/moving-border";
