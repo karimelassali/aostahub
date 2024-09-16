@@ -73,7 +73,7 @@ export default function RootLayout({ children }) {
         </head>
         <body className='bg-background'>
           <main>
-          <header
+         <header
           style={{zIndex:'999'}}
               className="bg-accent text-white py-3 px-4 md:px-8 flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -81,27 +81,16 @@ export default function RootLayout({ children }) {
                   <Image  alt='logo' width={220} height={220} src={'/ass/logo.png'} />
                 </Link>
               </div>
-              {/* <div className="flex items-center gap-4">
-                  <Button
-                    variant="ghost"
-                    className={`text-white hover:bg-[#00a185] ${language === "en" ? "font-bold" : ""}`}
-                    onClick={() => handleLanguageChange("en")}>
-                    English
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className={`text-white hover:bg-[#00a185] ${language === "it" ? "font-bold" : ""}`}
-                    onClick={() => handleLanguageChange("it")}>
-                    Italiano
-                  </Button>
-                </div> */}
               <SignedOut>
-              <SignInButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-            </header>
+                <button className="bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  Sign In
+                </button>
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+ </header>
+
             {children}
             </main>
             <footer className="flex justify-center p-4 w-full   bg-gray-100  rounded-md  " >
