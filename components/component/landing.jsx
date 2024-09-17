@@ -16,6 +16,16 @@ import { FocusCards } from "../ui/focusimg";
 import { FlipWords } from "../ui/flipWords";
 import { ShootingStars } from "../ui/stars";
 import { BackgroundBeams } from "../ui/beams";
+
+import {
+  FaCompass,
+  FaChat,
+  FaUtensils,
+  FaLandmark,
+  FaTree,
+  FaCalendar,
+} from "react-icons/fa";
+
 export const metadata = {
   title: "Home",
   description: "Welcome to Next.js",
@@ -27,7 +37,7 @@ const content = [
     description:
       "Step back in time and explore the ancient ruins of Aosta. Discover the rich history and stunning landscapes of this beautiful region.",
     content: (
-      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
+      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-black">
         <Image
           style={{ borderRadius: "8px" }}
           src={"/ass/roman.jpg"}
@@ -45,7 +55,7 @@ const content = [
     description:
       "Capture the breathtaking beauty of the Aosta Valley and share your experiences safely. Let others see the stunning views you've encountered on your journey.",
     content: (
-      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white">
+      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-black">
         <Image
           style={{ borderRadius: "5px" }}
           src={"/ass/snow.jpg"}
@@ -62,7 +72,7 @@ const content = [
     description:
       "Immerse yourself in the serene beauty of Aosta's mountains and lakes. Connect with others who appreciate the same scenic landscapes and start conversations that inspire.",
     content: (
-      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--orange-500),var(--yellow-500))] flex items-center justify-center text-white">
+      <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--orange-500),var(--yellow-500))] flex items-center justify-center text-black">
         <Image
           style={{ borderRadius: "5px" }}
           src={"/ass/lago.jpg"}
@@ -80,16 +90,49 @@ const content = [
 
 const infos = [
   {
-    quote: "Easily find and connect with new friends who share your interests.",
-    name: "Charles Dickens",
-    title: "A Tale of Two Cities",
+    quote:
+      "Discover hidden gems and breathtaking landscapes in the heart of the Alps.",
+    name: "Aosta Valley Explorer",
+    title: "Adventure Awaits",
+    icon: "compass", // or 'mountain'
   },
   {
-    quote: "Easily find and connect with new friends who share your interests.",
-    name: "Charles Dickens",
-    title: "A Tale of Two Cities",
+    quote:
+      "Share your stories, connect with locals, and experience the true spirit of Aosta.",
+    name: "Aosta Storyteller",
+    title: "Unforgettable Moments",
+    icon: "chat", // or 'users'
+  },
+  {
+    quote:
+      "Indulge in the rich flavors of Aosta's culinary heritage, from traditional dishes to innovative creations.",
+    name: "Aosta Food Lover",
+    title: "A Gastronomic Journey",
+    icon: "utensils", // or 'pizza'
+  },
+  {
+    quote:
+      "Explore ancient castles, Roman ruins, and charming villages that whisper tales of the past.",
+    name: "Aosta History Buff",
+    title: "Timeless Wonders",
+    icon: "landmark", // or 'castle'
+  },
+  {
+    quote:
+      "Find serenity amidst stunning natural beauty, from snow-capped peaks to lush valleys.",
+    name: "Aosta Nature Enthusiast",
+    title: "Peaceful Escapes",
+    icon: "tree", // or 'leaf'
+  },
+  {
+    quote:
+      "Embrace the vibrant energy of Aosta's festivals and events, celebrating culture and community.",
+    name: "Aosta Festivity Seeker",
+    title: "Joyful Celebrations",
+    icon: "calendar", // or 'music'
   },
 ];
+
 //for focus images annimation
 
 const focusImages = [
@@ -120,8 +163,7 @@ export default function Landing() {
 
   return (
     <>
-      <div className={`flex flex-col overflow-hidden mainFont `}>
-      </div>
+      <div className={`flex flex-col overflow-hidden mainFont `}></div>
       <motion.div
         initial={{
           opacity: 0,
@@ -166,9 +208,12 @@ export default function Landing() {
                   {language === "en"
                     ? "Connect and Share with "
                     : "Connetti e condividi con "}
-                    <span style={{fontWeight:'bold'}} className="text-primary font-body ">
-                      AostaHub
-                    </span>
+                  <span
+                    style={{ fontWeight: "bold" }}
+                    className="text-primary font-body "
+                  >
+                    AostaHub
+                  </span>
                 </h2>
                 <p className="text-xl font-body mb-6">
                   {language === "en"
@@ -218,9 +263,9 @@ export default function Landing() {
                     style={{ borderRadius: "4px" }}
                     containerClassName="rounded-full"
                     as="button"
-                    className="p-3 rounded-md bg-secondary w-max md:w-40 text-text text-lg"
+                    className="p-3 font-body  rounded-md bg-secondary w-max md:w-40 text-text text-lg hover:text-white"
                   >
-                    <Link href={'/explore'}>Sign up </Link>
+                    <Link href={"/explore"}>Sign up </Link>
                   </Button>
 
                   <Button
@@ -228,10 +273,10 @@ export default function Landing() {
                     duration={1}
                     containerClassName="rounded-full"
                     as="button"
-                    className="p-3 rounded-md bg-primary w-max md:w-40 text-secondary text-lg" 
+                    className="p-3  font-body rounded-md bg-primary w-max md:w-40 text-secondary text-lg"
                   >
-                    <Link href={'/explore'}>Explore </Link>
-                    </Button>
+                    <Link href={"/explore"}>Explore </Link>
+                  </Button>
                 </motion.div>
               </motion.div>
               <div>
@@ -267,11 +312,11 @@ export default function Landing() {
     </div> */}
         <div className="h-[10rem] pb-9 flex justify-center items-center px-4">
           <div
-            className="text-4xl mx-auto text-black font-heading  font-bold dark:text-neutral-400"
+            className="text-4xl mx-auto text-black   font-bold dark:text-neutral-800"
             style={{ gap: "3rem" }}
           >
             Esplora
-            <FlipWords  className='font-body' words={aostaWords} />
+            <FlipWords className="font-body" words={aostaWords} />
             Di Aosta
           </div>
         </div>
@@ -334,7 +379,7 @@ export default function Landing() {
         </div>
       </section> */}
         {/* -----------for pictures ------------ */}
-        <h1 className="text-center font-bold mt-9 text-3xl ">
+        <h1 className="text-center font-heading font-bold mt-9 text-3xl ">
           Perche <span className="text-accent">Aosta Hub</span> ?
         </h1>
         <StickyScroll content={content} />
@@ -346,7 +391,7 @@ export default function Landing() {
           }}
           items={infos}
           direction="right"
-          speed="fast"
+          speed="slow"
         />
         {/* <motion.section
       dropping="in"
@@ -399,43 +444,66 @@ export default function Landing() {
         <section className="py-12 md:py-20">
           <div className="container mx-auto px-4 md:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <ShootingStars minDelay={1000} minSpeed={4}/>
+              <div>
+                <ShootingStars
+                  minDelay={1}
+                  minSpeed={1}
+                  className={" mt-20 -z-2 "}
+                />
+              </div>
               {language === "en"
-               
                 ? `Join AostaHub Today`
                 : "Unisciti ad AostaHub oggi"}
             </h2>
-            <p className="text-xl text-[#555] mb-8">
+            <p className="text-xl font-bold text-center text-gray-500 mb-8">
               {language === "en"
-                ? "Connect, share, and make new friends in a secure and friendly environment."
-                : "Connetti, condividi e fai nuovi amici in un ambiente sicuro e amichevole."}
+                ? "Discover new connections and friendships in a safe and welcoming space."
+                : "Scopri nuove connessioni e amicizie in uno spazio sicuro e accogliente."}
             </p>
+
             <Button
-            style={{color: 'white',borderRadius: '5px'}}
+              style={{ color: "white", borderRadius: "5px" }}
               className=" bg-accent   text-white hover:bg-secondary hover:text-text"
             >
-              <Link className="text-background hover:text-text" href={"/explore"}>
+              <Link
+                className="text-background  font-bold text-lg hover:text-text"
+                href={"/explore"}
+              >
                 {language === "en" ? "Sign Up Now" : "Iscriviti ora"}
               </Link>
-            </Button>     
+            </Button>
           </div>
         </section>
         <section className="bg-accent text-white py-6 px-4 md:px-8">
           <div className="container mx-auto flex items-center justify-between">
             <div className="flex items-center gap-4">
               <AsteriskIcon className="h-6 w-6 text-background" />
-              <span className="text-background">&copy; 2024 AostaHub. All rights reserved.</span>
+              <span className="text-background">
+                &copy; 2024 AostaHub. All rights reserved.
+              </span>
             </div>
             <nav className="flex items-center gap-4">
-              <Link href="#" className="hover:underline text-[#ccc]" prefetch={false}>
+              <Link
+                href="#"
+                className="hover:underline text-[#ccc]"
+                prefetch={false}
+              >
                 {language === "en"
                   ? "Privacy Policy"
                   : "Informativa sulla privacy"}
               </Link>
-              <Link href="#" className="hover:underline text-[#ccc]" prefetch={false}>
+              <Link
+                href="#"
+                className="hover:underline text-[#ccc]"
+                prefetch={false}
+              >
                 {language === "en" ? "Terms of Service" : "Termini di servizio"}
               </Link>
-              <Link href="#" className="hover:underline text-[#ccc]" prefetch={false}>
+              <Link
+                href="#"
+                className="hover:underline text-[#ccc]"
+                prefetch={false}
+              >
                 {language === "en" ? "Contact Us" : "Contattaci"}
               </Link>
             </nav>

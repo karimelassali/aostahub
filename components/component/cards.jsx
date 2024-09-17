@@ -6,7 +6,6 @@ import Link from "next/link"
 import { createClient } from "@/utils/supabase/client";
 import { useState, useEffect } from "react";
 import { MdOutlineVerified } from "react-icons/md";
-import { Skeleton } from "../ui/skeleton"
 import {motion} from 'framer-motion'
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -21,6 +20,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/modalProfile"
+import { Suspense } from 'react';
 
 import { useUser } from "@clerk/nextjs";
 
@@ -51,11 +51,9 @@ export function Cards() {
     try {
       const { data, error } = await supabase.from('users').delete().eq('id', id);
       if (error) throw error;
-      toast.success('User deleted successfully');
     } catch (error) {
       console.error('Error deleting user:', error.message);
-      toast.error('Failed to delete user');
-    }
+      }
   }
 
   useEffect(()=>{
@@ -64,8 +62,8 @@ export function Cards() {
       const {data,error} = await supabase.from('users').select('*').order('id',{ascending:false});
       
       if(data){
-        setUsers(data) 
-        setLoading(false);
+          setUsers(data) 
+          setLoading(false);
       }
       else{
         setLoading(false);
@@ -91,26 +89,10 @@ export function Cards() {
 
 return (
   <>
-  <div className="grid p-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+  <Suspense fallback={'loading'} >
+    <div className="grid p-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
   
-    {
-      loading ? (
-        // عرض الـ Skeleton Loader أثناء التحميل
-        [...Array(4)].map((_, index) => (
-          <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3 }}
-          key={index} className="flex flex-col space-y-3">
-            <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[250px]" />
-              <Skeleton className="h-4 w-[200px]" />
-            </div>
-          </motion.div>
-        ))
-      ) : (
-        // عرض بيانات المستخدمين بعد انتهاء التحميل
+    { (
         
         users.map(user => (
           <motion.Card 
@@ -132,14 +114,19 @@ return (
                       </AlertDialogTrigger>
                       <AlertDialogContent  style={{backdropFilter:'blur(40px)'}}>
                         <AlertDialogHeader>
-                          <AlertDialogDescription styl={{display:'flex'}}>
-                            <center>
-                              <Image style={{borderRadius:'9px'}} className="md:w-screen w-full h-[200px] object-contain rounded-md" src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`} width={300} height={300} alt="profile pic" />
-                            </center>
-                          </AlertDialogDescription>
+                            <AlertDialogDescription>
+                              <Image
+                                style={{ borderRadius: '9px' }}
+                                className="w-full h-[200px] object-contain "
+                                src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`}
+                                width={300}
+                                height={300}
+                                alt="profile pic"
+                              />
+                            </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel style={{borderRadius:'4px'}}>Chiuso</AlertDialogCancel>
+                          <AlertDialogCancel className='bg-accent text-white' style={{borderRadius:'4px'}}>Chiuso</AlertDialogCancel>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
@@ -215,6 +202,8 @@ return (
       )
     }
   </div>
+  </Suspense>
+  
   </>
 );
 

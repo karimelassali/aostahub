@@ -12,6 +12,8 @@ import { useState, useEffect } from "react";
 import { IoLocationOutline } from "react-icons/io5";
 import  ProfileSkeleton from "@/components/component/profileSkeleton"
 import { FiActivity } from "react-icons/fi";
+import { MdOutlineVerified } from "react-icons/md";
+
 
 import {sonner} from 'sonner'
 
@@ -58,13 +60,16 @@ export default function Profile({userId}) {
               <AvatarFallback>{user.id}</AvatarFallback>
             </Avatar>
             <div className="grid gap-1 text-white" style={{color:'#0f172a'}}>
-              <h1 className="text-xl font-bold sm:text-2xl lg:text-3xl">{user.fname + user.lname}</h1>
-              <div className="flex items-center gap-2 text-sm sm:text-base font-bold" style={{color:'#1f2937'}}>
+            <h1  className="text-xl flex items-center gap-3 text-gray-900 font-bold font-heading sm:text-2xl lg:text-3xl">
+              {user.fname} {user.lname} {user.verified == 1 ? <MdOutlineVerified style={{ color: '#0284c7' }} /> : null}
+            </h1>
+
+              <div className="flex items-center gap-2 text-sm sm:text-base font-bold font-body text-secondary "  >
                 {user.age} - YEARS OLD
                 <FiActivity />
                 
               </div>
-              <div className="flex items-center gap-2 text-sm sm:text-base font-bold" style={{color:'#1f2937'}}>
+              <div className="flex items-center gap-2 text-sm sm:text-base font-bold font-body text-secondary " >
                 <IoLocationOutline />
                 - AOSTA
               </div>

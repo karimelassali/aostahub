@@ -10,6 +10,9 @@ import { MdDeleteSweep } from "react-icons/md";
 import { IoChatboxOutline } from "react-icons/io5";
 import { IoCreateOutline } from "react-icons/io5";
 import {motion} from 'framer-motion'
+import { Suspense } from 'react';
+import  CardSkeleton from "@/components/ui/cardSkeleton";
+
 
 
 
@@ -71,19 +74,25 @@ export default function Explore() {
  
 
   return (
-    (
-      <>
-      <Cards />
+    <>
+      <Suspense fallback={
+        <div className="grid p-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {[...Array(4)].map((_, index) => (
+            <CardSkeleton key={index} />
+          ))}
+        </div>
+      }>
+        <Cards />
+      </Suspense>
+
+
       {/* <footer className="flex justify-center p-4 w-full bg-gray-900 fixed bottom-0 " style={{}}>
-     
-      <FloatingDock  items={links} />
-    </footer> */}
-    <div className="pt-16"></div>
-      </>
-  )
-    
-  );
-}
+         <FloatingDock  items={links} />
+        </footer> */}
+      <div className="pt-16"></div>
+    </>
+    )};
+  
 
 function FacebookIcon(props) {
   return (

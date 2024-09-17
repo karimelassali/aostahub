@@ -1,100 +1,108 @@
-import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
-import './globals.css'
-import { Button } from "@/components/ui/button"
-import Image from 'next/image'
-import Link from 'next/link';
-import { FloatingNav } from '@/components/ui/floatingNavbar';
 import {
-  IconHome,
-  IconNewSection,
-} from "@tabler/icons-react";
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
+import "./globals.css";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
+import { FloatingNav } from "@/components/ui/floatingNavbar";
+import { IconHome, IconNewSection } from "@tabler/icons-react";
 import { IoCreateOutline } from "react-icons/io5";
 import { IoChatboxOutline } from "react-icons/io5";
 
-
-
-
 export const metadata = {
-  title: 'Welcome to Aosta Hub',
-  description: 'Discover Aosta Hub, a unique hub where people come together to share their stories',
-  keywords: 'Aosta Hub, Story Sharing, Community, Valle di Aosta, amici, storytelling, social platform, local community',
+  title: "Welcome to Aosta Hub",
+  description:
+    "Discover Aosta Hub, a unique hub where people come together to share their stories",
+  keywords:
+    "Aosta Hub, Story Sharing, Community, Valle di Aosta, amici, storytelling, social platform, local community",
   icons: {
-    icon: '/ass/logo.png'
+    icon: "/ass/logo.png",
   },
   openGraph: {
-    title: 'Welcome to Aosta Hub',
-    description: 'Discover Aosta Hub, a unique hub where people come together to share their stories',
-    url: 'https://aostahub.vercel.app', 
+    title: "Welcome to Aosta Hub",
+    description:
+      "Discover Aosta Hub, a unique hub where people come together to share their stories",
+    url: "https://aostahub.vercel.app",
     images: {
-      url: '/ass/logo.png',
+      url: "/ass/logo.png",
       width: 800,
       height: 600,
-    }
+    },
   },
-  googleSiteVerification: 'TFC9KKJST9sPJHv4r0wz0xnmUb09ZFJFC8crGzgUSnk' 
+  googleSiteVerification: "TFC9KKJST9sPJHv4r0wz0xnmUb09ZFJFC8crGzgUSnk",
 };
-
-
 
 const links = [
   {
-    name:'Home',
-    icon:(
-      <IconHome className="h-full w-full text-secondary " />
-    ),
-    link:'/explore'
-  }
-  ,
-  {
-    name:'Create',
-    icon:(
-      <IoCreateOutline className="h-full w-full text-secondary " />
-    ),
-    link:'/create'
+    name: "Home",
+    icon: <IconHome className="h-full w-full text-secondary " />,
+    link: "/explore",
   },
   {
-    name:'Chat',
-    icon:(
-      <IoChatboxOutline className="h-full w-full text-secondary " />
-    ),
-    link:'/chat'
-  }
-
-]
+    name: "Create",
+    icon: <IoCreateOutline className="h-full w-full text-secondary " />,
+    link: "/create",
+  },
+  {
+    name: "Chat",
+    icon: <IoChatboxOutline className="h-full w-full text-secondary " />,
+    link: "/chat",
+  },
+];
 
 export default function RootLayout({ children }) {
-  
   return (
     <ClerkProvider>
       <html lang="en">
         <head>
-          <meta name="msvalidate.01" content="95C6FEA2336278D091BC03508F4221AF" />
-          <meta name="google-site-verification" content="TFC9KKJST9sPJHv4r0wz0xnmUb09ZFJFC8crGzgUSnk" />
+          <meta
+            name="msvalidate.01"
+            content="95C6FEA2336278D091BC03508F4221AF"
+          />
+          <meta
+            name="google-site-verification"
+            content="TFC9KKJST9sPJHv4r0wz0xnmUb09ZFJFC8crGzgUSnk"
+          />
         </head>
-        <body className='bg-background'>
+        <body className="bg-background">
           <main>
-         <header
-          style={{zIndex:'999'}}
-              className="bg-accent text-white py-3 px-4 md:px-8 flex items-center justify-between">
+            <header
+              style={{ zIndex: "99999" }}
+              className="bg-accent text-white py-3 px-4 md:px-8 flex items-center justify-between"
+            >
               <div className="flex items-center gap-4">
                 <Link href="/">
-                  <Image  alt='logo' width={220} height={220} src={'/ass/logo.png'} />
+                  <Image
+                    alt="logo"
+                    width={220}
+                    height={220}
+                    src={"/ass/logo.png"}
+                  />
                 </Link>
               </div>
               <SignedOut>
-                <button className="bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <Link
+                  href={"/explore"}
+                  className="bg-white rounded-md text-primary font-bold py-2 px-4 hover:cursor-pointer"
+                  style={{ borderRadius: "5px" }}
+                >
                   Sign In
-                </button>
+                </Link>
               </SignedOut>
               <SignedIn>
                 <UserButton />
               </SignedIn>
- </header>
+            </header>
 
-            {children}
-            </main>
-            <footer className="flex justify-center p-4 w-full   bg-gray-100  rounded-md  " >
-              {/* <div className="w-full max-w-4xl p-4 rounded-lg flex justify-center gap-8 rounded-sm" style={{ backdropFilter: 'blur(30px)' }}>
+            {children }
+          </main>
+          <footer className="flex justify-center  w-full     rounded-md  ">
+            {/* <div className="w-full max-w-4xl p-4 rounded-lg flex justify-center gap-8 rounded-sm" style={{ backdropFilter: 'blur(30px)' }}>
                 <Link
               
                 href={'/create'} className="flex items-center justify-center p-3 rounded-lg text-white font-semibold transition-colors duration-300 transform hover:bg-purple-600 hover:scale-105 hover:cursor-pointer" style={{ backgroundColor: '#38bdf8' }}>
@@ -107,12 +115,16 @@ export default function RootLayout({ children }) {
                   <span className="ml-2">Profile</span>
                 </Link>
               </div> */}
-              {/* <div className="p-2 w-full flex   justify-center  rounded-lg sm:justify-end" style={{backdropFilter:'blur(20px)',borderRadius:'5px'}}> */}
-                <FloatingNav  className='rounded-lg '  style={{gap:'20 ',color:'black'}} navItems={links} />
-              {/* </div> */}
-            </footer>
+            {/* <div className="p-2 w-full flex   justify-center  rounded-lg sm:justify-end" style={{backdropFilter:'blur(20px)',borderRadius:'5px'}}> */}
+            <FloatingNav
+              className="rounded-md  "
+              style={{ gap: "30 ", color: "black" }}
+              navItems={links}
+            />
+            {/* </div> */}
+          </footer>
         </body>
       </html>
     </ClerkProvider>
-  )
+  );
 }
