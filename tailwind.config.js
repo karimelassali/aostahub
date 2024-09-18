@@ -6,23 +6,7 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    screens: {
-      'phone': '599px',
-      'tablet': '640px',
-      'laptop': '1024px',
-      'desktop': '1280px',
-    },
-    borderRadius: {
-      'none': '0',
-      'sm': '.125rem',
-      DEFAULT: '.25rem',
-      'lg': '.5rem',
-      'full': '9999px',
-    },
     extend: {
-      rotate:{
-        '360' : '360deg',
-      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -50,14 +34,21 @@ module.exports = {
         '5xl': '4.210rem',
       },
       fontFamily: {
-        poppins: ['Poppins', 'sans-serif'],
-        opensans: ['Open Sans', 'sans-serif'],
+        heading: 'Righteous',
+        body: 'Righteous',
       },
       fontWeight: {
         normal: '400',
         bold: '700',
       },
     },
+    
+     
+      borderRadius: {
+            "lg": "var(--radius)",
+            "md": "calc(var(--radius) - 2px)",
+            "sm": "calc(var(--radius) - 4px)"
+          },
       keyframes: {
             scroll: {
               to: {
