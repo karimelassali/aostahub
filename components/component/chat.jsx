@@ -3,14 +3,19 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Textarea } from "@/components/ui/textarea"
-
+import Image from "next/image"
 import { createClient } from "@/utils/supabase/client"
 import { useState, useEffect } from "react";
+
 
 import { useRouter } from "next/router"
 import { useUser } from "@clerk/nextjs"
 import { Toaster, toast } from "sonner"
 import { MdDeleteSweep } from "react-icons/md";
+import { CiStar } from "react-icons/ci";
+import { CiShare2 } from "react-icons/ci";
+import { CiSearch } from "react-icons/ci";
+import { SlOptionsVertical } from "react-icons/sl";
 
 export function Chat() {
   const supabase = createClient();
@@ -89,168 +94,132 @@ export function Chat() {
     }
   }
   return (
-    (<div
-      className="flex flex-col h-auto max-h-[800px] bg-background rounded-2xl shadow-lg overflow-hidden">
-        <Toaster />
-      <header
-        className="flex items-center gap-4 bg-[#382bf0] p-4 border-b border-card-foreground/10">
-        <h2 className="text-xl font-bold text-primary-foreground">Aosta Hub Chat</h2>
-        <div className="flex-1" />
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <SettingsIcon className="w-5 h-5 text-primary-foreground" />
-          <span className="sr-only">Settings</span>
-        </Button>
-      </header>
-      <div
-        className="flex-1 grid grid-cols-1 lg:grid-cols-[260px_1fr] overflow-hidden">
-        <div
-          className="bg-card border-b lg:border-r border-card-foreground/10 overflow-auto">
-          <div className="p-4 text-sm font-medium text-card-foreground">Online Users</div>
-          <div className="divide-y divide-card-foreground/10">
-            <div className="flex items-center gap-3 p-4 hover:bg-muted transition">
-              <Avatar className="w-8 h-8">
-                <AvatarImage src="/placeholder-user.jpg" alt="User Avatar" />
-                <AvatarFallback>JD</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 truncate">
-                <div className="font-medium">John Doe</div>
-                <div className="text-xs text-muted-foreground">Online</div>
+    (
+      <div className="w-screen h-screen  flex">
+        <div className="w-[30%] " style={{border:'1px solid red'}}>
+            <div className="sectionHeader">
+              <div className="sectionHeaderInfo flex justify-between items-center p-2 gap-1">
+                <div className="flex gap-1 p-1 items-center">
+                  <Image style={{borderRadius:'50px'}} height={50} width={50} className="rounded-full" alt='userPicture' src={'/ass/logo.png'}  />
+                    <div className="sectionHeaderFullName flex ">
+                      <h4>Karim El assali</h4>
+                    </div>
+                </div>
+
+                  <div className="sectionHeaderOptions">
+                    <div className="flex gap-1">
+                      <SlOptionsVertical />
+                    </div>
+                </div>
               </div>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <MessageCircleIcon className="w-4 h-4 text-[#382bf0]" />
-                <span className="sr-only">Chat</span>
-              </Button>
-            </div>
-            <div className="flex items-center gap-3 p-4 hover:bg-muted transition">
-              <Avatar className="w-8 h-8">
-                <AvatarImage src="/placeholder-user.jpg" alt="User Avatar" />
-                <AvatarFallback>SA</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 truncate">
-                <div className="font-medium">Sarah Anderson</div>
-                <div className="text-xs text-muted-foreground">Online</div>
+                <div className=" p-2 "></div>
+               <div className="sectionSearch p-1">
+                <div className="flex items-center justify-center gap-1 p-1">
+                  <CiSearch className="relative" size={30} />
+                  <input style={{borderRadius:'5px'}} className="flex justify-start p-1 w-full border border-gray-400 rounded"  type="text" placeholder={`Search` }  />
+                </div>
+               
               </div>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <MessageCircleIcon className="w-4 h-4 text-[#382bf0]" />
-                <span className="sr-only">Chat</span>
-              </Button>
-            </div>
-            <div className="flex items-center gap-3 p-4 hover:bg-muted transition">
-              <Avatar className="w-8 h-8">
-                <AvatarImage src="/placeholder-user.jpg" alt="User Avatar" />
-                <AvatarFallback>MR</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 truncate">
-                <div className="font-medium">Michael Rowe</div>
-                <div className="text-xs text-muted-foreground">Online</div>
-              </div>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <MessageCircleIcon className="w-4 h-4 text-[#382bf0]" />
-                <span className="sr-only">Chat</span>
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col">
-          <div className="bg-card p-4 border-b border-card-foreground/10">
-            <p className="text-sm text-muted-foreground">
-              All messages will be deleted after 24 hours. Any bad words or inappropriate content will result in a ban.
-            </p>
-          </div>
-          <div className="flex-1 overflow-auto bg-card rounded-b-2xl">
-            <div className="grid gap-4 p-4 overflow-auto max-h-[400px]">
-              {
-                messages.map((msg) => (
-                     msg.msgSenderUid != currentUserId ?
-                      <div key={msg.id} className="flex items-start gap-4"> 
-                      <Avatar className="w-8 h-8">
-                        <AvatarImage src={msg.msgSenderPicture} alt="User Avatar" />
-                        <AvatarFallback>{msg.msgSenderUid}</AvatarFallback>
-                      </Avatar>
-                      <div className="grid gap-1 text-sm">
-                        <div className="flex items-center justify-between">
-                          <div className="font-medium">{msg.msgSender} </div>
-                          <div className="text-xs text-muted-foreground">10:30 AM</div>
-                        </div>
-                        <div className="bg-muted p-3 rounded-2xl max-w-[80%]">
-                          {msg.message}
-                        </div>
-                        <div className="flex justify-end gap-2">
-                          <Button variant="ghost" size="icon" className="rounded-full">
-                            <ThumbsUpIcon className="w-4 h-4 text-[#382bf0]" />
-                            <span className="sr-only">Like</span>
-                          </Button>
-                          <Button variant="ghost" size="icon" className="rounded-full">
-                            <ThumbsDownIcon className="w-4 h-4 text-[#382bf0]" />
-                            <span className="sr-only">Dislike</span>
-                          </Button>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="rounded-full">
-                                <MoveVerticalIcon className="w-4 h-4 text-[#382bf0]" />
-                                <span className="sr-only">More</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem>Report</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
+              <div className="availableChats">
+                <div className="chatsOptions flex justify-between p-2 gap-2">
+                    <div className='p-1 border-b border-b-3 cursor-pointer border-secondary '>All Users</div>
+                    <div className='p-1 border-b border-b-3 cursor-pointer border-secondary '>Favourites</div>
+                </div>
+                <div className="allUsers p-1  h-52 overflow-y-auto border  " >
+                  <div className="user border-b border-gray-500 flex mt-3 items-center justify-between ">
+                    <div className="userInfo flex flex-col items-center p-1">
+                      <div className="flex p-1">
+                        <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
+                        <div className="flex flex-col pl-1">
+                          <h4>Karim El assali</h4>
+                          <span className='text-sm text-gray-500' >Hello</span>
                         </div>
                       </div>
-                    </div> : 
-
-                    <div key={msg.id} className="grid gap-1 text-sm">
-                    <div className="flex items-center justify-between">
-                      <div className="font-medium text-right">You</div>
-                      <div className="text-xs text-muted-foreground">10:35 AM</div>
-                    </div>
-                    <div
-                      className="bg-[#382bf0] text-primary-foreground p-3 rounded-2xl max-w-auto" style={{borderRadius:'9px'}}>
-                      {msg.message}
-                    </div>
-                    <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon" className="rounded-full">
-                        <ThumbsUpIcon className="w-4 h-4 text-[#382bf0]" />
-                        <span className="sr-only">Like</span>
-                      </Button>
-                      <Button variant="ghost" size="icon" className="rounded-full">
-                        <ThumbsDownIcon className="w-4 h-4 text-[#382bf0]" />
-                        <span className="sr-only">Dislike</span>
-                      </Button>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="rounded-full">
-                            <MoveVerticalIcon className="w-4 h-4 text-[#382bf0]" />
-                            <span className="sr-only">More</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Report</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
+                    </div>  
+                    <span className="text-gray-500 text-sm">Tue</span>
                   </div>
-                ))
-              }
-            
+                  <div className="user border-b border-gray-500 flex mt-3 items-center justify-between ">
+                    <div className="userInfo flex flex-col items-center p-1">
+                      <div className="flex p-1">
+                        <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
+                        <div className="flex flex-col pl-1">
+                          <h4>Karim El assali</h4>
+                          <span className='text-sm text-gray-500' >Hello</span>
+                        </div>
+                      </div>
+                    </div>  
+                    <span className="text-gray-500 text-sm">Tue</span>
+                  </div>
+                  <div className="user border-b border-gray-500 flex  items-center justify-between ">
+                    <div className="userInfo flex flex-col items-center p-1">
+                      <div className="flex p-1">
+                        <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
+                        <div className="flex flex-col pl-1">
+                          <h4>Karim El assali</h4>
+                          <span className='text-sm text-gray-500' >Hello</span>
+                        </div>
+                      </div>
+                    </div>  
+                    <span className="text-gray-500 text-sm">Tue</span>
+                  </div><div className="user border-b border-gray-500 flex  items-center justify-between ">
+                    <div className="userInfo flex flex-col items-center p-1">
+                      <div className="flex p-1">
+                        <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
+                        <div className="flex flex-col pl-1">
+                          <h4>Karim El assali</h4>
+                          <span className='text-sm text-gray-500' >Hello</span>
+                        </div>
+                      </div>
+                    </div>  
+                    <span className="text-gray-500 text-sm">Tue</span>
+                  </div>
+                  <div className="user border-b border-gray-500 flex  items-center justify-between ">
+                    <div className="userInfo flex flex-col items-center p-1">
+                      <div className="flex p-1">
+                        <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
+                        <div className="flex flex-col pl-1">
+                          <h4>Karim El assali</h4>
+                          <span className='text-sm text-gray-500' >Hello</span>
+                        </div>
+                      </div>
+                    </div>  
+                    <span className="text-gray-500 text-sm">Tue</span>
+                  </div>
+                  <div className="user border-b border-gray-500 flex  items-center justify-between ">
+                    <div className="userInfo flex flex-col items-center p-1">
+                      <div className="flex p-1">
+                        <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
+                        <div className="flex flex-col pl-1">
+                          <h4>Karim El assali</h4>
+                          <span className='text-sm text-gray-500' >Hello</span>
+                        </div>
+                      </div>
+                    </div>  
+                    <span className="text-gray-500 text-sm">Tue</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>  
+        <div className="main w-full flex flex-col">
+          <div className="mainHeader w-full flex justify-between items-center p-3 border-b border-gray-400 " >
+            <div className="userInfo flex ">
+              <Image height={50} width={50} className="rounded-full" alt='userPicture' src={'/ass/logo.png'} />
+              <div className="fullName flex flex-col">
+                <h4>Karim El assali</h4>
+                <span className="text-sm ">Active Now</span>
+              </div>
+            </div>
+            <div className="mainOptions flex gap-2">
+              <div className="rounded-full bg-secondary cursor-pointer  w-[30px] h-[30px] p-1 flex items-center justify-center hover:scale-150 " style={{borderRadius:'50%'}} ><CiStar /></div>
+              <div className="rounded-full bg-secondary cursor-pointer  w-[30px] h-[30px] p-1 flex items-center justify-center hover:scale-150 " style={{borderRadius:'50%'}} ><CiShare2 /></div>
+              {/* <div className="rounded-full bg-gray-600 w-[30px] h-[30px] p-1 flex items-center justify-center" style={{borderRadius:'50%'}} ></div> */}
             </div>
           </div>
-          <div className="bg-card p-4 border-t border-card-foreground/10">
-            <div className="relative">
-              <Textarea
-              onChange={(e) => {setMessage(e.target.value)}}
-                placeholder="Type your message..."
-                className="pr-16 rounded-2xl resize-none" />
-              <Button onClick={sendMessage} type="submit" size="icon" className="absolute w-8 h-8 top-3 right-3">
-                <SendIcon className="w-4 h-4 text-[#382bf0]" />
-                <span className="sr-only">Send</span>
-              </Button>
-            </div>
-          </div>
+         
         </div>
       </div>
-    </div>)
-  );
+  ));
 }
 
 function MessageCircleIcon(props) {
