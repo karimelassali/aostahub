@@ -16,6 +16,7 @@ import { CiStar } from "react-icons/ci";
 import { CiShare2 } from "react-icons/ci";
 import { CiSearch } from "react-icons/ci";
 import { SlOptionsVertical } from "react-icons/sl";
+import { IoSendOutline } from "react-icons/io5";
 
 export function Chat() {
   const supabase = createClient();
@@ -94,133 +95,217 @@ export function Chat() {
     }
   }
   return (
-    (
-      <div className="w-screen h-screen  flex">
-        <div className="w-[30%] " style={{border:'1px solid red'}}>
-            <div className="sectionHeader">
-              <div className="sectionHeaderInfo flex justify-between items-center p-2 gap-1">
-                <div className="flex gap-1 p-1 items-center">
-                  <Image style={{borderRadius:'50px'}} height={50} width={50} className="rounded-full" alt='userPicture' src={'/ass/logo.png'}  />
-                    <div className="sectionHeaderFullName flex ">
-                      <h4>Karim El assali</h4>
-                    </div>
-                </div>
-
-                  <div className="sectionHeaderOptions">
-                    <div className="flex gap-1">
-                      <SlOptionsVertical />
-                    </div>
-                </div>
-              </div>
-                <div className=" p-2 "></div>
-               <div className="sectionSearch p-1">
-                <div className="flex items-center justify-center gap-1 p-1">
-                  <CiSearch className="relative" size={30} />
-                  <input style={{borderRadius:'5px'}} className="flex justify-start p-1 w-full border border-gray-400 rounded"  type="text" placeholder={`Search` }  />
-                </div>
-               
-              </div>
-              <div className="availableChats">
-                <div className="chatsOptions flex justify-between p-2 gap-2">
-                    <div className='p-1 border-b border-b-3 cursor-pointer border-secondary '>All Users</div>
-                    <div className='p-1 border-b border-b-3 cursor-pointer border-secondary '>Favourites</div>
-                </div>
-                <div className="allUsers p-1  h-52 overflow-y-auto border  " >
-                  <div className="user border-b border-gray-500 flex mt-3 items-center justify-between ">
-                    <div className="userInfo flex flex-col items-center p-1">
-                      <div className="flex p-1">
-                        <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
-                        <div className="flex flex-col pl-1">
-                          <h4>Karim El assali</h4>
-                          <span className='text-sm text-gray-500' >Hello</span>
-                        </div>
-                      </div>
-                    </div>  
-                    <span className="text-gray-500 text-sm">Tue</span>
-                  </div>
-                  <div className="user border-b border-gray-500 flex mt-3 items-center justify-between ">
-                    <div className="userInfo flex flex-col items-center p-1">
-                      <div className="flex p-1">
-                        <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
-                        <div className="flex flex-col pl-1">
-                          <h4>Karim El assali</h4>
-                          <span className='text-sm text-gray-500' >Hello</span>
-                        </div>
-                      </div>
-                    </div>  
-                    <span className="text-gray-500 text-sm">Tue</span>
-                  </div>
-                  <div className="user border-b border-gray-500 flex  items-center justify-between ">
-                    <div className="userInfo flex flex-col items-center p-1">
-                      <div className="flex p-1">
-                        <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
-                        <div className="flex flex-col pl-1">
-                          <h4>Karim El assali</h4>
-                          <span className='text-sm text-gray-500' >Hello</span>
-                        </div>
-                      </div>
-                    </div>  
-                    <span className="text-gray-500 text-sm">Tue</span>
-                  </div><div className="user border-b border-gray-500 flex  items-center justify-between ">
-                    <div className="userInfo flex flex-col items-center p-1">
-                      <div className="flex p-1">
-                        <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
-                        <div className="flex flex-col pl-1">
-                          <h4>Karim El assali</h4>
-                          <span className='text-sm text-gray-500' >Hello</span>
-                        </div>
-                      </div>
-                    </div>  
-                    <span className="text-gray-500 text-sm">Tue</span>
-                  </div>
-                  <div className="user border-b border-gray-500 flex  items-center justify-between ">
-                    <div className="userInfo flex flex-col items-center p-1">
-                      <div className="flex p-1">
-                        <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
-                        <div className="flex flex-col pl-1">
-                          <h4>Karim El assali</h4>
-                          <span className='text-sm text-gray-500' >Hello</span>
-                        </div>
-                      </div>
-                    </div>  
-                    <span className="text-gray-500 text-sm">Tue</span>
-                  </div>
-                  <div className="user border-b border-gray-500 flex  items-center justify-between ">
-                    <div className="userInfo flex flex-col items-center p-1">
-                      <div className="flex p-1">
-                        <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
-                        <div className="flex flex-col pl-1">
-                          <h4>Karim El assali</h4>
-                          <span className='text-sm text-gray-500' >Hello</span>
-                        </div>
-                      </div>
-                    </div>  
-                    <span className="text-gray-500 text-sm">Tue</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </div>  
-        <div className="main w-full flex flex-col">
-          <div className="mainHeader w-full flex justify-between items-center p-3 border-b border-gray-400 " >
-            <div className="userInfo flex ">
-              <Image height={50} width={50} className="rounded-full" alt='userPicture' src={'/ass/logo.png'} />
-              <div className="fullName flex flex-col">
-                <h4>Karim El assali</h4>
-                <span className="text-sm ">Active Now</span>
-              </div>
-            </div>
-            <div className="mainOptions flex gap-2">
-              <div className="rounded-full bg-secondary cursor-pointer  w-[30px] h-[30px] p-1 flex items-center justify-center hover:scale-150 " style={{borderRadius:'50%'}} ><CiStar /></div>
-              <div className="rounded-full bg-secondary cursor-pointer  w-[30px] h-[30px] p-1 flex items-center justify-center hover:scale-150 " style={{borderRadius:'50%'}} ><CiShare2 /></div>
-              {/* <div className="rounded-full bg-gray-600 w-[30px] h-[30px] p-1 flex items-center justify-center" style={{borderRadius:'50%'}} ></div> */}
-            </div>
-          </div>
-         
-        </div>
-      </div>
-  ));
-}
+     (
+        <div className="w-screen h-screen font-sura fixed flex phone:hidden sm:flex-col md:flex-row">
+         <div className="w-[30%] rounded-md   font-poppins " >
+             <div className="sectionHeader border p-2 border-secondary">
+               <div className="sectionHeaderInfo border border-secondary rounded flex justify-between items-center p-2 gap-1">
+                 <div className="flex gap-1 p-1 items-center">
+                     <div className="sectionHeaderFullName flex ">
+                       <h4 >Karim El assali</h4>
+                     </div>
+                 </div>
+ 
+                   <div className="sectionHeaderOptions">
+                     <div className="flex gap-1 cursor-pointer transition-all hover:rotate-90 ">
+                       <SlOptionsVertical style={{color:'#433bff'}} />
+                     </div>
+                 </div>
+               </div>
+                 <div className=" p-2 "></div>
+               <div className="availableChats">
+                 <div className="chatsOptions flex justify-between p-2 gap-2">
+                     <div className='p-1 border-b border-b-3 cursor-pointer border-secondary text-accent hover:text-text  transition-colors '>All Users</div>
+                     <div className='p-1 border-b border-b-3 cursor-pointer border-secondary text-accent hover:text-text transition-colors  '>Favourites</div>
+                 </div>
+                 <div className="sectionSearch p-1">
+                   <div className="flex items-center justify-center gap-1 p-1">
+                     <input style={{borderRadius:'5px'}} className="flex justify-start p-1 w-full border-b border-accent rounded"  type="text" placeholder={`Search` }  />
+                     <CiSearch className="relative hover:rotate-360 cursor-pointer transition-all " size={30} style={{color:'#433bff'}} />
+                   </div>
+                 
+                 </div>
+                 <div className="allUsers p-1 h-96   overflow-y-auto border  border-secondary rounded " >
+                   <div className="user border-b border-gray-500 flex mt-3 items-center justify-between ">
+                     <div className="userInfo flex flex-col items-center p-1">
+                       <div className="flex p-1">
+                         <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
+                         <div className="flex flex-col pl-1">
+                           <h4>Karim El assali</h4>
+                           <span className='text-sm text-gray-500' >Hello</span>
+                         </div>
+                       </div>
+                     </div>  
+                     <span className="text-gray-500 text-sm">Tue</span>
+                   </div>
+                   <div className="user border-b border-gray-500 flex mt-3 items-center justify-between ">
+                     <div className="userInfo flex flex-col items-center p-1">
+                       <div className="flex p-1">
+                         <Image height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
+                         <div className="flex flex-col pl-1">
+                           <h4>Karim El assali</h4>
+                           <span className='text-sm text-gray-500' >Hello</span>
+                         </div>
+                       </div>
+                     </div>  
+                     <span className="text-gray-500 text-sm">Tue</span>
+                   </div>
+                   <div className="user border-b border-gray-500 flex  items-center justify-between ">
+                     <div className="userInfo flex flex-col items-center p-1">
+                       <div className="flex p-1">
+                         <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
+                         <div className="flex flex-col pl-1">
+                           <h4>Karim El assali</h4>
+                           <span className='text-sm text-gray-500' >Hello</span>
+                         </div>
+                       </div>
+                     </div>  
+                     <span className="text-gray-500 text-sm">Tue</span>
+                   </div><div className="user border-b border-gray-500 flex  items-center justify-between ">
+                     <div className="userInfo flex flex-col items-center p-1">
+                       <div className="flex p-1">
+                         <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
+                         <div className="flex flex-col pl-1">
+                           <h4>Karim El assali</h4>
+                           <span className='text-sm text-gray-500' >Hello</span>
+                         </div>
+                       </div>
+                     </div>  
+                     <span className="text-gray-500 text-sm">Tue</span>
+                   </div>
+                   <div className="user border-b border-gray-500 flex  items-center justify-between ">
+                     <div className="userInfo flex flex-col items-center p-1">
+                       <div className="flex p-1">
+                         <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
+                         <div className="flex flex-col pl-1">
+                           <h4>Karim El assali</h4>
+                           <span className='text-sm text-gray-500' >Hello</span>
+                         </div>
+                       </div>
+                     </div>  
+                     <span className="text-gray-500 text-sm">Tue</span>
+                   </div>
+                   <div className="user border-b border-gray-500 flex  items-center justify-between ">
+                     <div className="userInfo flex flex-col items-center p-1">
+                       <div className="flex p-1">
+                         <Image style={{borderRadius:'50%'}} height={50} width={40} className="rounded-full border " alt='userPicture' src={'/ass/logo.png'}  />
+                         <div className="flex flex-col pl-1">
+                           <h4>Karim El assali</h4>
+                           <span className='text-sm text-gray-500' >Hello</span>
+                         </div>
+                       </div>
+                     </div>  
+                     <span className="text-gray-500 text-sm">Tue</span>
+                   </div>
+                 </div>
+               </div>
+             </div>
+         </div>  
+         <div className="main w-full flex flex-col">
+           <div className="mainHeader w-full flex justify-between items-center p-3 border-b border-gray-400 " >
+             <div className="userInfo flex ">
+               <Image height={50} width={50} className="rounded-full" alt='userPicture' src={'/ass/logo.png'} />
+               <div className="fullName flex flex-col">
+                 <h4>Karim El assali</h4>
+                 <span className="text-sm ">Active Now</span>
+               </div>
+             </div>
+             <div className="mainOptions flex gap-2">
+               <div className="rounded-full bg-secondary cursor-pointer  w-[30px] h-[30px] p-1 flex items-center justify-center hover:scale-150  transition-all " style={{borderRadius:'50%'}} ><CiStar /></div>
+               <div className="rounded-full bg-secondary cursor-pointer  w-[30px] h-[30px] p-1 flex items-center justify-center hover:scale-150 transition-all  " style={{borderRadius:'50%'}} ><CiShare2 /></div>
+               {/* <div className="rounded-full bg-gray-600 w-[30px] h-[30px] p-1 flex items-center justify-center" style={{borderRadius:'50%'}} ></div> */}
+             </div>
+           </div>
+           <div className="chats w-full h-full">
+             <div className="w-full h-96 overflow-y-auto" >
+                 <div className="newMsg">
+                   <div className="p-1 gap-3 flex items-end">
+                     <Image height={50} width={50} className="rounded-full" alt='userPicture' src={'/ass/logo.png'} />
+                     <div className="p-2 border border-secondary bg-accent w-[50%] rounded " >
+                         <div className="msgHeader flex justify-between text-white p-1">
+                           <h3 className="text-sm">Karim El assali</h3>
+                           <span className="text-sm">11:12 pm</span>
+                         </div>
+                         <div className="msgHeaderInfo text-white p-1 flex gap-1">
+                             <h5>Hey !</h5>
+                         </div>
+                     </div>
+                   </div>
+                 </div>
+                 <br />
+                 <div className="myMs  ">
+                   <div className="p-1 gap-3 flex items-end justify-end">
+                       <div className="p-2 border border-secondary bg-background w-[50%] rounded " >
+                           <div className="msgHeader flex justify-between text-text p-1">
+                             <h3 className="text-sm">Karim El assali</h3>
+                             <span className="text-sm">11:12 pm</span>
+                           </div>
+                           <div className="msgHeaderInfo text-text p-1 flex gap-1">
+                               <h5>Hey !</h5>
+                           </div>
+                       </div>
+                       <Image height={50} width={50} className="rounded-full" alt='userPicture' src={'/ass/logo.png'} />
+                     </div>
+                 </div>
+                 <div className="myMs  ">
+                   <div className="p-1 gap-3 flex items-end justify-end">
+                       <div className="p-2 border border-secondary bg-background w-[50%] rounded " >
+                           <div className="msgHeader flex justify-between text-text p-1">
+                             <h3 className="text-sm">Karim El assali</h3>
+                             <span className="text-sm">11:12 pm</span>
+                           </div>
+                           <div className="msgHeaderInfo text-text p-1 flex gap-1">
+                               <h5>Hey !</h5>
+                           </div>
+                       </div>
+                       <Image height={50} width={50} className="rounded-full" alt='userPicture' src={'/ass/logo.png'} />
+                     </div>
+                 </div>
+                 <div className="myMs  ">
+                   <div className="p-1 gap-3 flex items-end justify-end">
+                       <div className="p-2 border border-secondary bg-background w-[50%] rounded " >
+                           <div className="msgHeader flex justify-between text-text p-1">
+                             <h3 className="text-sm">Karim El assali</h3>
+                             <span className="text-sm">11:12 pm</span>
+                           </div>
+                           <div className="msgHeaderInfo text-text p-1 flex gap-1">
+                               <h5>Hey !</h5>
+                           </div>
+                       </div>
+                       <Image height={50} width={50} className="rounded-full" alt='userPicture' src={'/ass/logo.png'} />
+                     </div>
+                 </div>
+                 <div className="myMs  ">
+                   <div className="p-1 gap-3 flex items-end justify-end">
+                       <div className="p-2 border border-secondary bg-background w-[50%] rounded " >
+                           <div className="msgHeader flex justify-between text-text p-1">
+                             <h3 className="text-sm">Karim El assali</h3>
+                             <span className="text-sm">11:12 pm</span>
+                           </div>
+                           <div className="msgHeaderInfo text-text p-1 flex gap-1">
+                               <h5>Hey !</h5>
+                           </div>
+                       </div>
+                       <Image height={50} width={50} className="rounded-full" alt='userPicture' src={'/ass/logo.png'} />
+                     </div>
+                 </div>
+             </div>
+           </div>
+           <div className="inputArea w-full mb-[100px] bg-blue-300 absolute bottom-0"> 
+             <form className="flex p-2 items-center bg-green-400 gap-2 w-full">
+                 <input type="text" className="w-full bg-red-300" />
+                 <button className="bg-black w-10 h-10 shrink-0"> 
+                   <IoSendOutline />
+                 </button>
+             </form>
+           </div>
+ 
+ 
+         </div>
+       </div>
+   ));
+ }
+  
 
 function MessageCircleIcon(props) {
   return (
