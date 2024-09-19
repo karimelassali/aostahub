@@ -18,6 +18,9 @@ module.exports = {
       'rounded': '5px'
     },
     extend: {
+      rotate:{
+        '200': '200deg'
+      },
       animation: {
         'spin-slow': 'spin 3s linear infinite',
       },
