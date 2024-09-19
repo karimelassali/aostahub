@@ -250,15 +250,14 @@ export function Chat() {
           {messages.map((msg) =>
             msg.msgSenderUid !== currentUserId ? (
               <div key={msg.id} className="mb-4 flex items-end">
-                <Image
-                  width={40}
-                  height={40}
-                  className="rounded-full mr-2 object-cover"
-                  alt="userPicture"
-                  src={msg.msgSenderPicture || "/ass/logo.png"}
-                />
+                <div className="imgDiv rounded-full">
+                  <Avatar className="rounded-full mr-2 object-cover w-5 h-5" >
+                    <AvatarImage src={msg.msgSenderPicture || "/ass/logo.png"} alt="userPicture" />
+                  </Avatar>
+                </div>
                 <div className="p-3 rounded-tl-lg rounded-br-lg rounded-tr-lg  break-words max-w-[70%] md:max-w-[80%] bg-accent border border-secondary text-white overflow-hidden">
-                  <div className="flex gap-5 items-center justify-between">
+                  <div className="flex gap-5
+                   items-center justify-between">
                     <h3 className="text-sm font-medium">
                       {msg.msgSenderName || "Karim El assali"}
                     </h3>
@@ -282,13 +281,11 @@ export function Chat() {
                   </div>
                   <p className="text-sm mt-1 break-words">{msg.message}</p>
                 </div>
-                <Image
-                  width={20}
-                  height={20}
-                  className="rounded-full mr-2 object-cover"
-                  alt="userPicture"
-                  src={msg.msgSenderPicture || "/ass/logo.png"}
-                />
+                <div className="imgDiv rounded-full">
+                  <Avatar className="rounded-full mr-2 object-cover w-5 h-5" >
+                    <AvatarImage src={msg.msgSenderPicture || "/ass/logo.png"} alt="userPicture" />
+                  </Avatar>
+                </div>
               </div>
             )
           )}
