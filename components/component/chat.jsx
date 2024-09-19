@@ -249,7 +249,7 @@ export function Chat() {
         <div className="chats flex-grow p-2 overflow-y-auto pb-[13.5rem] md:pb-[14rem]">
           {messages.map((msg) =>
             msg.msgSenderUid !== currentUserId ? (
-              <div className="mb-4 flex items-end">
+              <div key={msg.id} className="mb-4 flex items-end">
                 <Image
                   width={40}
                   height={40}
@@ -270,7 +270,7 @@ export function Chat() {
                 </div>
               </div>
             ) : (
-              <div className="mb-4 flex p-1 gap-2 items-end justify-end">
+              <div key={msg.id} className="mb-4 flex p-1 gap-2 items-end justify-end">
                 <div className="p-3 rounded-tr-lg rounded-bl-lg  rounded-tl-lg break-words max-w-[70%] md:max-w-[80%] bg-background border border-secondary text-text overflow-hidden">
                   <div className="flex items-center gap-5 justify-between">
                     <h3 className="text-sm font-medium">
