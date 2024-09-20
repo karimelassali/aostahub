@@ -74,9 +74,11 @@ export function Chat() {
           "postgres_changes",
           { event: "*", schema: "public", table: "msgs" },
           (payload) => {
-            console.log(payload)
-            if(payload.new.msgSenderUid !== currentUserId && payload.new.msgSender !== currentUser){
-              alert('your not the smae')
+            console.log(payload);
+            if (
+              payload.new.msgSenderUid !== currentUserId &&
+              payload.new.msgSender !== currentUser
+            ) {
               const newMsgSound = new Audio("/ass/ann.wav");
               newMsgSound.play();
             }
@@ -137,7 +139,7 @@ export function Chat() {
     };
   }, [sidebarOpen]);
   return (
-    <div className="w-full h-screen font-sura flex fixed">
+    <div className="w-full h-screen font-sura flex fixed font-garamond ">
       {/* Overlay */}
       {sidebarOpen && (
         <div
@@ -156,7 +158,7 @@ export function Chat() {
         <div className="sectionHeader p-2 border-b border-secondary">
           <div className="sectionHeaderInfo border border-secondary rounded flex justify-between items-center p-2 gap-1">
             <div className="flex gap-1 p-1 items-center">
-              <h4 className="text-sm md:text-base">Karim El assali</h4>
+              <h4 className="text-sm md:text-base font-poppins ">Karim El assali</h4>
             </div>
             <div className="sectionHeaderOptions flex items-center">
               <div className="flex gap-1 cursor-pointer transition-all hover:rotate-90">
@@ -168,17 +170,17 @@ export function Chat() {
             </div>
           </div>
           <div className="chatsOptions flex justify-between p-2 gap-2 text-sm">
-            <div className="p-1 border-b cursor-pointer border-secondary text-accent hover:text-text transition-colors">
+            <div className="font-garamond p-1 border-b cursor-pointer border-secondary text-accent hover:text-text transition-colors">
               All Users
             </div>
-            <div className="p-1 border-b cursor-pointer border-secondary text-accent hover:text-text transition-colors">
+            <div className="font-garamond p-1 border-b cursor-pointer border-secondary text-accent hover:text-text transition-colors">
               Favourites
             </div>
           </div>
           <div className="sectionSearch p-1">
             <div className="flex items-center justify-center gap-1 p-1">
               <input
-                className="flex-grow p-1 border-b border-accent rounded text-sm"
+                className="flex-grow p-1 border-b border-accent rounded font-poppins text-sm"
                 type="text"
                 placeholder="Search"
               />
@@ -205,7 +207,7 @@ export function Chat() {
                   src="/ass/logo.png"
                 />
                 <div className="flex flex-col pl-2">
-                  <h4 className="text-sm">Karim El assali</h4>
+                  <h4 className="text-sm font-poppins ">Karim El assali</h4>
                   <span className="text-xs text-gray-500">Hello</span>
                 </div>
               </div>
@@ -231,8 +233,8 @@ export function Chat() {
                 src="/ass/logo.png"
               />
               <div className="fullName flex flex-col ml-2">
-                <h4 className="text-sm md:text-base">Karim El assali</h4>
-                <span className="text-xs">Active Now</span>
+                <h4 className="text-sm md:text-base font-poppins">Karim El assali</h4>
+                <span className="text-xs text-slate-400 ">Active Now</span>
               </div>
             </div>
           </div>
@@ -251,39 +253,50 @@ export function Chat() {
             msg.msgSenderUid !== currentUserId ? (
               <div key={msg.id} className="mb-4 flex items-end">
                 <div className="imgDiv rounded-full">
-                  <Avatar className="rounded-full mr-2 object-cover w-5 h-5" >
-                    <AvatarImage src={msg.msgSenderPicture || "/ass/logo.png"} alt="userPicture" />
+                  <Avatar className="rounded-full mr-2 object-cover w-5 h-5">
+                    <AvatarImage
+                      src={msg.msgSenderPicture || "/ass/logo.png"}
+                      alt="userPicture"
+                    />
                   </Avatar>
                 </div>
                 <div className="p-3 rounded-tl-lg rounded-br-lg rounded-tr-lg  break-words max-w-[70%] md:max-w-[80%] bg-accent border border-secondary text-white overflow-hidden">
-                  <div className="flex gap-5
-                   items-center justify-between">
-                    <h3 className="text-sm font-medium">
+                  <div
+                    className="flex gap-5
+                   items-center justify-between"
+                  >
+                    <h3 className="text-sm font-poppins text-slate-400 font-medium">
                       {msg.msgSenderName || "Karim El assali"}
                     </h3>
                     <span className="text-xs text-slate-500">
                       {msg.timestamp || "11:12 pm"}
                     </span>
                   </div>
-                  <p className="text-sm mt-1 break-words">{msg.message}</p>
+                  <p className="text-md mt-1 break-words font-poppins ">{msg.message}</p>
                 </div>
               </div>
             ) : (
-              <div key={msg.id} className="mb-4 flex p-1 gap-2 items-end justify-end">
+              <div
+                key={msg.id}
+                className="mb-4 flex p-1 gap-2 items-end justify-end"
+              >
                 <div className="p-3 rounded-tr-lg rounded-bl-lg  rounded-tl-lg break-words max-w-[70%] md:max-w-[80%] bg-background border border-secondary text-text overflow-hidden">
                   <div className="flex items-center gap-5 justify-between">
-                    <h3 className="text-sm font-medium">
+                    <h3 className="text-sm font-poppins text-slate-900 font-medium">
                       {msg.msgSenderName || "Karim El assali"}
                     </h3>
-                    <span className="text-xs text-slate-500">
+                    <span className="text-sm text-slate-500">
                       {msg.timestamp || "11:12 pm"}
                     </span>
                   </div>
-                  <p className="text-sm mt-1 break-words">{msg.message}</p>
+                  <p className="text-md mt-1 break-words">{msg.message}</p>
                 </div>
                 <div className="imgDiv rounded-full">
-                  <Avatar className="rounded-full mr-2 object-cover w-5 h-5" >
-                    <AvatarImage src={msg.msgSenderPicture || "/ass/logo.png"} alt="userPicture" />
+                  <Avatar className="rounded-full mr-2 object-cover w-5 h-5">
+                    <AvatarImage
+                      src={msg.msgSenderPicture || "/ass/logo.png"}
+                      alt="userPicture"
+                    />
                   </Avatar>
                 </div>
               </div>
@@ -291,28 +304,28 @@ export function Chat() {
           )}
         </div>
 
-        <div className="inputArea p-1 border-t fixed bottom-0 w-full min-h-[50px]">
+        <div className="inputArea p-1  fixed bottom-0 w-full min-h-[50px]">
           <form
             onSubmit={(e) => {
               e.preventDefault();
               sendMessage();
             }}
-            className="flex justify-around  md:grid md:grid-cols-2  border border-secondary rounded gap-2 p-2 w-full"
+            className="flex flex-col sm:flex-row items-center justify-between border border-secondary rounded gap-2 p-2 w-full"
           >
             <input
               id="messageInput"
               type="text"
-              className="w-full md:w-[80%] p-2 rounded focus:outline-none focus:border-accent flex-grow "
+              className="w-full sm:w-auto p-2 rounded focus:outline-none focus:border-accent flex-grow"
               placeholder="Type a message..."
               onChange={(e) => setMessage(e.target.value)}
             />
             <button
-              className="w-full md:w-[20%] text-accent rounded-full p-2 hover:bg-opacity-80 transition-colors"
+              className="text-accent rounded-full p-2 hover:bg-opacity-80 transition-colors w-12 sm:w-auto"
               onClick={sendMessage}
               type="button"
             >
               <IoSendOutline
-                size={20}
+                size={30}
                 className="transform hover:scale-110 transition-all"
               />
             </button>

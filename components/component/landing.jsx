@@ -163,7 +163,7 @@ export default function Landing() {
 
   return (
     <>
-      <div className={`flex flex-col overflow-hidden mainFont `}></div>
+      <div className={`flex flex-col overflow-hidden font-poppins `}></div>
       <motion.div
         initial={{
           opacity: 0,
@@ -204,7 +204,7 @@ export default function Landing() {
                   ease: "easeIn",
                 }}
               >
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                <h2 className="text-3xl md:text-4xl font-poppins mb-4">
                   {language === "en"
                     ? "Connect and Share with "
                     : "Connetti e condividi con "}
@@ -215,11 +215,6 @@ export default function Landing() {
                     AostaHub
                   </span>
                 </h2>
-                <p className="text-xl font-body mb-6">
-                  {language === "en"
-                    ? "Securely connect and share your Instagram and other social profiles to make new friends."
-                    : "Connetti in modo sicuro e condividi i tuoi profili Instagram e altri social per fare nuovi amici."}
-                </p>
                 <motion.p
                   initial={{
                     opacity: 0,
@@ -232,7 +227,7 @@ export default function Landing() {
                     delay: 1.2,
                     ease: "easeIn",
                   }}
-                  className="text-xl text-text font-body "
+                  className="text-xl text-text font-poppins "
                 >
                   Discover a unique way to connect in Aosta, Italy! Aosta Hub
                   addresses the local trend of people sharing their social media
@@ -241,6 +236,11 @@ export default function Landing() {
                   meaningful connections securely.
                 </motion.p>
                 <br />
+                <p className="text-xl  mb-6 font-open">
+                  {language === "en"
+                    ? "Securely connect and share your Instagram and other social profiles to make new friends."
+                    : "Connetti in modo sicuro e condividi i tuoi profili Instagram e altri social per fare nuovi amici."}
+                </p>
                 <hr />
                 <br />
                 <motion.div
@@ -263,7 +263,7 @@ export default function Landing() {
                     style={{ borderRadius: "4px" }}
                     containerClassName="rounded-full"
                     as="button"
-                    className="p-3 font-body  rounded-md bg-secondary w-max md:w-40 text-text text-lg hover:text-white"
+                    className="p-3 font-open  rounded-md bg-secondary w-max md:w-40 text-text text-lg hover:text-white"
                   >
                     <Link href={"/explore"}>Sign up </Link>
                   </Button>
@@ -273,7 +273,7 @@ export default function Landing() {
                     duration={1}
                     containerClassName="rounded-full"
                     as="button"
-                    className="p-3  font-body rounded-md bg-primary w-max md:w-40 text-secondary text-lg"
+                    className="p-3  font-open rounded-md bg-primary w-max md:w-40 text-secondary text-lg"
                   >
                     <Link href={"/explore"}>Explore </Link>
                   </Button>
@@ -312,11 +312,11 @@ export default function Landing() {
     </div> */}
         <div className="h-[10rem] pb-9 flex justify-center items-center px-4">
           <div
-            className="text-4xl mx-auto text-black   font-bold dark:text-neutral-800"
+            className="text-4xl mx-auto text-black   font-poppins dark:text-neutral-800"
             style={{ gap: "3rem" }}
           >
             Esplora
-            <FlipWords className="font-body" words={aostaWords} />
+            <FlipWords className="font-open" words={aostaWords} />
             Di Aosta
           </div>
         </div>
@@ -379,10 +379,10 @@ export default function Landing() {
         </div>
       </section> */}
         {/* -----------for pictures ------------ */}
-        <h1 className="text-center font-heading font-bold mt-9 text-3xl ">
+        <h1 className="text-center font-poppins font-bold mt-9 text-3xl ">
           Perche <span className="text-accent">Aosta Hub</span> ?
         </h1>
-        <StickyScroll content={content} />
+        <StickyScroll contentClassName={'font-poppins'} content={content} />
         <br />
         <br />
         <InfiniteMovingCards
@@ -448,14 +448,14 @@ export default function Landing() {
                 <ShootingStars
                   minDelay={1}
                   minSpeed={1}
-                  className={" mt-20 -z-2 "}
+                  className={" mt-20 -z-2 font-poppins "}
                 />
               </div>
               {language === "en"
                 ? `Join AostaHub Today`
                 : "Unisciti ad AostaHub oggi"}
             </h2>
-            <p className="text-xl font-bold text-center text-gray-500 mb-8">
+            <p className="text-xl font-open text-center text-gray-500 mb-8">
               {language === "en"
                 ? "Discover new connections and friendships in a safe and welcoming space."
                 : "Scopri nuove connessioni e amicizie in uno spazio sicuro e accogliente."}
@@ -466,7 +466,7 @@ export default function Landing() {
               className=" bg-accent   text-white hover:bg-secondary hover:text-text"
             >
               <Link
-                className="text-background  font-bold text-lg hover:text-text"
+                className="text-background  font-open text-lg hover:text-text"
                 href={"/explore"}
               >
                 {language === "en" ? "Sign Up Now" : "Iscriviti ora"}

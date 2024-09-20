@@ -53,18 +53,18 @@ export default function Profile({userId}) {
           style={{ aspectRatio: "1920/500", objectFit: "cover" }} />
         <div
           className="absolute inset-0 flex items-end bg-gradient-to-t from-black/50 to-transparent p-6 sm:p-8 lg:p-10">
-          <div className="flex items-center gap-4 p-2 "   style={{backdropFilter:'blur(100px)',borderRadius:'9px'}}>
+          <div className="flex items-center gap-4 p-2 "   style={{backdropFilter:'blur(300px)',borderRadius:'9px'}}>
             <Avatar
               className="h-16 w-16 border-2  sm:h-20 sm:w-20 lg:h-40 lg:w-40 "  style={{borderRadius:'50%  '}}>
               <AvatarImage src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`} alt="@shadcn" />
               <AvatarFallback>{user.id}</AvatarFallback>
             </Avatar>
             <div className="grid gap-1 text-white" style={{color:'#0f172a'}}>
-            <h1  className="text-xl flex items-center gap-3 text-gray-900 font-bold font-heading sm:text-2xl lg:text-3xl">
+            <h1  className="text-xl flex items-center gap-3 text-gray-900 font-bold font-poppins sm:text-2xl lg:text-3xl">
               {user.fname} {user.lname} {user.verified == 1 ? <MdOutlineVerified style={{ color: '#0284c7' }} /> : null}
             </h1>
 
-              <div className="flex items-center gap-2 text-sm sm:text-base font-bold font-body text-secondary "  >
+              <div className="flex items-center gap-2 text-sm sm:text-base font-bold font-open text-secondary "  >
                 {user.age} - YEARS OLD
                 <FiActivity />
                 
@@ -82,8 +82,8 @@ export default function Profile({userId}) {
         <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold">About</h2>
-              <p className="mt-2 text-muted-foreground">
+              <h2 className="text-2xl font-bold font-poppins   ">About</h2>
+              <p className="mt-2 text-muted-foreground font-open">
                 {user.description}
                 John Doe is a passionate designer and developer who loves creating beautiful and functional digital
                 experiences. With over 10 years of experience in the industry, he has worked with a wide range of
