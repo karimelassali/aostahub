@@ -63,7 +63,7 @@ export default function Chat() {
         .from("msgs")
         .select("*")
         .order("id", { ascending: true });
-      data ? setMessages(data) : toast.message("No messages yet.");
+      data ? setMessages(data) : toast.message("No messages yet wait.");
       scrollToBottom(); // Call scrollToBottom after setting messages
     }
     fetchMessages();
