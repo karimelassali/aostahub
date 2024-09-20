@@ -1,30 +1,41 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { Textarea } from "@/components/ui/textarea";
-import Image from "next/image";
-import { createClient } from "@/utils/supabase/client";
+
 import { useState, useEffect, useRef } from "react";
-
-import { useRouter } from "next/router";
-import { useUser } from "@clerk/nextjs";
+import { motion, AnimatePresence } from "framer-motion";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  SendIcon,
+  MenuIcon,
+  MapPinIcon,
+  UserPlusIcon,
+  HeartIcon,
+  XIcon,
+  CoffeeIcon,
+  MountainIcon,
+  WineIcon,
+  SearchIcon,
+  ImageIcon,
+} from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
 import { Toaster, toast } from "sonner";
-import { MdDeleteSweep } from "react-icons/md";
-import { CiStar } from "react-icons/ci";
-import { CiShare2 } from "react-icons/ci";
-import { CiSearch } from "react-icons/ci";
-import { SlOptionsVertical } from "react-icons/sl";
-import { IoSendOutline } from "react-icons/io5";
-import { HiMenuAlt2 } from "react-icons/hi";
-import { IoMdClose } from "react-icons/io";
+import { useUser } from "@clerk/nextjs";
 
-export function Chat() {
+export default function Chat() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [potentialFriends, setPotentialFriends] = useState([]);
+  const [currentFriend, setCurrentFriend] = useState(null);
+  const [showSuggestion, setShowSuggestion] = useState(true);
+  const [friendFilter, setFriendFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+
   const supabase = createClient();
 
   const [messages, setMessages] = useState([]);
@@ -35,18 +46,7 @@ export function Chat() {
   const userProfile = user?.imageUrl;
   const currentUser = user?.fullName;
 
-  // Function to scroll to the bottom
-  const scrollToBottom = () => {
-    const chatContainer = document.querySelector(".chats");
-    if (chatContainer) {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-  };
-
-  useEffect(() => {
-    // This will scroll to the bottom whenever messages change
-    scrollToBottom();
-  }, [messages]);
+  const scrollAreaRef = useRef(null);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -64,6 +64,7 @@ export function Chat() {
         .select("*")
         .order("id", { ascending: true });
       data ? setMessages(data) : toast.message("No messages yet.");
+      scrollToBottom(); // Call scrollToBottom after setting messages
     }
     fetchMessages();
 
@@ -77,7 +78,8 @@ export function Chat() {
             console.log(payload);
             if (
               payload.new.msgSenderUid !== currentUserId &&
-              payload.new.msgSender !== currentUser
+              payload.new.msgSender !== currentUser &&
+              window.location.pathname === "/chat"
             ) {
               const newMsgSound = new Audio("/ass/ann.wav");
               newMsgSound.play();
@@ -88,16 +90,21 @@ export function Chat() {
         .subscribe();
     }
     realTimeFetchMessages();
-  }, []);
+  }, [currentUser, currentUserId, supabase]);
 
   async function sendMessage() {
-    const msgInput = (document.getElementById("messageInput").value = "");
+    let time = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
     if (message.length > 0 && currentUserId) {
       const { data, error } = await supabase.from("msgs").insert({
         msgSenderUid: currentUserId,
         message,
         msgSender: currentUser,
         msgSenderPicture: userProfile,
+        time,
         // msgReceiverUid: users[0].id,
         // msgReceiver: users[0].fullName,
         // read: false,
@@ -107,351 +114,436 @@ export function Chat() {
       });
       const sA = new Audio("/ass/sent.wav");
       sA.play();
+      scrollToBottom();
+      setMessage("");
     } else {
       setMessage("");
       toast.message("Message cannot be empty");
     }
   }
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const sidebarRef = useRef(null);
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+
+  useEffect(() => {
+    // Simulate loading data
+    setTimeout(() => {
+      setCurrentFriend({
+        id: 1,
+        name: "Sofia Rossi",
+        age: 28,
+        interests: ["Hiking", "Wine tasting", "Skiing"],
+        lastSeen: "Just now",
+        distance: "0.5 km",
+        status: "online",
+        favorite: true,
+      });
+      setIsLoading(false);
+    }, 2000);
+  }, []);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const closeSidebar = () => {
-    setSidebarOpen(false);
+  const filteredFriends = potentialFriends.filter((friend) => {
+    const matchesFilter =
+      friendFilter === "all" ||
+      (friendFilter === "online" && friend.status === "online") ||
+      (friendFilter === "favorites" && friend.favorite);
+    const matchesSearch = friend.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
+
+  const menuVariants = {
+    open: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+      },
+    },
+    closed: {
+      x: "-100%",
+      opacity: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+      },
+    },
+  };
+
+  const scrollToBottom = () => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target) &&
-        sidebarOpen
-      ) {
-        closeSidebar();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [sidebarOpen]);
+    scrollToBottom();
+  }, [messages]);
+        
   return (
-    <div className="w-full h-screen font-sura flex fixed font-garamond ">
-      {/* Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-10 md:hidden"
-          onClick={closeSidebar}
-        ></div>
-      )}
-
-      {/* Sidebar */}
+    <div className="flex h-screen bg-[#fbfbfe] text-[#050315]">
+      {/* Aosta Friends List - Now always visible on large screens */}
       <div
-        ref={sidebarRef}
-        className={`fixed md:relative w-3/4 max-w-xs md:w-[30%] lg:w-[25%] h-full bg-background transition-all duration-300 ease-in-out ${
-          sidebarOpen ? "left-0" : "-left-full"
-        } md:left-0 z-20 flex flex-col`}
+        className={`
+        w-full md:w-1/3 lg:w-1/4 
+        bg-[#fbfbfe] border border-accent
+        text-accent
+        fixed md:relative inset-y-0 left-0 z-30 
+        transform ${
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 
+        transition-transform duration-300 ease-in-out
+      `}
       >
-        <div className="sectionHeader p-2 border-b border-secondary">
-          <div className="sectionHeaderInfo border border-secondary rounded flex justify-between items-center p-2 gap-1">
-            <div className="flex gap-1 p-1 items-center">
-              <h4 className="text-sm md:text-base font-poppins ">Karim El assali</h4>
-            </div>
-            <div className="sectionHeaderOptions flex items-center">
-              <div className="flex gap-1 cursor-pointer transition-all hover:rotate-90">
-                <SlOptionsVertical className="text-accent" />
-              </div>
-              <button onClick={closeSidebar} className="ml-2 md:hidden">
-                <IoMdClose size={24} className="text-accent" />
-              </button>
-            </div>
-          </div>
-          <div className="chatsOptions flex justify-between p-2 gap-2 text-sm">
-            <div className="font-garamond p-1 border-b cursor-pointer border-secondary text-accent hover:text-text transition-colors">
-              All Users
-            </div>
-            <div className="font-garamond p-1 border-b cursor-pointer border-secondary text-accent hover:text-text transition-colors">
-              Favourites
-            </div>
-          </div>
-          <div className="sectionSearch p-1">
-            <div className="flex items-center justify-center gap-1 p-1">
-              <input
-                className="flex-grow p-1 border-b border-accent rounded font-poppins text-sm"
-                type="text"
-                placeholder="Search"
-              />
-              <CiSearch
-                className="relative hover:rotate-360 cursor-pointer transition-all text-accent"
-                size={24}
-              />
-            </div>
-          </div>
+        <div className="p-4 border-b border-[#dedcff] flex justify-between items-center font-poppins text-text">
+          <h2 className="text-xl font-semibold first-letter:capitalize ">{currentUser}</h2>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleMobileMenu}
+            className="md:hidden text-accent border border-accent hover:text-white "
+          >
+            <XIcon className="h-6 w-6" />
+          </Button>
         </div>
-        <div className="allUsers flex-grow overflow-y-auto pb-[10.5rem] p-1">
-          {/* User list items */}
-          {[...Array(5)].map((_, index) => (
-            <div
-              key={index}
-              className="user border-b border-gray-500 flex mt-3 items-center justify-between p-2"
-            >
-              <div className="userInfo flex items-center">
-                <Image
-                  width={40}
-                  height={40}
-                  className="rounded-full border"
-                  alt="userPicture"
-                  src="/ass/logo.png"
-                />
-                <div className="flex flex-col pl-2">
-                  <h4 className="text-sm font-poppins ">Karim El assali</h4>
-                  <span className="text-xs text-gray-500">Hello</span>
-                </div>
-              </div>
-              <span className="text-gray-500 text-xs">Tue</span>
-            </div>
-          ))}
+        <div className="p-4 space-y-4">
+          <div className="relative">
+            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#050315]" />
+            <Input
+              type="text"
+              placeholder="Search friends..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 border-[#dedcff] text-[#050315]"
+            />
+          </div>
+          <Tabs defaultValue="all" onValueChange={setFriendFilter}>
+            <TabsList className="grid w-full grid-cols-3 bg-[#dedcff]">
+              <TabsTrigger
+                value="all"
+                className="data-[state=active]:bg-[#2f27ce] data-[state=active]:text-[#fbfbfe]"
+              >
+                All
+              </TabsTrigger>
+              <TabsTrigger
+                value="online"
+                className="data-[state=active]:bg-[#2f27ce] data-[state=active]:text-[#fbfbfe]"
+              >
+                Online
+              </TabsTrigger>
+              <TabsTrigger
+                value="favorites"
+                className="data-[state=active]:bg-[#2f27ce] data-[state=active]:text-[#fbfbfe]"
+              >
+                Favorites
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
+        <ScrollArea className="h-[calc(100vh-13rem)]">
+          {isLoading
+            ? Array(4)
+                .fill(0)
+                .map((_, index) => (
+                  <div key={index} className="p-4">
+                    <Skeleton className="h-24 w-full rounded-lg" />
+                  </div>
+                ))
+            : users.map((friend) => (
+                <motion.div
+                  key={friend.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="p-4"
+                >
+                  <Card className="p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer border-[#dedcff]">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage
+                            src={`https://api.dicebear.com/6.x/micah/svg?seed=${friend.name}`}
+                            alt={friend.fullName}
+                          />
+                          <AvatarFallback>
+                            {friend.fname
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="ml-4">
+                          <h3 className="font-semibold">
+                            {friend.fname}, {friend.age}
+                          </h3>
+                          <p className="text-sm text-[#050315] flex items-center">
+                            {/* <MapPinIcon className="h-4 w-4 mr-1" />{" "} */}
+                            {/* {friend.distance} */}
+                          </p>
+                        </div>
+                      </div>
+                      <Badge
+                        variant={
+                          friend.status === "online" ? "default" : "secondary"
+                        }
+                        className={
+                          friend.status === "online"
+                            ? "bg-[#433bff] text-[#fbfbfe]"
+                            : "bg-[#dedcff] text-[#050315]"
+                        }
+                      >
+                        {friend.status}
+                      </Badge>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {/* {friend.interests.map((interest, index) => (
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="bg-[#dedcff] text-[#050315]"
+                        >
+                          {interest === "Hiking" && (
+                            <MountainIcon className="h-3 w-3 mr-1" />
+                          )}
+                          {interest === "Wine tasting" && (
+                            <WineIcon className="h-3 w-3 mr-1" />
+                          )}
+                          {interest === "Coffee" && (
+                            <CoffeeIcon className="h-3 w-3 mr-1" />
+                          )}
+                          {interest}
+                        </Badge>
+                      ))} */}
+                    </div>
+                  </Card>
+                </motion.div>
+              ))}
+        </ScrollArea>
       </div>
 
-      {/* Main Chat Area */}
-      <div className="main border relative   border-secondary flex-grow flex flex-col ">
-        <div className="mainHeader flex justify-between items-center p-2 border-b border-gray-400">
+      {/* Chat Window */}
+      <div className="flex-1 flex flex-col">
+        {/* Chat Header */}
+        <div className="p-4 border-b border-[#dedcff] bg-[#fbfbfe] flex justify-between items-center">
           <div className="flex items-center">
-            <button onClick={toggleSidebar} className="mr-2 md:hidden">
-              <HiMenuAlt2 size={24} />
-            </button>
-            <div className="userInfo flex items-center">
-              <Image
-                width={40}
-                height={40}
-                className="rounded-full"
-                alt="userPicture"
-                src="/ass/logo.png"
-              />
-              <div className="fullName flex flex-col ml-2">
-                <h4 className="text-sm md:text-base font-poppins">Karim El assali</h4>
-                <span className="text-xs text-slate-400 ">Active Now</span>
-              </div>
-            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleMobileMenu}
+              className="mr-2 md:hidden text-[#050315]"
+            >
+              <MenuIcon className="h-6 w-6" />
+            </Button>
+            
+              <>
+                <Avatar className="h-10 w-10">
+                  <AvatarImage
+                    src={`https://api.dicebear.com/6.x/micah/svg?seed=${currentUser}`}
+                  />
+                
+                </Avatar>
+                <div className="ml-4">
+                  <h3 className="font-semibold">{currentUser}</h3>
+                  <p className="text-sm text-[#050315]">
+                    Just Now
+                  </p>
+                </div>
+              </>
           </div>
-          <div className="mainOptions flex gap-2">
-            <div className="rounded-full bg-secondary cursor-pointer w-8 h-8 flex items-center justify-center hover:scale-110 transition-all">
-              <CiStar className="text-lg" />
-            </div>
-            <div className="rounded-full bg-secondary cursor-pointer w-8 h-8 flex items-center justify-center hover:scale-110 transition-all">
-              <CiShare2 className="text-lg" />
-            </div>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-[#dedcff] text-[#050315] hover:bg-[#433bff] hover:text-[#fbfbfe]"
+            >
+              <UserPlusIcon className="h-4 w-4 mr-2" />
+              Add Friend
+            </Button>
           </div>
         </div>
 
-        <div className="chats flex-grow p-2 overflow-y-auto pb-[13.5rem] md:pb-[14rem]">
-          {messages.map((msg) =>
-            msg.msgSenderUid !== currentUserId ? (
-              <div key={msg.id} className="mb-4 flex items-end">
-                <div className="imgDiv rounded-full">
-                  <Avatar className="rounded-full mr-2 object-cover w-5 h-5">
-                    <AvatarImage
-                      src={msg.msgSenderPicture || "/ass/logo.png"}
-                      alt="userPicture"
-                    />
-                  </Avatar>
-                </div>
-                <div className="p-3 rounded-tl-lg rounded-br-lg rounded-tr-lg  break-words max-w-[70%] md:max-w-[80%] bg-accent border border-secondary text-white overflow-hidden">
-                  <div
-                    className="flex gap-5
-                   items-center justify-between"
+        {/* Messages */}
+        <ScrollArea
+          ref={scrollAreaRef}
+          className="flex-1 p-4 border font-poppins border-secondary"
+        >
+          <div id="chats" className="flex flex-col grow min-h-full">
+            {isLoading
+              ? Array(5)
+                  .fill(0)
+                  .map((_, index) => (
+                    <div
+                      key={index}
+                      className={`flex mb-4 ${
+                        index % 2 === 0 ? "justify-start" : "justify-end"
+                      }`}
+                    >
+                      <Skeleton
+                        className={`h-16 w-64 rounded-lg ${
+                          index % 2 === 0 ? "mr-12" : "ml-12"
+                        }`}
+                      />
+                    </div>
+                  ))
+              : messages.map((msg, idx) => (
+                
+                  <motion.div
+                    key={msg.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className={`flex mb-4 ${
+                      msg.msgSenderUid === currentUserId
+                        ? "justify-end"
+                        : "justify-start"
+                    }`}
+                    // Attach ref to the last message
+                    ref={idx === messages.length - 1 ? scrollAreaRef : null}
                   >
-                    <h3 className="text-sm font-poppins text-slate-400 font-medium">
-                      {msg.msgSenderName || "Karim El assali"}
-                    </h3>
-                    <span className="text-xs text-slate-500">
-                      {msg.timestamp || "11:12 pm"}
-                    </span>
-                  </div>
-                  <p className="text-md mt-1 break-words font-poppins ">{msg.message}</p>
-                </div>
-              </div>
-            ) : (
-              <div
-                key={msg.id}
-                className="mb-4 flex p-1 gap-2 items-end justify-end"
-              >
-                <div className="p-3 rounded-tr-lg rounded-bl-lg  rounded-tl-lg break-words max-w-[70%] md:max-w-[80%] bg-background border border-secondary text-text overflow-hidden">
-                  <div className="flex items-center gap-5 justify-between">
-                    <h3 className="text-sm font-poppins text-slate-900 font-medium">
-                      {msg.msgSenderName || "Karim El assali"}
-                    </h3>
-                    <span className="text-sm text-slate-500">
-                      {msg.timestamp || "11:12 pm"}
-                    </span>
-                  </div>
-                  <p className="text-md mt-1 break-words">{msg.message}</p>
-                </div>
-                <div className="imgDiv rounded-full">
-                  <Avatar className="rounded-full mr-2 object-cover w-5 h-5">
-                    <AvatarImage
-                      src={msg.msgSenderPicture || "/ass/logo.png"}
-                      alt="userPicture"
-                    />
-                  </Avatar>
-                </div>
-              </div>
-            )
-          )}
-        </div>
+                    {
+                      msg.msgSenderUid !== currentUserId && (
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage
+                            src={`https://api.dicebear.com/6.x/micah/svg?seed=${msg.msgSender}`}
+                            alt={'woieh'}
+                          />
+                        </Avatar>
+                      )
+                    }
+                    
+                    <div
+                      className={` flex gap-5 p-3 max-w-xs lg:max-w-md ${
+                        msg.msgSenderUid === currentUserId
+                          ? " bg-[#dedcff] text-black break-words rounded-tl-lg rounded-bl-lg rounded-tr-lg "
+                          : " bg-[#2f27ce] text-white break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg "
+                      }`}
+                    >
+                      <p>{msg.message}</p>
+                      <p
+                        className={`text-sm mt-1 ${
+                          msg.msgSenderUid === currentUserId
+                            ? "text-slate-800"
+                            : "text-slate-500"
+                        }`}
+                      >
+                        {msg.time}
+                      </p>
+                    </div>
+                    {
+                      msg.msgSenderUid === currentUserId && (
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage
+                            src={`https://api.dicebear.com/6.x/micah/svg?seed=${msg.msgSender}`}
+                            alt={'woieh'}
+                          />
+                        </Avatar>
+                      )
+                    }
+                    
+                  </motion.div>
+                ))}
+          </div>
+        </ScrollArea>
 
-        <div className="inputArea p-1  fixed bottom-0 w-full min-h-[50px]">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              sendMessage();
-            }}
-            className="flex flex-col sm:flex-row items-center justify-between border border-secondary rounded gap-2 p-2 w-full"
-          >
-            <input
+        {/* Message Input */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault(), sendMessage();
+          }}
+          className="p-4 bg-[#fbfbfe] border-t border-[#dedcff]"
+        >
+          <div className="flex items-center">
+            <Input
               id="messageInput"
               type="text"
-              className="w-full sm:w-auto p-2 rounded focus:outline-none focus:border-accent flex-grow"
               placeholder="Type a message..."
+              value={message}
               onChange={(e) => setMessage(e.target.value)}
+              className="flex-1 bg-[#dedcff] text-[#050315] border-[#dedcff]"
             />
-            <button
-              className="text-accent rounded-full p-2 hover:bg-opacity-80 transition-colors w-12 sm:w-auto"
-              onClick={sendMessage}
+            <Button
               type="button"
+              size="icon"
+              className="ml-2 bg-[#dedcff] text-[#050315] hover:bg-[#433bff] hover:text-[#fbfbfe]"
             >
-              <IoSendOutline
-                size={30}
-                className="transform hover:scale-110 transition-all"
-              />
-            </button>
-          </form>
-        </div>
+              <ImageIcon className="h-5 w-5" />
+              <span className="sr-only">Send image</span>
+            </Button>
+            <Button
+              type="submit"
+              size="icon"
+              className="ml-2 bg-[#2f27ce] text-[#fbfbfe] hover:bg-[#433bff]"
+            >
+              <SendIcon className="h-5 w-5" />
+              <span className="sr-only">Send message</span>
+            </Button>
+          </div>
+        </form>
       </div>
+
+      {/* Friend Suggestion Overlay */}
+      <AnimatePresence>
+        {!isLoading && showSuggestion && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.5 }}
+            className="fixed bottom-4 right-4 bg-[#fbfbfe] p-4 rounded-lg shadow-lg border border-[#dedcff]"
+          >
+            <div className="flex justify-between items-start mb-2">
+              <h4 className="font-semibold text-[#050315]">
+                New Friend Suggestion
+              </h4>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowSuggestion(false)}
+                className="text-[#050315]"
+              >
+                <XIcon className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="flex items-center">
+              <Avatar className="h-12 w-12">
+                <AvatarImage
+                  src="https://api.dicebear.com/6.x/micah/svg?seed=Elena"
+                  alt="Elena"
+                />
+                <AvatarFallback>E</AvatarFallback>
+              </Avatar>
+              <div className="ml-4">
+                <p className="font-medium text-[#050315]">Elena, 27</p>
+                <p className="text-sm text-[#050315]">
+                  Loves hiking and local cuisine
+                </p>
+              </div>
+            </div>
+            <div className="mt-4 flex justify-end space-x-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setShowSuggestion(false)}
+                className="border-[#dedcff] text-[#050315] hover:bg-[#dedcff]"
+              >
+                Skip
+              </Button>
+              <Button
+                size="sm"
+                className="bg-[#2f27ce] text-[#fbfbfe] hover:bg-[#433bff]"
+              >
+                <HeartIcon className="h-4 w-4 mr-2" />
+                Connect
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
-  );
-}
-
-function MessageCircleIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-    </svg>
-  );
-}
-
-function MoveVerticalIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="8 18 12 22 16 18" />
-      <polyline points="8 6 12 2 16 6" />
-      <line x1="12" x2="12" y1="2" y2="22" />
-    </svg>
-  );
-}
-
-function SendIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m22 2-7 20-4-9-9-4Z" />
-      <path d="M22 2 11 13" />
-    </svg>
-  );
-}
-
-function SettingsIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
-  );
-}
-
-function ThumbsDownIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M17 14V2" />
-      <path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22h0a3.13 3.13 0 0 1-3-3.88Z" />
-    </svg>
-  );
-}
-
-function ThumbsUpIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M7 10v12" />
-      <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z" />
-    </svg>
   );
 }
