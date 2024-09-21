@@ -25,6 +25,7 @@ import { Suspense } from 'react';
 import { useUser } from "@clerk/nextjs";
 
 
+import CardSkeleton from '@/components/ui/cardSkeleton'
 
 export function Cards() {
   const router = useRouter();
@@ -89,7 +90,9 @@ export function Cards() {
 
 return (
   <>
+<CardSkeleton/>
   <Suspense fallback={'loading'} >
+    
     <div className="grid p-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
   
     { (
@@ -101,9 +104,6 @@ return (
           onHoverEnd={e => {}}
           onDoubleClick={(e)=>{router.push('profile/'+user.id)  }} key={user.id} className="bg-background rounded-lg overflow-hidden shadow-lg hover:cursor-pointer ">
               <div style={{ backdropFilter: 'blur(30px)' }}>
-                {
-                  console.log(user.imgName)
-                }
                 <div className="relative h-32 flex items-end justify-end p-1" style={{ backgroundSize: 'cover' }}>
                 <Image width={100} height={100}  className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}} src={user.profilePic} alt="bgImage" />
                   <Avatar style={{borderRadius:'50px'}} className="absolute top-[70%] left-4 w-20 h-20 border-4 border-background rounded-lg ">
@@ -138,11 +138,11 @@ return (
             <CardContent className="p-6 pt-12 space-y-4">
               <div className="flex items-center justify-between lg:flex-col lg:items-start lg:gap-2 lg:justify-center">
                 <div className="space-y-1">
-                  <h3 className="text-xl flex items-center gap-2 font-semibold">
+                  <h3 className="text-xl flex items-center gap-2 font-semibold font-poppins ">
                     {user.fname + ' ' +  user.lname} 
                     {user.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
                   </h3>
-                  <p className="text-sm text-muted-foreground">{user.age} years old</p>
+                  <p className="text-sm text-muted-foregro und font-open ">{user.age} years old</p>
                 </div>
                 <div className="flex items-center space-x-3 rounded-sm p-1" style={{ backdropFilter: 'blur(30px)', border: '0.2px solid #e2e8f0',borderRadius:'4px' }}>
                   {user.instagram && (
@@ -164,7 +164,7 @@ return (
               </div>
               <hr />
               {/* via rue abbe ame gorret */}
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground font-open ">
                 {user.description}
               </p>
               <hr />

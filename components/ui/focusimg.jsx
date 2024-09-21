@@ -54,7 +54,7 @@ export function FocusCards({
   return (
     (<div
       style={{borderRadius:'5px'}}
-      className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-5xl mx-auto md:px-8 w-full">
+      className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-5xl mx-auto md:px-8 w-full max-sm:p-2 max-md:p-2 ">
       {cards.map((card, index) => (
         <Card
           
