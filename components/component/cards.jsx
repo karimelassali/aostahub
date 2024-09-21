@@ -25,6 +25,7 @@ import { Suspense } from 'react';
 import { useUser } from "@clerk/nextjs";
 
 
+import CardSkeleton from '@/components/ui/cardSkeleton'
 
 export function Cards() {
   const router = useRouter();
@@ -89,7 +90,9 @@ export function Cards() {
 
 return (
   <>
+<CardSkeleton/>
   <Suspense fallback={'loading'} >
+    
     <div className="grid p-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
   
     { (

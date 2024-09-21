@@ -30,7 +30,7 @@ module.exports = {
         scroll:
           "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
         skeleton: 'skeleton 1.5s ease-in-out infinite',
-        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate',
       },
       backgroundSize: {
         skeleton: '200% 100%',
@@ -88,8 +88,9 @@ module.exports = {
         },
       },
       pulse: {
-        '0%, 100%': { transform: 'scale(1)' },
-        '50%': { transform: 'scale(1.05)' },
+        '0%':{opacity:'1'},
+        '50%':{opacity:'0.5'},
+        '100%':{opacity:'0.3'},
       },
     },
   },
