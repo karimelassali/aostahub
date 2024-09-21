@@ -96,7 +96,7 @@ export function Chat() {
   }
   return (
      (
-        <div className="w-screen h-screen font-sura fixed flex phone:hidden sm:flex-col md:flex-row">
+        <div className="w-screen h-screen font-sura fixed flex ">
          <div className="w-[30%] rounded-md   font-poppins " >
              <div className="sectionHeader border p-2 border-secondary">
                <div className="sectionHeaderInfo border border-secondary rounded flex justify-between items-center p-2 gap-1">
