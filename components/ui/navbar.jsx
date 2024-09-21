@@ -78,7 +78,7 @@ export default function Navbar() {
       </div>
 
       <div className={`sm:hidden ${isOpen ? 'block' : 'hidden'}`} id="mobile-menu">
-        <div className="space-y-1 px-2 pb-3 pt-2">
+        <div className="space-y-1 px-2 pb-3 pt-2 max-sm:flex max-sm:justify-center">
           <Link href="/explore" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home</Link>
           <Link href="/create" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create</Link>
           <Link href="/chat" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat</Link>  
