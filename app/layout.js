@@ -9,10 +9,10 @@ import "./globals.css";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { FloatingNav } from "@/components/ui/floatingNavbar";
 import { IconHome, IconNewSection } from "@tabler/icons-react";
 import { IoCreateOutline } from "react-icons/io5";
 import { IoChatboxOutline } from "react-icons/io5";
+import Navbar from "@/components/ui/navbar";
 
 export const metadata = {
   title: "Welcome to Aosta Hub",
@@ -70,38 +70,9 @@ export default function RootLayout({ children }) {
           />
         </head>
         <body className="bg-background">
-          <main>
-            <header
-              style={{ zIndex: "99999" }}
-              className="bg-accent text-white py-3 px-4 md:px-8 flex items-center justify-between"
-            >
-              <div className="flex items-center gap-4">
-                <Link href="/">
-                  <Image
-                    alt="logo"
-                    width={220}
-                    height={220}
-                    src={"/ass/logo.png"}
-                  />
-                </Link>
-              </div>
-              <SignedOut>
-                <Link
-                  href={"/explore"}
-                  className="bg-white rounded-md text-primary font-bold py-2 px-4 hover:cursor-pointer"
-                  style={{ borderRadius: "5px" }}
-                >
-                  Sign In
-                </Link>
-              </SignedOut>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
-            </header>
-
+          <Navbar />
             {children }
-          </main>
-          <footer className="flex justify-center  w-full     rounded-md  ">
+          <footer className="flex justify-center  w-full rounded-md  ">
             {/* <div className="w-full max-w-4xl p-4 rounded-lg flex justify-center gap-8 rounded-sm" style={{ backdropFilter: 'blur(30px)' }}>
                 <Link
               
@@ -116,11 +87,7 @@ export default function RootLayout({ children }) {
                 </Link>
               </div> */}
             {/* <div className="p-2 w-full flex   justify-center  rounded-lg sm:justify-end" style={{backdropFilter:'blur(20px)',borderRadius:'5px'}}> */}
-            <FloatingNav
-              className="rounded-md  "
-              style={{ gap: "30 ", color: "black" }}
-              navItems={links}
-            />
+            
             {/* </div> */}
           </footer>
         </body>

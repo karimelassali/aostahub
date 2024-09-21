@@ -1,0 +1,149 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  SendIcon,
+  MenuIcon,
+  MapPinIcon,
+  UserPlusIcon,
+  HeartIcon,
+  XIcon,
+  CoffeeIcon,
+  MountainIcon,
+  WineIcon,
+  SearchIcon,
+  ImageIcon,
+} from "lucide-react";
+
+export default function Chat() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [potentialFriends, setPotentialFriends] = useState([]);
+  const [currentFriend, setCurrentFriend] = useState(null);
+  const [showSuggestion, setShowSuggestion] = useState(true);
+  const [friendFilter, setFriendFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const supabase = createClient();
+
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState("");
+  const [users, setUsers] = useState([]);
+  const { user } = useUser();
+  const currentUserId = user?.id;
+  const userProfile = user?.imageUrl;
+  const currentUser = user?.fullName;
+
+  const scrollAreaRef = useRef(null);
+
+  
+
+  async function sendMessage() {
+    let time = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    if (message.length > 0 && currentUserId) {
+      const { data, error } = await supabase.from("msgs").insert({
+        msgSenderUid: currentUserId,
+        message,
+        msgSender: currentUser,
+        msgSenderPicture: userProfile,
+        time,
+        // msgReceiverUid: users[0].id,
+        // msgReceiver: users[0].fullName,
+        // read: false,
+        // delivered: false,
+
+        // created_at: new Date().toISOString(),
+      });
+      const sA = new Audio("/ass/sent.wav");
+      sA.play();
+      scrollToBottom();
+      setMessage("");
+    } else {
+      setMessage("");
+      toast.message("Message cannot be empty");
+    }
+  }
+
+  useEffect(() => {
+    // Simulate loading data
+    setTimeout(() => {
+      setCurrentFriend({
+        id: 1,
+        name: "Sofia Rossi",
+        age: 28,
+        interests: ["Hiking", "Wine tasting", "Skiing"],
+        lastSeen: "Just now",
+        distance: "0.5 km",
+        status: "online",
+        favorite: true,
+      });
+      setIsLoading(false);
+    }, 2000);
+  }, []);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const filteredFriends = potentialFriends.filter((friend) => {
+    const matchesFilter =
+      friendFilter === "all" ||
+      (friendFilter === "online" && friend.status === "online") ||
+      (friendFilter === "favorites" && friend.favorite);
+    const matchesSearch = friend.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
+
+  const menuVariants = {
+    open: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+      },
+    },
+    closed: {
+      x: "-100%",
+      opacity: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+      },
+    },
+  };
+
+  const scrollToBottom = () => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+        
+
+
+
+
+
+
+        

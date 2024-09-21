@@ -1,31 +1,21 @@
-"use client";
+'use client'
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  SendIcon,
-  MenuIcon,
-  MapPinIcon,
-  UserPlusIcon,
-  HeartIcon,
-  XIcon,
-  CoffeeIcon,
-  MountainIcon,
-  WineIcon,
-  SearchIcon,
-  ImageIcon,
-} from "lucide-react";
-import { createClient } from "@/utils/supabase/client";
-import { Toaster, toast } from "sonner";
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Badge } from "@/components/ui/badge"
+import { Card } from "@/components/ui/card"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { SendIcon, MenuIcon, MapPinIcon, UserPlusIcon, HeartIcon, XIcon, CoffeeIcon, MountainIcon, WineIcon, SearchIcon, ImageIcon } from "lucide-react"
+
 import { useUser } from "@clerk/nextjs";
+import { Toaster, toast } from "sonner";
+import { createClient } from "@/utils/supabase/client";
+
 
 export default function Chat() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -45,9 +35,89 @@ export default function Chat() {
   const currentUserId = user?.id;
   const userProfile = user?.imageUrl;
   const currentUser = user?.fullName;
+  const messagesEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
 
-  const scrollAreaRef = useRef(null);
+  const scrollToBottom = useCallback(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+    }
+  }, [])
 
+  useEffect(() => {
+    // Simulate loading data
+    setTimeout(() => {
+      setPotentialFriends([
+        { id: 1, name: 'Sofia Rossi', age: 28, interests: ['Hiking', 'Wine tasting', 'Skiing'], lastSeen: 'Just now', distance: '0.5 km', status: 'online', favorite: true },
+        { id: 2, name: 'Marco Bianchi', age: 32, interests: ['Mountain biking', 'Cooking', 'Photography'], lastSeen: '5 min ago', distance: '1.2 km', status: 'online', favorite: false },
+        { id: 3, name: 'Giulia Ferrero', age: 25, interests: ['Rock climbing', 'Yoga', 'Local history'], lastSeen: '20 min ago', distance: '2.3 km', status: 'offline', favorite: true },
+        { id: 4, name: 'Luca Esposito', age: 30, interests: ['Snowboarding', 'Coffee', 'Art galleries'], lastSeen: '1 hour ago', distance: '3.7 km', status: 'offline', favorite: false },
+      ])
+      setCurrentFriend({
+        id: 1,
+        name: 'Sofia Rossi',
+        age: 28,
+        interests: ['Hiking', 'Wine tasting', 'Skiing'],
+        lastSeen: 'Just now',
+        distance: '0.5 km',
+        status: 'online',
+        favorite: true
+      })
+      setIsLoading(false)
+    }, 2000)
+  }, [])
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages, isLoading, scrollToBottom])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      scrollToBottom()
+    }, 100)
+
+    return () => clearTimeout(timer);
+  }, [scrollToBottom])
+
+  
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  const filteredFriends = potentialFriends.filter(friend => {
+    const matchesFilter = 
+      (friendFilter === 'all') ||
+      (friendFilter === 'online' && friend.status === 'online') ||
+      (friendFilter === 'favorites' && friend.favorite)
+    const matchesSearch = friend.name.toLowerCase().includes(searchQuery.toLowerCase())
+    return matchesFilter && matchesSearch
+  })
+
+  const menuVariants = {
+    open: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 30
+      }
+    },
+    closed: {
+      x: "-100%",
+      opacity: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 30
+      }
+    }
+  }
+  //--------------
   useEffect(() => {
     async function fetchUsers() {
       const { data, error } = await supabase
@@ -90,8 +160,9 @@ export default function Chat() {
         .subscribe();
     }
     realTimeFetchMessages();
-  }, [currentUser, currentUserId, supabase]);
+  },[currentUser,currentUserId,supabase] );
 
+  
   async function sendMessage() {
     let time = new Date().toLocaleTimeString([], {
       hour: "2-digit",
@@ -122,245 +193,143 @@ export default function Chat() {
     }
   }
 
-  useEffect(() => {
-    // Simulate loading data
-    setTimeout(() => {
-      setCurrentFriend({
-        id: 1,
-        name: "Sofia Rossi",
-        age: 28,
-        interests: ["Hiking", "Wine tasting", "Skiing"],
-        lastSeen: "Just now",
-        distance: "0.5 km",
-        status: "online",
-        favorite: true,
-      });
-      setIsLoading(false);
-    }, 2000);
-  }, []);
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const filteredFriends = potentialFriends.filter((friend) => {
-    const matchesFilter =
-      friendFilter === "all" ||
-      (friendFilter === "online" && friend.status === "online") ||
-      (friendFilter === "favorites" && friend.favorite);
-    const matchesSearch = friend.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-    return matchesFilter && matchesSearch;
-  });
-
-  const menuVariants = {
-    open: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-      },
-    },
-    closed: {
-      x: "-100%",
-      opacity: 0,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-      },
-    },
-  };
-
-  const scrollToBottom = () => {
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-        
   return (
-    <div className="flex h-screen bg-[#fbfbfe] text-[#050315]">
-      {/* Aosta Friends List - Now always visible on large screens */}
-      <div
-        className={`
-        w-full md:w-1/3 lg:w-1/4 
-        bg-[#fbfbfe] border border-accent
-        text-accent
-        fixed md:relative inset-y-0 left-0 z-30 
-        transform ${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 
-        transition-transform duration-300 ease-in-out
-      `}
-      >
-        <div className="p-4 border-b border-[#dedcff] flex justify-between items-center font-poppins text-text">
-          <h2 className="text-xl font-semibold first-letter:capitalize ">{currentUser}</h2>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleMobileMenu}
-            className="md:hidden text-accent border border-accent hover:text-white "
-          >
-            <XIcon className="h-6 w-6" />
-          </Button>
-        </div>
-        <div className="p-4 space-y-4">
-          <div className="relative">
-            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#050315]" />
-            <Input
-              type="text"
-              placeholder="Search friends..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 border-[#dedcff] text-[#050315]"
-            />
+    (<div className="flex h-screen w-full  bg-[#fbfbfe] text-[#050315]">
+      {/* Potential Friends List */}
+      <AnimatePresence>
+        <motion.div
+          initial={false}
+          animate={{ x: 0, opacity: 1 }}
+          exit="closed"
+          variants={menuVariants}
+          className={`w-full sm:w-1/3 lg:w-1/4 xl:w-1/5 bg-[#fbfbfe] border-r border-[#dedcff] fixed sm:relative inset-0 z-50 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
+          <div
+            className="p-4 border-b border-[#dedcff] flex justify-start   items-center bg-accent text-[#fbfbfe]">
+              <Avatar className="h-8 w-8 ml-2">
+                    <AvatarImage src={`https://api.dicebear.com/6.x/micah/svg?seed=${currentUser}`} alt="You" />
+                    <AvatarFallback>You</AvatarFallback>
+              </Avatar>
+
+            <h2 className="text-xl font-poppins font-semibold">{currentUser}</h2>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleMobileMenu}
+              className="sm:hidden text-[#fbfbfe]">
+              <XIcon className="h-6 w-6" />
+            </Button>
           </div>
-          <Tabs defaultValue="all" onValueChange={setFriendFilter}>
-            <TabsList className="grid w-full grid-cols-3 bg-[#dedcff]">
-              <TabsTrigger
-                value="all"
-                className="data-[state=active]:bg-[#2f27ce] data-[state=active]:text-[#fbfbfe]"
-              >
-                All
-              </TabsTrigger>
-              <TabsTrigger
-                value="online"
-                className="data-[state=active]:bg-[#2f27ce] data-[state=active]:text-[#fbfbfe]"
-              >
-                Online
-              </TabsTrigger>
-              <TabsTrigger
-                value="favorites"
-                className="data-[state=active]:bg-[#2f27ce] data-[state=active]:text-[#fbfbfe]"
-              >
-                Favorites
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
-        <ScrollArea className="h-[calc(100vh-13rem)]">
-          {isLoading
-            ? Array(4)
-                .fill(0)
-                .map((_, index) => (
-                  <div key={index} className="p-4">
-                    <Skeleton className="h-24 w-full rounded-lg" />
-                  </div>
-                ))
-            : users.map((friend) => (
+          <div className="p-4 space-y-4">
+            <div className="relative">
+              <SearchIcon
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#050315]" />
+              <Input
+                type="text"
+                placeholder="Search friends..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 border-[#dedcff] text-[#050315]" />
+            </div>
+            <Tabs defaultValue="all" onValueChange={setFriendFilter}>
+              <TabsList className="grid w-full grid-cols-3 bg-[#dedcff]">
+                <TabsTrigger
+                  value="all"
+                  className="data-[state=active]:bg-[#2f27ce] data-[state=active]:text-[#fbfbfe]">All</TabsTrigger>
+                <TabsTrigger
+                  value="online"
+                  className="data-[state=active]:bg-[#2f27ce] data-[state=active]:text-[#fbfbfe]">Online</TabsTrigger>
+                <TabsTrigger
+                  value="favorites"
+                  className="data-[state=active]:bg-[#2f27ce] data-[state=active]:text-[#fbfbfe]">Favorites</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+          <ScrollArea className="h-[calc(100vh-13rem)]">
+            {isLoading ? (
+              Array(4).fill(0).map((_, index) => (
+                <div key={index} className="p-4">
+                  <Skeleton className="h-24 w-full rounded-lg" />
+                </div>
+              ))
+            ) : (
+              filteredFriends.map((friend) => (
                 <motion.div
                   key={friend.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="p-4"
-                >
-                  <Card className="p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer border-[#dedcff]">
+                  className="p-4">
+                  <Card
+                    className="p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer border-[#dedcff]">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <Avatar className="h-12 w-12">
                           <AvatarImage
                             src={`https://api.dicebear.com/6.x/micah/svg?seed=${friend.name}`}
-                            alt={friend.fullName}
-                          />
-                          <AvatarFallback>
-                            {friend.fname
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </AvatarFallback>
+                            alt={friend.name} />
+                          <AvatarFallback>{friend.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                         </Avatar>
                         <div className="ml-4">
-                          <h3 className="font-semibold">
-                            {friend.fname}, {friend.age}
-                          </h3>
+                          <h3 className="font-semibold">{friend.name}, {friend.age}</h3>
                           <p className="text-sm text-[#050315] flex items-center">
-                            {/* <MapPinIcon className="h-4 w-4 mr-1" />{" "} */}
-                            {/* {friend.distance} */}
+                            <MapPinIcon className="h-4 w-4 mr-1" /> {friend.distance}
                           </p>
                         </div>
                       </div>
                       <Badge
-                        variant={
-                          friend.status === "online" ? "default" : "secondary"
-                        }
-                        className={
-                          friend.status === "online"
-                            ? "bg-[#433bff] text-[#fbfbfe]"
-                            : "bg-[#dedcff] text-[#050315]"
-                        }
-                      >
-                        {friend.status}
-                      </Badge>
+                        variant={friend.status === 'online' ? 'default' : 'secondary'}
+                        className={friend.status === 'online' ? 'bg-[#433bff] text-[#fbfbfe]' : 'bg-[#dedcff] text-[#050315]'}>{friend.status}</Badge>
                     </div>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {/* {friend.interests.map((interest, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="bg-[#dedcff] text-[#050315]"
-                        >
-                          {interest === "Hiking" && (
-                            <MountainIcon className="h-3 w-3 mr-1" />
-                          )}
-                          {interest === "Wine tasting" && (
-                            <WineIcon className="h-3 w-3 mr-1" />
-                          )}
-                          {interest === "Coffee" && (
-                            <CoffeeIcon className="h-3 w-3 mr-1" />
-                          )}
+                      {friend.interests.map((interest, index) => (
+                        <Badge key={index} variant="outline" className="bg-[#dedcff] text-[#050315]">
+                          {interest === 'Hiking' && <MountainIcon className="h-3 w-3 mr-1" />}
+                          {interest === 'Wine tasting' && <WineIcon className="h-3 w-3 mr-1" />}
+                          {interest === 'Coffee' && <CoffeeIcon className="h-3 w-3 mr-1" />}
                           {interest}
                         </Badge>
-                      ))} */}
+                      ))}
                     </div>
                   </Card>
                 </motion.div>
-              ))}
-        </ScrollArea>
-      </div>
-
+              ))
+            )}
+          </ScrollArea>
+        </motion.div>
+      </AnimatePresence>
       {/* Chat Window */}
-      <div className="flex-1 flex flex-col h-screen">
+      <div className="flex-1 flex flex-col h-screen max-sm:w-full ">
         {/* Chat Header */}
-        <div className="p-4 border-b border-[#dedcff] bg-[#fbfbfe] flex justify-between items-center">
+        <div
+          className="p-4 border-b border-[#dedcff] bg-[#fbfbfe] flex justify-between items-center ">
           <div className="flex items-center">
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleMobileMenu}
-              className="mr-2 md:hidden text-[#050315]"
-            >
+              className="mr-2 sm:hidden text-[#050315]">
               <MenuIcon className="h-6 w-6" />
             </Button>
-            
+            {currentFriend && (
               <>
                 <Avatar className="h-10 w-10">
                   <AvatarImage
-                    src={`https://api.dicebear.com/6.x/micah/svg?seed=${currentUser}`}
-                  />
-                
+                    src={`https://api.dicebear.com/6.x/micah/svg?seed=${currentFriend.name}`}
+                    alt={currentFriend.name} />
+                  <AvatarFallback>{currentFriend.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                 </Avatar>
                 <div className="ml-4">
-                  <h3 className="font-semibold">{currentUser}</h3>
-                  <p className="text-sm text-[#050315]">
-                    Just Now
-                  </p>
+                  <h3 className="font-semibold">{currentFriend.name}</h3>
+                  <p className="text-sm text-[#050315]">{currentFriend.lastSeen}</p>
                 </div>
               </>
+            )}
           </div>
           <div className="flex items-center space-x-2">
             <Button
               variant="outline"
               size="sm"
-              className="bg-[#dedcff] text-[#050315] hover:bg-[#433bff] hover:text-[#fbfbfe]"
-            >
+              className="bg-[#dedcff] text-[#050315] hover:bg-[#433bff] hover:text-[#fbfbfe]">
               <UserPlusIcon className="h-4 w-4 mr-2" />
               Add Friend
             </Button>
@@ -369,122 +338,78 @@ export default function Chat() {
 
         {/* Messages */}
         <div
-          className="flex-1 p-4 border font-poppins border-secondary"
-        >
-          <div id="chats" className="flex flex-col grow min-h-full">
-            {isLoading
-              ? Array(5)
-                  .fill(0)
-                  .map((_, index) => (
-                    <div
-                      key={index}
-                      className={`flex mb-4 ${
-                        index % 2 === 0 ? "justify-start" : "justify-end"
-                      }`}
-                    >
-                      <Skeleton
-                        className={`h-16 w-64 rounded-lg ${
-                          index % 2 === 0 ? "mr-12" : "ml-12"
-                        }`}
-                      />
-                    </div>
-                  ))
-              : messages.map((msg, idx) => (
-                
-                  <motion.div
-                    key={msg.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className={`flex mb-4 ${
-                      msg.msgSenderUid === currentUserId
-                        ? "justify-end"
-                        : "justify-start"
-                    }`}
-                    // Attach ref to the last message
-                    ref={idx === messages.length - 1 ? scrollAreaRef : null}
-                  >
-                    {
-                      msg.msgSenderUid !== currentUserId && (
-                        <Avatar className="h-12 w-12">
-                          <AvatarImage
-                            src={`https://api.dicebear.com/6.x/micah/svg?seed=${msg.msgSender}`}
-                            alt={'woieh'}
-                          />
-                        </Avatar>
-                      )
-                    }
-                    
-                    <div
-                      className={` flex gap-5 p-3 max-w-xs lg:max-w-md ${
-                        msg.msgSenderUid === currentUserId
-                          ? " bg-[#dedcff] text-black break-words rounded-tl-lg rounded-bl-lg rounded-tr-lg "
-                          : " bg-[#2f27ce] text-white break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg "
-                      }`}
-                    >
-                      <p>{msg.message}</p>
-                      <p
-                        className={`text-sm mt-1 ${
-                          msg.msgSenderUid === currentUserId
-                            ? "text-slate-800"
-                            : "text-slate-500"
-                        }`}
-                      >
-                        {msg.time}
-                      </p>
-                    </div>
-                    {
-                      msg.msgSenderUid === currentUserId && (
-                        <Avatar className="h-12 w-12">
-                          <AvatarImage
-                            src={`https://api.dicebear.com/6.x/micah/svg?seed=${msg.msgSender}`}
-                            alt={'woieh'}
-                          />
-                        </Avatar>
-                      )
-                    }
-                    
-                  </motion.div>
-                ))}
-          </div>
+          ref={chatContainerRef}
+          className="flex-1 overflow-y-auto p-4  ">
+          {isLoading ? (
+            Array(5).fill(0).map((_, index) => (
+              <div
+                key={index}
+                className={`flex mb-4 ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
+                <Skeleton className={`h-16 w-64 rounded-lg ${index % 2 === 0 ? 'mr-12' : 'ml-12'}`} />
+              </div>
+            ))
+          ) : (
+            messages.map((message) => (
+              <motion.div
+                key={message.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className={`flex items-end mb-4  ${message.msgSenderUid === currentUserId ? 'justify-end' : 'justify-start'  }`}>
+                {message.msgSenderUid !== currentUserId && (
+                  <Avatar className="h-8 w-8 mr-2">
+                    <AvatarImage
+                      src={`https://api.dicebear.com/6.x/micah/svg?seed=${message.msgSender}`}
+                      alt={message.msgSender} />
+                    <AvatarFallback>{message.msgSender.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                  </Avatar>
+                )}
+                <div
+                  className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${message.msgSenderUid === currentUserId ? 'bg-[#2f27ce] max-w-[80%]  text-[#fbfbfe] rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'  : 'bg-[#dedcff] max-w-[80%] text-text break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg '}`}>
+                  <p>{message.message}</p>
+                  <p
+                    className={`text-xs mt-1 ${message.msgSenderUid === currentUserId ? 'text-gray-300 text-sm ' : ' text-sm text-slate-700 '}`}>{message.time}</p>
+                </div>
+                {message.msgSenderUid === currentUserId && (
+                  <Avatar className="h-8 w-8 ml-2">
+                    <AvatarImage src={`https://api.dicebear.com/6.x/micah/svg?seed=${currentUser}`} alt="You" />
+                    <AvatarFallback>You</AvatarFallback>
+                  </Avatar>
+                )}
+              </motion.div>
+            ))
+          )}
+          <div ref={messagesEndRef} />
         </div>
 
         {/* Message Input */}
         <form
-          onSubmit={(e) => {
-            e.preventDefault(), sendMessage();
-          }}
-          className="p-4 bg-[#fbfbfe] border-t border-[#dedcff]"
-        >
-          <div className="flex items-center">
+          onSubmit={(e)=>{e.preventDefault(),sendMessage()}} 
+          className="p-4 bg-[#fbfbfe] border-t border-[#dedcff]">
+          <div className="flex gap-2 items-center">
+          <Button
+              type="button"
+              size="icon"
+              className="ml-2  bg-white text-accent border border-accent ">
+              <ImageIcon className="h-5 w-5" />
+              <span className="sr-only">Send image</span>
+            </Button>
             <Input
-              id="messageInput"
               type="text"
               placeholder="Type a message..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="flex-1 bg-[#dedcff] text-[#050315] border-[#dedcff]"
-            />
-            <Button
-              type="button"
-              size="icon"
-              className="ml-2 bg-[#dedcff] text-[#050315] hover:bg-[#433bff] hover:text-[#fbfbfe]"
-            >
-              <ImageIcon className="h-5 w-5" />
-              <span className="sr-only">Send image</span>
-            </Button>
+              className="flex-1 border-b focus:outline-none border-accent" />
             <Button
               type="submit"
               size="icon"
-              className="ml-2 bg-[#2f27ce] text-[#fbfbfe] hover:bg-[#433bff]"
-            >
+              className=" bg-[#2f27ce] text-[#fbfbfe] hover:bg-[#433bff]">
               <SendIcon className="h-5 w-5" />
               <span className="sr-only">Send message</span>
             </Button>
           </div>
         </form>
       </div>
-
       {/* Friend Suggestion Overlay */}
       <AnimatePresence>
         {!isLoading && showSuggestion && (
@@ -493,34 +418,25 @@ export default function Chat() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.5 }}
-            className="fixed bottom-4 right-4 bg-[#fbfbfe] p-4 rounded-lg shadow-lg border border-[#dedcff]"
-          >
+            className="fixed bottom-4 right-4 bg-[#fbfbfe] p-4 rounded-lg shadow-lg border border-[#dedcff]">
             <div className="flex justify-between items-start mb-2">
-              <h4 className="font-semibold text-[#050315]">
-                New Friend Suggestion
-              </h4>
+              <h4 className="font-semibold text-[#050315]">New Friend Suggestion</h4>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowSuggestion(false)}
-                className="text-[#050315]"
-              >
+                className="text-[#050315]">
                 <XIcon className="h-4 w-4" />
               </Button>
             </div>
             <div className="flex items-center">
               <Avatar className="h-12 w-12">
-                <AvatarImage
-                  src="https://api.dicebear.com/6.x/micah/svg?seed=Elena"
-                  alt="Elena"
-                />
+                <AvatarImage src="https://api.dicebear.com/6.x/micah/svg?seed=Elena" alt="Elena" />
                 <AvatarFallback>E</AvatarFallback>
               </Avatar>
               <div className="ml-4">
                 <p className="font-medium text-[#050315]">Elena, 27</p>
-                <p className="text-sm text-[#050315]">
-                  Loves hiking and local cuisine
-                </p>
+                <p className="text-sm text-[#050315]">Loves hiking and local cuisine</p>
               </div>
             </div>
             <div className="mt-4 flex justify-end space-x-2">
@@ -528,14 +444,10 @@ export default function Chat() {
                 size="sm"
                 variant="outline"
                 onClick={() => setShowSuggestion(false)}
-                className="border-[#dedcff] text-[#050315] hover:bg-[#dedcff]"
-              >
+                className="border-[#dedcff] text-[#050315] hover:bg-[#dedcff]">
                 Skip
               </Button>
-              <Button
-                size="sm"
-                className="bg-[#2f27ce] text-[#fbfbfe] hover:bg-[#433bff]"
-              >
+              <Button size="sm" className="bg-[#2f27ce] text-[#fbfbfe] hover:bg-[#433bff]">
                 <HeartIcon className="h-4 w-4 mr-2" />
                 Connect
               </Button>
@@ -543,6 +455,6 @@ export default function Chat() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </div>)
   );
 }
