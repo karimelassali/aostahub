@@ -5,10 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
-import { createClient } from "@/utils/supabase/client"
-import { toast, Toaster } from 'sonner';
-import { useRouter } from "next/navigation"
-import { useUser } from "@clerk/nextjs"
+
 import { MdOutlineLinkedCamera } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
 
@@ -20,113 +17,18 @@ export const metadata = {
 };
 
 export default function Create() {
-  const [fname,setFname] = useState('');
-  const [lname,setLname] = useState('');
-  const [age,setAge] = useState(0);
-  const [description,setDescription] = useState('');
-  const [profilePic,setUserp] = useState('');
-  const [imgInp,setImgInp] = useState();
-  const [imgName,setImgName] = useState('');
-  const [bg,setBg] = useState(false);
-
-  // const [username,setUsername] = useState('');
-  const [inlist,setInlist] = useState(false);
-  const [email,setEmail] = useState('');
-  const [uid,setUid] = useState('');
-
-  const [instagram,setInstagram] = useState('');
-  const [facebook,setFacebook] = useState('');
-  const [number,setNumber] = useState(''); 
-
-  const supabase = createClient();
-  const router = useRouter();
-
-  const {user,isLoaded} = useUser();
-
-  async function create(e) {
-    e.preventDefault();
   
-    // Input validation (optional but recommended)
-    if (!fname || !lname || !age || !description) {
-      toast.error('Please fill in all required fields.');
-      return;
-    }
-  
-    // Show a loading indicator if necessary (optional)
-  
-    try {
-      const username = user.fullName;
-      const { data, error } = await supabase
-        .from('users')
-        .insert([{ fname, lname, age, description, instagram, facebook, number,profilePic,username ,uid, email,imgName }])
-        .single();
 
-        toast.success(lname +' ' +  fname + ' added succefully');
-        setTimeout(()=>{
-          router.push('/explore')
-        },3000)
-        
-      // Check if there's an error from Supabase
-      if (error) {
-        console.error('Supabase error details:', error);
-        toast.error(`Error: ${error.message}`);
-        return;
-      }
   
-      // Check if the data is returned successfully
-      if (data) {
-        console.log('Data inserted successfully:', data); // Debugging line
-        toast.success(`${lname} ${fname} added successfully!`);
-      } else {
-        console.error('Unexpected response format:', data); // Debugging line
-        // toast.error('An unexpected error occurred. Please try again.');
-      }
-    } catch (err) {
-      // Catch any unexpected errors
-      console.error('Unexpected error details:', err);
-      // toast.error('An unexpected error occurred. Please try again.');
-    } finally {
-      // Hide loading indicator if you showed one (optional)
-    }
-  }
   
-  async function chck() {
-    const {data,error} = await supabase.from('users').select().eq('username',user.fullName).single();
-    console.log(user.fullName);
-
-    if(data){
-      toast.warning('You are already in list');
-      setInlist(true);
-    }else{
-      toast.success('You are not in list');
-    }
-    // console.log(data.length)
-  }
+  
   
   
   function clickHandle(){
     document.getElementById('imgInp').click();
   }
-  async  function handleImgInput(e){
-    const img = e.target.files[0];
-    const imgName = `${Date.now()}${e.target.files[0].name}`;
-    setImgName(imgName);
-    setBg(true);
-    const {data,error} = await 
-    supabase.storage.from('images').upload(`imgs/${imgName}`,img)
-    data ? toast.success('Profile picture uploaded successfully') : toast.error('Error uploading profile picture');
-
-  }
-  //----------------------------------------------------------------
-  useEffect(() => {
-    if (isLoaded && user) {
-      setUserp(user.imageUrl);
-      setUid(user.id);
-      setEmail(user.emailAddresses[0]);
-      // setUsername(user.username);
-      chck();
-    }
-  }, [isLoaded, user,fname]);
+  
+  
   
   return (
     (
@@ -139,7 +41,6 @@ export default function Create() {
       )
     }
       <div className="space-y-6">
-        <Toaster richColors />
         <div>
           <h1 className="text-3xl font-bold">Create Your Box Profile</h1>
           <p className="mt-2 text-muted-foreground">Fill out the form below to create your profile.</p>

@@ -1,8 +1,8 @@
 import React from 'react'
-import Create from '@/components/component/create'
+import {CreateProfile} from '@/components/create'
 
 export default function Page() {
   return (
-    <Create />
+    <CreateProfile />
   )
 }

@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import Head from "next/head";
 import { color, motion } from "framer-motion";
-import AOS from "aos";
 import { A } from "../ui/background-beams-with-collision";
 import { HoverBorderGradient } from "../ui/hover-border-gradient";
 import { StickyScroll } from "../ui/sticky-scroll-reveal";
@@ -186,7 +185,7 @@ export default function Landing() {
         </div>
         
       </header> */}
-        <main className="flex-1 py-12 max-sm:py-1 md:py-20">
+        <main className="flex-1  z-50 py-12 max-sm:py-1 md:py-20">
           <div className="container mx-auto px-4 md:px-8">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <motion.div
@@ -448,7 +447,7 @@ export default function Landing() {
                 <ShootingStars
                   minDelay={1}
                   minSpeed={1}
-                  className={" mt-20 -z-2 font-poppins "}
+                  className={" -z-2 font-poppins   "}
                 />
               </div>
               {language === "en"

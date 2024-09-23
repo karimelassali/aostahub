@@ -9,8 +9,9 @@ import {
 } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-
-  
+import { IoMdHome } from "react-icons/io";
+import { IoIosCreate } from "react-icons/io";
+import { IoChatbox } from "react-icons/io5";
 
  
 
@@ -48,15 +49,17 @@ export default function Navbar() {
               )}
             </button>
           </div>
-          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+          <div className="flex flex-1 items-center w-full justify-center sm:items-stretch sm:justify-start">
             <div className="flex flex-shrink-0 items-center">
-              <Image width={100} height={100} className="h-8 w-auto" src="/ass/logo.png" alt="Aostahub Logo" />
+              <Link href={'/'}>
+                <Image width={150} height={150} className="h-8 w-auto" src="/ass/logo.png" alt="Aostahub Logo" />
+              </Link>
             </div>
             <div className="hidden sm:ml-6 sm:block">
-              <div className="flex space-x-4">
-                <Link href="/explore" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home</Link>
-                <Link href="/create" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create</Link>
-                <Link href="/chat" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat</Link>
+              <div className="flex space-x-4 w-full justify-center">
+                <Link href="/explore" className="rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
+                <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
+                <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link>
               </div>
             </div>
           </div>
@@ -78,10 +81,10 @@ export default function Navbar() {
       </div>
 
       <div className={`sm:hidden ${isOpen ? 'block' : 'hidden'}`} id="mobile-menu">
-        <div className="space-y-1 px-2 pb-3 pt-2 max-sm:flex max-sm:justify-center max-sm:items-center">
-          <Link href="/explore" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home</Link>
-          <Link href="/create" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create</Link>
-          <Link href="/chat" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat</Link>  
+        <div className=" p-5 max-sm:flex max-sm:justify-center max-sm:items-center">
+        <Link href="/explore" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
+        <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
+        <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link>  
         </div>
       </div>
     </nav>
