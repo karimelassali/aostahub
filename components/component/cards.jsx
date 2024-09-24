@@ -94,16 +94,26 @@ return (
     <div className="grid p-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
   
     { (
-        
+          
         users.map(user => (
+          
           <motion.Card 
           whileHover={{ shadow: '0 10px 20px red'}}
           onHoverStart={e => {}}
           onHoverEnd={e => {}}
-          onDoubleClick={(e)=>{router.push('profile/'+user.id)  }} key={user.id} className="bg-background rounded-lg overflow-hidden shadow-lg hover:cursor-pointer ">
+          onDoubleClick={(e)=>{router.push('profile/'+user.id)  }} key={user.id} className="bg-background max-h-[100%] rounded-lg   overflow-hidden shadow-lg hover:cursor-pointer ">
               <div style={{ backdropFilter: 'blur(30px)' }}>
                 <div className="relative h-32 flex items-end justify-end p-1" style={{ backgroundSize: 'cover' }}>
-                <Image width={100} height={100}  className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}} src={user.profilePic} alt="bgImage" />
+                  {
+                    user.permission == "true" ? (
+                      <Image width={100} height={100} src={user.profilePic} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />
+
+                    ):
+                    (
+                      <Image width={100} height={100} src={'/ass/logo.png'} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />
+
+                    )
+                  }
                   <Avatar style={{borderRadius:'50px'}} className="absolute top-[70%] left-4 w-20 h-20 border-4 border-background rounded-lg ">
                     <span className="flex h-[100%] w-full items-center justify-center " >
                     <AlertDialog>

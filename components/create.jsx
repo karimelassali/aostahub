@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Switch } from '@/components/ui/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
 import { Slider } from "@/components/ui/slider"
 import { Upload, Instagram, Facebook, Phone, Briefcase, MapPin, Globe, Music } from 'lucide-react'
 import { color, motion } from "framer-motion";
+import { MdOutlineSportsGymnastics } from "react-icons/md";
+import Image from 'next/image';
 
 import { createClient } from "@/utils/supabase/client"
 import { toast, Toaster } from 'sonner';
@@ -22,7 +24,7 @@ export function  CreateProfile() {
   const [age,setAge] = useState(0);
   const [gender,setGender] = useState('');
   const [description,setDescription] = useState('');
-  const [skillLevel, setSkillLevel] = useState([50])
+  const [skillLevel, setSkillLevel] = useState([10])
   const [interests,setInterests] = useState('');
   const [permission,setPermission] = useState(true)
   const [occupation,setOccupation] = useState('');
@@ -51,7 +53,9 @@ export function  CreateProfile() {
   const [imagePreview, setImagePreview] = useState(null)
 
   const currentUserId = user?.id;
-
+  const currentInterests = interests.split(/[,.:&;\s]|and/).filter(Boolean);
+  console.log(currentInterests)
+  
   const handleImageChange = async (e) => {
     const file = e.target.files?.[0]
     if (file) {
@@ -94,7 +98,7 @@ export function  CreateProfile() {
         .single();
   
       if (error) throw error;
-  
+    
       console.log('Data inserted successfully:', data);
       toast.success(`${lname} ${fname} added successfully!`);
       setTimeout(() => {
@@ -104,8 +108,8 @@ export function  CreateProfile() {
       console.error('Error submitting form:', err);
       toast.error(`Error: ${err.message}`);
     }
+
   }
-  
 
   async function chck() {
     const {data,error} = await supabase.from('users').select().eq('uid',currentUserId).single();
@@ -129,11 +133,11 @@ export function  CreateProfile() {
         console.log('emailis '+ user?.emailAddresses)
         chck();
       }
-    }, [isLoaded, user,fname]);
-  async  function handleImgInput(e){
-   
+      console.log(permission)
 
-  }
+    }, [isLoaded, user,fname]);
+  //----------------------------------------------------------------  
+
   return (
     (<div
       className="min-h-screen bg-[#fbfbfe] text-[#050315] py-12 px-4 sm:px-6 lg:px-8">
@@ -242,12 +246,41 @@ export function  CreateProfile() {
           </div>
           <div>
             <Label htmlFor="interests">Interests (comma-separated)</Label>
-            <Input onChange={(e) =>{setInterests(e.target.value)}} id="interests" placeholder="e.g., photography, travel, cooking" />
+            <Input onChange={(e) =>{
+              setInterests(e.target.value);
+              }} id="interests" placeholder="e.g., photography, travel, cooking" />
+            <div id='currentInterests' className='grid grid-cols-4  max-sm:grid-cols-1 max-md:grid-cols-2  max-xl:grid-cols-6 p-1 w-full justify-center items-center p-2' >
+              {
+                currentInterests.map((interest,index) => (
+                  <motion.div
+                  initial={{
+                    opacity: 0,
+                    x: -20
+                  }}
+                  animate={{
+                    opacity: 1,
+                    x: 0
+                  }}
+                  whileHover={{
+                    scale: 1.1,
+                    skew: 10,
+                    cursor: 'pointer'
+                  }}
+                  key={index} className="grid gid-col-2  max-w-[100%] m-1  gap-2 m-2 bg-secondary rounded text-white items-center  p-2 first-letter:capitalize  space-x-2">
+                    <div className="flex  items-center truncate  ">
+                      <img  width={30} height={30} src={`https://api.dicebear.com/9.x/notionists-neutral/svg?seed=${interest}&backgroundColor=dedcff`} />
+                      <span className='font-poppins first-letter:capitalize text-text break-words ' >{interest}</span>
+                    </div>
+                  </motion.div>
+                ))
+              }
+            </div>
           </div>
           <div>
-            <Label>Skill Level</Label>
+            <Label>Interests Percent</Label>
             <div className="flex items-center space-x-4">
-              <Music className="w-5 h-5 text-[#2f27ce]" />
+              <MdOutlineSportsGymnastics className="w-5 h-5 text-[#2f27ce]" />
+              
               <Slider
                 value={skillLevel}
                 onValueChange={setSkillLevel}
@@ -258,7 +291,7 @@ export function  CreateProfile() {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Switch  onCheckedChange={(e) =>{setPermission(e)}} id="permission" />
+            <Switch checked={permission} name="permission"  onCheckedChange={(e)=>{setPermission(e);console.log(e)}} id="permission" />
             <Label htmlFor="permission">Show Your Account Image</Label>
           </div>
           <button

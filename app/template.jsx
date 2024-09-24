@@ -18,7 +18,7 @@ export default function Template({ children }) {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-  };
+};
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
