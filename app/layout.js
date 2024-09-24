@@ -12,7 +12,6 @@ import Link from "next/link";
 import { IconHome, IconNewSection } from "@tabler/icons-react";
 import { IoCreateOutline } from "react-icons/io5";
 import { IoChatboxOutline } from "react-icons/io5";
-import Navbar from "@/components/ui/navbar";
 
 export const metadata = {
   title: "Welcome to Aosta Hub",
@@ -37,23 +36,7 @@ export const metadata = {
   googleSiteVerification: "TFC9KKJST9sPJHv4r0wz0xnmUb09ZFJFC8crGzgUSnk",
 };
 
-const links = [
-  {
-    name: "Home",
-    icon: <IconHome className="h-full w-full text-secondary " />,
-    link: "/explore",
-  },
-  {
-    name: "Create",
-    icon: <IoCreateOutline className="h-full w-full text-secondary " />,
-    link: "/create",
-  },
-  {
-    name: "Chat",
-    icon: <IoChatboxOutline className="h-full w-full text-secondary " />,
-    link: "/chat",
-  },
-];
+
 
 export default function RootLayout({ children }) {
   return (
@@ -70,7 +53,6 @@ export default function RootLayout({ children }) {
           />
         </head>
         <body className="bg-background">
-          <Navbar />
             {children }
           <footer className="flex justify-center  w-full rounded-md  ">
             {/* <div className="w-full max-w-4xl p-4 rounded-lg flex justify-center gap-8 rounded-sm" style={{ backdropFilter: 'blur(30px)' }}>

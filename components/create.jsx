@@ -26,15 +26,16 @@ export function  CreateProfile() {
   const [interests,setInterests] = useState('');
   const [permission,setPermission] = useState(true)
   const [occupation,setOccupation] = useState('');
+  const [email,setEmail] = useState('');
+  const [personaleWebsite,setPersonaleWebsite] = useState('');
+  const [username,setUsername] = useState('');
   const [location,setLocation] = useState('');
   const [profilePic,setUserp] = useState('');
   const [imgInp,setImgInp] = useState();
   const [imgName,setImgName] = useState('');
   const [bg,setBg] = useState(false);
 
-  // const [username,setUsername] = useState('');
   const [inlist,setInlist] = useState(false);
-  const [email,setEmail] = useState('');
   const [uid,setUid] = useState('');
 
   const [instagram,setInstagram] = useState('');
@@ -85,7 +86,8 @@ export function  CreateProfile() {
       const { data, error } = await supabase
         .from('users')
         .insert([{ 
-          fname, lname, age, description, instagram, facebook, number, 
+          fname, lname, age, description, instagram, facebook, number, permission,
+          personaleWebsite, username, 
           profilePic, uid, email, imgName, gender, occupation,
           interests, location, skillLevel: skillLevel[0]
         }])
@@ -122,8 +124,9 @@ export function  CreateProfile() {
       if (isLoaded && user) {
         setUserp(user.imageUrl);
         setUid(user.id);
-        setEmail(user.emailAddresses[0]);
-        // setUsername(user.username);
+        setUsername(user?.username);
+        setEmail(user?.emailAddresses);
+        console.log('emailis '+ user?.emailAddresses)
         chck();
       }
     }, [isLoaded, user,fname]);
@@ -139,8 +142,8 @@ export function  CreateProfile() {
         className="max-w-4xl rounded mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="bg-[#2f27ce] text-white py-8 px-8 relative overflow-hidden">
           <div
-            className="absolute top-0 right-0 w-64 h-64 bg-[#433bff] rounded-full transform translate-x-1/3 -translate-y-1/2 opacity-50"></div>
-          <h1 className="text-4xl font-bold relative z-10">Create Your Box Profile</h1>
+            className="absolute top-0 right-0 w-64 h-64 bg-[#433bff] rounded-full transform translate-x-1/3 -translate-y-1/2 opacity-50 font-poppins "></div>
+          <h1 className="text-4xl font-poppins font-bold relative z-10">Create Your Box Profile</h1>
           <p className="mt-2 relative z-10">Fill out the form below to create your unique profile.</p>
         </div>
         <form onSubmit={create} className="p-8 space-y-6">
@@ -153,11 +156,11 @@ export function  CreateProfile() {
                 <Upload className="w-16 h-16 text-[#2f27ce]" />
               )}
             </motion.div>
-            <motion.Label
+            <motion.label
               htmlFor="picture"
               className="cursor-pointer bg-[#433bff] text-white py-2 px-6 rounded-full hover:bg-[#2f27ce] transition-colors transform hover:scale-105 duration-200 shadow-lg">
               Select your profile picture
-            </motion.Label>
+            </motion.label>
             <Input
               required
               id="picture"
@@ -187,7 +190,7 @@ export function  CreateProfile() {
                 <SelectTrigger>
                   <SelectValue placeholder="Select your gender" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent style={{backgroundColor:'white'}} >
                   <SelectItem value="male">Male</SelectItem>
                   <SelectItem value="female">Female</SelectItem>
                   <SelectItem value="non-binary">Non-binary</SelectItem>
@@ -198,24 +201,24 @@ export function  CreateProfile() {
           </div>
           <div>
             <Label htmlFor="description">Description</Label>
-            <Textarea onChange={(e) =>{setDescription(e.target.value)}} id="description" placeholder="Tell us about yourself" className="h-24" />
+            <Textarea required onChange={(e) =>{setDescription(e.target.value)}} id="description" placeholder="Tell us about yourself" className="h-24" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="relative">
               <Label htmlFor="instagram">Instagram</Label>
-              <Input id="instagram" placeholder="Enter your Instagram" className="pl-10" />
+              <Input onChange={(e) =>{setInstagram(e.target.value)}}  id="instagram" placeholder="Enter your Instagram" className="pl-10" />
               <Instagram className="absolute left-3 top-9 w-5 h-5 text-[#2f27ce]" />
               <p className="text-sm text-gray-500 mt-1">Without @</p>
             </div>
             <div className="relative">
               <Label htmlFor="facebook">Facebook</Label>
-              <Input id="facebook" placeholder="Enter your Facebook" className="pl-10" />
+              <Input onChange={(e) =>{setFacebook(e.target.value)}}  id="facebook" placeholder="Enter your Facebook" className="pl-10" />
               <Facebook className="absolute left-3 top-9 w-5 h-5 text-[#2f27ce]" />
             </div>
           </div>
           <div className="relative">
             <Label htmlFor="phone">Phone</Label>
-            <Input id="phone" placeholder="Enter your Phone Number" className="pl-10" />
+            <Input onChange={(e) =>{setNumber(e.target.value)}}  id="phone" placeholder="Enter your Phone Number" className="pl-10" />
             <Phone className="absolute left-3 top-9 w-5 h-5 text-[#2f27ce]" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -223,7 +226,7 @@ export function  CreateProfile() {
               <Label  htmlFor="occupation">Occupation</Label>
               <Input onChange={(e) =>{setOccupation(e.target.value)}} id="occupation" placeholder="Enter your occupation" className="pl-10" />
               <Briefcase className="absolute left-3 top-9 w-5 h-5 text-[#2f27ce]" />
-            </div>
+            </div> 
             <div className="relative">
               <Label htmlFor="location">Location</Label>
               <Input required onChange={(e) =>{setLocation(e.target.value)}} id="location" placeholder="Enter your location" className="pl-10" />
@@ -233,7 +236,7 @@ export function  CreateProfile() {
           <div>
             <Label htmlFor="website">Personal Website</Label>
             <div className="relative">
-              <Input id="website" placeholder="https://yourwebsite.com" className="pl-10" />
+              <Input onChange={(e) =>{setPersonaleWebsite(e.target.value)}} id="website" placeholder="https://yourwebsite.com" className="pl-10" />
               <Globe className="absolute left-3 top-3 w-5 h-5 text-[#2f27ce]" />
             </div>
           </div>
@@ -255,13 +258,12 @@ export function  CreateProfile() {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Switch  onChange={(e) =>{setPermission(e.target.value)}} id="permission" />
+            <Switch  onCheckedChange={(e) =>{setPermission(e)}} id="permission" />
             <Label htmlFor="permission">Show Your Account Image</Label>
           </div>
           <button
-            onClick={create}
             type="submit"
-            className="w-full bg-[#2f27ce] hover:bg-[#433bff] text-white text-lg py-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+            className="w-full bg-[#2f27ce] hover:bg-[#433bff] rounded text-white text-lg py-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
             Create Your Box Profile
           </button>
           

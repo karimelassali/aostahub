@@ -1,31 +1,33 @@
 'use client'
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
-import Image from "next/image";
-import Link from "next/link";
-import { IoMdHome } from "react-icons/io";
-import { IoIosCreate } from "react-icons/io";
-import { IoChatbox } from "react-icons/io5";
+    ClerkProvider,
+    SignInButton,
+    SignedIn,
+    SignedOut,
+    UserButton,
+  } from "@clerk/nextjs";
+  import Image from "next/image";
+  import Link from "next/link";
+  import { IoMdHome } from "react-icons/io";
+  import { IoIosCreate } from "react-icons/io";
+  import { IoChatbox } from "react-icons/io5";
 
- 
-
-
-
-export default function Navbar() {
-
-  const [isOpen, setIsOpen] = useState(false);
+export default function Template({ children }) {
+    const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-  return (
-    <nav className="bg-primary font-poppins w-full">
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    return (
+        <>
+         <nav className="bg-primary font-poppins w-full">
       <div className=" p-2 gap-2 ">
         <div className="relative flex h-16 items-center justify-center ">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -57,9 +59,15 @@ export default function Navbar() {
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4 w-full justify-center">
-                <Link href="/explore" className="rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
-                <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
-                <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link>
+              {
+                isClient && window.location.pathname  != '/' && (
+                  <>
+                  <Link href="/explore" className="rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
+                  <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
+                  <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link>
+                  </>
+                )
+              }
               </div>
             </div>
           </div>
@@ -82,11 +90,20 @@ export default function Navbar() {
 
       <div className={`sm:hidden ${isOpen ? 'block' : 'hidden'}`} id="mobile-menu">
         <div className=" p-5 max-sm:flex max-sm:justify-center max-sm:items-center">
-        <Link href="/explore" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
-        <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
-        <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link>  
+        {
+          isClient && window.location.pathname  != '/' && (
+            <>
+              <Link href="/explore" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
+              <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
+              <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link> 
+            </>
+          )
+        }
+         
         </div>
       </div>
     </nav>
-  )
+            {children}
+        </>
+    );
 }
