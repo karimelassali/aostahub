@@ -69,6 +69,8 @@ export default function Template({ children }) {
                   <Link href="/explore" className="rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
                   <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
                   <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link>
+                  <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Friends <IoChatbox /></Link>
+
                   </>
                 )
               }
@@ -100,6 +102,8 @@ export default function Template({ children }) {
               <Link href="/explore" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
               <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
               <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link> 
+              <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Friends <IoChatbox /></Link> 
+
             </>
           )
         }

@@ -249,7 +249,7 @@ export function  CreateProfile() {
             <Input onChange={(e) =>{
               setInterests(e.target.value);
               }} id="interests" placeholder="e.g., photography, travel, cooking" />
-            <div id='currentInterests' className='grid grid-cols-4  max-sm:grid-cols-1 max-md:grid-cols-2  max-xl:grid-cols-6 p-1 w-full justify-center items-center p-2' >
+            <div id='currentInterests' className='grid grid-cols-4  max-sm:grid-cols-1 max-md:grid-cols-2  max-xl:grid-cols-6  w-full justify-center items-center p-2' >
               {
                 currentInterests.map((interest,index) => (
                   <motion.div
