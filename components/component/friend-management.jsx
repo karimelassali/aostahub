@@ -46,16 +46,16 @@ export default function FriendManagement() {
   // const filteredRequests = pendingRequests.filter(request => 
   //   request.name.toLowerCase().includes(searchTerm.toLowerCase()))
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFriends(prevFriends => 
-        prevFriends.map(friend => ({
-          ...friend,
-          status: Math.random() > 0.7 ? 'online' : (Math.random() > 0.5 ? 'offline' : 'away')
-        })))
-    }, 5000)
-    return () => clearInterval(interval);
-  }, [])
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setFriends(prevFriends => 
+  //       prevFriends.map(friend => ({
+  //         ...friend,
+  //         status: Math.random() > 0.7 ? 'online' : (Math.random() > 0.5 ? 'offline' : 'away')
+  //       })))
+  //   }, 5000)
+  //   return () => clearInterval(interval);
+  // }, [])
 
   async function countFriends(){
     const {data,error} = await supabase.from('friendships').select('*').eq('useruid',currentUserUid).eq('status','accept');
