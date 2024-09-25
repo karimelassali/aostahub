@@ -91,7 +91,7 @@ return (
   <>
   <Suspense fallback={'loading'} >
     
-    <div className="grid p-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid p-2 gap-6 sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-4">
   
     { (
           
@@ -101,7 +101,7 @@ return (
           whileHover={{ shadow: '0 10px 20px red'}}
           onHoverStart={e => {}}
           onHoverEnd={e => {}}
-          onDoubleClick={(e)=>{router.push('profile/'+user.id)  }} key={user.id} className="bg-background max-h-[100%] rounded-lg   overflow-hidden shadow-lg hover:cursor-pointer ">
+          onDoubleClick={(e)=>{router.push('profile/'+user.id)  }} key={user.id} className="bg-background max-h-[100%] rounded-lg  border-t border-accent overflow-hidden shadow-lg hover:cursor-pointer ">
               <div style={{ backdropFilter: 'blur(30px)' }}>
                 <div className="relative h-32 flex items-end justify-end p-1" style={{ backgroundSize: 'cover' }}>
                   {
@@ -143,7 +143,7 @@ return (
                   </Avatar>
                 </div>
               </div>
-            <CardContent className="p-6 pt-12 space-y-4">
+            <CardContent className="p-6 pt-12   space-y-4">
               <div className="flex items-center justify-between lg:flex-col lg:items-start lg:gap-2 lg:justify-center">
                 <div className="space-y-1">
                   <h3 className="text-xl flex items-center gap-2 font-semibold font-poppins ">
@@ -154,17 +154,17 @@ return (
                 </div>
                 <div className="flex items-center space-x-3 rounded-sm p-1" style={{ backdropFilter: 'blur(30px)', border: '0.2px solid #e2e8f0',borderRadius:'4px' }}>
                   {user.instagram && (
-                    <Link href={"https://www.instagram.com/"+user.instagram} className="text-muted-foreground hover:text-primary" prefetch={false}>
+                    <Link href={"https://www.instagram.com/"+user.instagram} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
                       <InstagramIcon className="w-5 h-5" style={{ color: '#c026d3' }} />
                     </Link>
                   )}
                   {user.facebook && (
-                    <Link href={"https://www.facebook.com/"+user.facebook} className="text-muted-foreground hover:text-primary" prefetch={false}>
+                    <Link href={"https://www.facebook.com/"+user.facebook} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
                       <FacebookIcon className="w-5 h-5" style={{ color: '#06b6d4' }} />
                     </Link>
                   )}
                   {user.number && (
-                    <Link href={"tel:"+user.number} className="text-muted-foreground hover:text-primary" prefetch={false}>
+                    <Link href={"tel:"+user.number} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
                       <PhoneIcon className="w-5 h-5" style={{ color: '#4ade80' }} />
                     </Link>
                   )}
@@ -172,7 +172,7 @@ return (
               </div>
               <hr />
               {/* via rue abbe ame gorret */}
-              <p className="text-sm text-muted-foreground font-open ">
+              <p className="text-sm text-muted-foreground font-open line-clamp-4 ">
                 {user.description}
               </p>
               <hr />
@@ -182,13 +182,13 @@ return (
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 1.3 ,delay:3}}
-                  className="flex items-center justify-end ">
+                  className="flex items-center justify-end  ">
                       <Button
                         style={{border:'1px solid red',borderRadius:'4px'}}  
                         variant="ghost"
                         size="icon"
                         className=" w-[50%]  0 text-white hover:bg-red-500" onClick={()=>delAno(user.id)} >
-                          <TrashIcon className="w-5 h-5" style={{ color: '#e11d48' }} />
+                          <TrashIcon className="w-5 h-5 " style={{ color: '#e11d48' }} />
                         </Button>
                   </motion.div>
                 ) : null  
