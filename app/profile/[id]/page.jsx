@@ -1,5 +1,5 @@
 import React from 'react'
-import Profile from '@/components/component/profile';
+import UserProfile from '@/components/component/UserProfile';
 
 
 function Page({params}) {
@@ -8,7 +8,7 @@ function Page({params}) {
     
   return (
     <>
-      <Profile userId={id} />
+      <UserProfile userId={id} />
     </>
   )
 }
