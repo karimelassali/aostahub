@@ -39,7 +39,7 @@ export default function FriendsPage() {
 
   // Fetch friend requests from Supabase
   async function fetchFriendRequests() {
-    if (!currentUserUid) return;  // Guard against undefined user id
+    if (!currentUserUid) return;  // Guard against undefined useer id
     const { data, error } = await supabase
       .from('friends')
       .select('*')
