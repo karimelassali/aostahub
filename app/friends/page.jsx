@@ -1,5 +1,5 @@
 import React from 'react'
-import FriendManagement from '@/components/component/friend-management'
+import FriendManagement from '@/hooks/user-page'
 
 
 export default function Page() {
