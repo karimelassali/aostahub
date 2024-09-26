@@ -9,11 +9,15 @@ import { MdOutlineVerified } from "react-icons/md";
 import  ProfileSkeleton from "@/components/component/profileSkeleton"
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { useUser } from "@clerk/nextjs";
+import { UserProfile, useUser } from "@clerk/nextjs";
 import {sonner} from 'sonner'
 import { BsBriefcase } from "react-icons/bs";
 import { IoIosLink } from "react-icons/io";
 import { toast, Toaster } from 'sonner';
+import { IoTime } from "react-icons/io5"
+import { IoSad } from "react-icons/io5"
+import { IoRemove } from "react-icons/io5"
+import {OctagonPause} from 'lucide-react'
 
 
 
@@ -24,12 +28,28 @@ function Page({params}) {
 
   const supabase = createClient();
   const [userP, setUserP] = useState([]);
+  const [isFriend, setIsFriend] = useState('');
+  const [userAsUser , setUserAsUser] = useState([]);
+  const [userAsfriend, setUserAsFriend] = useState([]);
+  const [me,setMe] = useState([]);
   
   const { user } = useUser();
   const currentUserUid = user?.id;
-
+  const userName = user?.fullName;
 
     
+  async function fetchMe(){
+    const { data, error } = await supabase
+     .from('users')
+     .select('*')
+     .eq('uid', currentUserUid)
+     .single();
+    if(data){
+      setMe(data)
+    }else{
+      toast.error('User not found');
+    }
+  }
 
     useEffect(()=>{
       async function fetchUser(){
@@ -38,23 +58,89 @@ function Page({params}) {
 
     }
     fetchUser();
+    fetchMe();
     
 },[id])
 
-    
+  
     async function handelFriendshipRequest() {
-      const { data, error } = await supabase.from('friendships').insert({
+      const { data, error } = await supabase.from('friends').insert({
         useruid:currentUserUid,
-        frienduid:user.uid,
+        userName:userName,
+        userProfile:me.imgName,
+        userAge:me.age,
+        userSkill:me.skill,
+        userLocation:me.location,
+        frienduid:userP.uid,
         status:'pending',
       });
       if (error) {
         toast.error(`Error: ${error.message}`);
       } else {
-        toast.success('Friend request sent');
+        checkFriendshipStatus();
+        toast.success(`Friend request sent to ${userP.fname}`);
       }
     }
+    // Fixing friendship status check
+      async function checkFriendshipStatus() {
+        const { data, error } = await supabase
+          .from('friends')
+          .select('*')
+          .eq('useruid', currentUserUid)
+          .eq('frienduid', userP.uid);
 
+        if (error) {
+          toast.error(error.message);
+          return;
+        }
+
+        if (data && data.length > 0) {
+          const status = data[0].status;
+          if (status === 'accept') {
+            setIsFriend('true');
+          } else if (status === 'rejected') {
+            setIsFriend('rejected');
+          } else if (status === 'pending') {
+            setIsFriend('pending');
+          }
+        } else {
+          setIsFriend('0');
+        }
+      }
+      async function getUserFriends(){
+        const {data:userAsuser,error:userAsuserProbleme} = await supabase.from('friends').select('*').eq('frienduid', userP.uid).eq('status','accept');
+        const {data:userAsfriend,error:userAsfriendProblem} = await supabase.from('friends').select('*').eq('frienduid', userP.uid).eq('status','accept');
+
+
+        userAsuser  ? setUserAsUser(userAsuser) : console.log(userAsuserProbleme);
+        userAsfriend  ? setUserAsFriend(userAsfriend) : console.log(userAsfriendProblem);
+
+      }
+    //remove removeFriendShip
+    async function removeFriendShip(){
+      const {data,error} = await supabase.from('friends').delete().eq('useruid',currentUserUid).eq('frienduid',userP.uid);
+      data ? toast.success(`${userP.name} is not your friend anymore .`) : toast.error(error);
+    }
+    //stop request 
+    async function stopRequest(){
+      const {data,error} = await supabase.from('friends').delete().eq('useruid',currentUserUid).eq('frienduid',userP.uid);
+      data ? toast.success(`${userP.name} will not get you request`) : console.log(error);
+    }
+
+    useEffect(()=>{
+          getUserFriends()
+          checkFriendshipStatus();
+    },[currentUserUid,userP.uid,userP])
+
+      async function friendshipsRealtime(){
+        const {data,error} = await supabase.channel('listenInFriendshipsTable')
+        .on('postgres_changes',{event:'*',schema:'public',table:'friends'},(payload)=>{
+          console.log(payload)
+          getUserFriends();
+          checkFriendshipStatus();
+        }).subscribe();
+      }
+      friendshipsRealtime();
 
   return (
     <>
@@ -92,10 +178,58 @@ function Page({params}) {
                 {userP.location}
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4 mb-4">
-                <Button onClick={() => {handelFriendshipRequest()}} className="bg-[#2f27ce] hover:bg-[#433bff] text-[#fbfbfe]">
-                  <Users className="h-4 w-4 mr-2" />
-                  Add Friend
-                </Button>
+                {
+                  isFriend == 'true' && (
+                    <>
+                    <Button
+                      variant="outline"
+                      className="border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
+                      <MessageCircle className="h-4 w-4 mr-2" />
+                      Message
+                    </Button> 
+                    <Button
+                      onClick={()=>{removeFriendShip()}}
+                      variant="outline"
+                      className="bg-[#2f27ce] text-white hover:text-[#2f27ce] hover:bg-white border border-secondary hover:border-accent">
+                      <IoRemove className="h-4 w-4 mr-2" />
+                      Unfollow
+                    </Button> 
+                    </>
+                    
+
+                  )
+                }
+                {
+                  isFriend =='rejected' && (
+                    <p className="text-red-400 border border-red-400 rounded p-2 flex gap-x-1 items-center text-lg"><IoSad   className="h-4 w-4 mr-2" /> Friend request rejected</p>
+                  )
+                }
+                {
+                  isFriend == 'pending' && (
+                    <div className="grid grid-cols-2 gap-2" >
+                          <Button  disabled={isFriend == 'pending'} variant="outline" className="border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
+                            <IoTime className="h-4 w-4 mr-2" />
+                              Request Pending
+                          </Button>
+                          <button onClick={()=>{stopRequest()}} className="p-2 bg-red-400 text-white rounded flex items-center gap-x-2 hover:bg-red-300 transition-all cursor-pointer" >
+                            <OctagonPause  className="h-4 w-4 mr-2" />
+                            Pause Request
+                          </button>
+                    </div>
+                  )
+                }
+                {
+                  isFriend == '0'  && (
+                    <Button onClick={()=>{
+                      handelFriendshipRequest();
+                    }}  variant="outline" className="border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
+                    <BsBriefcase className="h-4 w-4 mr-2" />
+                      Add Friend
+                    </Button> 
+  
+                  )
+                }
+                
                 {/* <Button
                   variant="outline"
                   className="border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
@@ -107,11 +241,11 @@ function Page({params}) {
             {/* Stats */}
             <div className="flex gap-6 text-center">
               <div>
-                <p className="text-2xl font-semibold text-[#2f27ce]">1.5K</p>
+                <p className="text-2xl font-semibold text-[#2f27ce]">{userAsfriend.length}</p>
                 <p className="text-[#050315]">Followers</p>
               </div>
               <div>
-                <p className="text-2xl font-semibold text-[#2f27ce]">1</p>
+                <p className="text-2xl font-semibold text-[#2f27ce]">{userAsUser.length}</p>
                 <p className="text-[#050315]">Following</p>
               </div>
             </div>

@@ -39,7 +39,7 @@ export default function FriendsPage() {
 
   // Fetch friend requests from Supabase
   async function fetchFriendRequests() {
-    if (!currentUserUid) return;  // Guard against undefined useer id
+    if (!currentUserUid) return;  // Guard against undefined user id
     const { data, error } = await supabase
       .from('friends')
       .select('*')
@@ -234,7 +234,7 @@ export default function FriendsPage() {
                       size="sm"
                       onClick={() => removeFriend(friend.id)}
                       className="text-red-500 hover:text-red-700">
-                      Removeee
+                      Remove
                     </Button>
                   </motion.div>
                 ))}
