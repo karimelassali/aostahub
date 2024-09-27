@@ -147,7 +147,7 @@ export function  CreateProfile() {
         <div className="bg-[#2f27ce] text-white py-8 px-8 relative overflow-hidden">
           <div
             className="absolute top-0 right-0 w-64 h-64 bg-[#433bff] rounded-full transform translate-x-1/3 -translate-y-1/2 opacity-50 font-poppins "></div>
-          <h1 className="text-4xl font-poppins font-bold relative z-10">Create Your Box Profile</h1>
+          <h1 className="text-2xl font-poppins font-bold relative z-10">Create Your Box Profile</h1>
           <p className="mt-2 relative z-10">Fill out the form below to create your unique profile.</p>
         </div>
         <form onSubmit={create} className="p-8 space-y-6">
@@ -162,7 +162,7 @@ export function  CreateProfile() {
             </motion.div>
             <motion.label
               htmlFor="picture"
-              className="cursor-pointer bg-[#433bff] text-white py-2 px-6 rounded-full hover:bg-[#2f27ce] transition-colors transform hover:scale-105 duration-200 shadow-lg">
+              className="cursor-pointer bg-[#433bff] text-white p-3 rounded-lg hover:bg-[#2f27ce] transition-colors transform hover:scale-105 duration-200 shadow-lg">
               Select your profile picture
             </motion.label>
             <Input
