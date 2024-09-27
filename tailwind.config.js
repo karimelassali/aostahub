@@ -47,6 +47,7 @@ module.exports = {
         'secondary': '#dedcff',
         'accent': '#433bff',
       },
+      
       fontSize: {
         sm: '0.750rem',
         base: '1rem',

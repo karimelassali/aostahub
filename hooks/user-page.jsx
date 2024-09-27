@@ -11,6 +11,8 @@ import { useUser } from "@clerk/nextjs";
 import { createClient } from "@/utils/supabase/client";
 import Image from "next/image"
 import Link from "next/link"
+import { toast, Toaster } from 'sonner';
+
 
 export default function FriendsPage() {
 
@@ -32,7 +34,6 @@ export default function FriendsPage() {
       .from('friends')
       .select('*')
       .or(`useruid.eq.${currentUserUid},frienduid.eq.${currentUserUid}`)
-      .eq('frienduid', currentUserUid)
       .eq('status','accept')
       .order('id', { ascending: false });
     if (data) {
@@ -60,7 +61,6 @@ export default function FriendsPage() {
       const { error } = await supabase
         .from('friends')
         .update({ status: 'accept' })
-        .eq('useruid', uuid)
         .eq('frienduid', currentUserUid);
       if (error) console.log(error);
     }
@@ -99,8 +99,12 @@ export default function FriendsPage() {
     };
   }, [isLoaded, currentUserUid]);
 
-  const removeFriend = (id) => {
+  const removeFriend = async  (id) => {
+    console.log(id);
+    console.log('my id' + currentUserUid)
     setFriends(friends.filter(friend => friend.id !== id))
+    const {data,error} = await supabase.from('friends').delete().or(`useruid.eq.${currentUserUid},frienduid.eq.${id}`);
+    data ? toast.success(`${id} is not your friend anymore.`) : toast.error(error);
   }
 
   // useEffect(() => {
@@ -113,6 +117,7 @@ export default function FriendsPage() {
 
   return (
     (<div className="min-h-screen font-poppins bg-[#fbfbfe] text-[#050315]">
+        <Toaster richColors />
       <div className="px-4 py-8">
         <motion.header
           initial={{ opacity: 0, y: -20 }}
@@ -233,7 +238,7 @@ export default function FriendsPage() {
                     </Link>
                     <button
                       size="sm"
-                      onClick={() => removeFriend(friend.id)}
+                      onClick={() => removeFriend(friend.useruid)}
                       className=" border border-red-400 text-red-400 p-1 rounded hover:p-0  z-20  hover:bg-red-400 ">
                       Remove
                     </button>

@@ -66,16 +66,25 @@ function Page({params}) {
   
     async function handelFriendshipRequest() {
       const fname = user?.firstName;
-      const theProfile = me.imgName ? `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${me.imgName}` : `https://api.dicebear.com/6.x/micah/svg?seed=${fname}`;
+      const theUserProfile = me.imgName ? `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${me.imgName}` : `https://api.dicebear.com/6.x/micah/svg?seed=${fname}`;
       const { data, error } = await supabase.from('friends').insert({
         useruid:currentUserUid,
         userName:userName,
-        userProfile:theProfile,
+        userProfile:theUserProfile,
         userAge:me.age,
-        userSkill:me.skill,
+        userSkill:me.skill ? me.skill : 'No skill available',
         userLocation:me.location,
-        frienduid:userP.uid,
+        userInterests:me.interests ? me.interests : 'No interest available',
         status:'pending',
+        frienduid:userP.uid,
+        friendName:userP.username,
+        friendProfile:userP.profilePic ? `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${userP.imgName}` : `https://api.dicebear.com/6.x/micah/svg?seed=${userP.userName}`,
+        friendAge:userP.age,
+        friendSkill:userP.skill ? userP.skill : 'No skill available',
+        friendLocation:userP.location,
+        friendInterests:userP.interests ? userP.interests : 'No interest available',
+        requester:currentUserUid,
+        receiver:userP.uid
       });
       if (error) {
         toast.error(`Error: ${error.message}`);
@@ -183,12 +192,13 @@ function Page({params}) {
                 {
                   isFriend == 'true' && (
                     <>
-                    <Button
+                    <Link
+                      href={`/chat/${userP.uid}`}
                       variant="outline"
                       className="border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
                       <MessageCircle className="h-4 w-4 mr-2" />
                       Message
-                    </Button> 
+                    </Link> 
                     <Button
                       onClick={()=>{removeFriendShip()}}
                       variant="outline"

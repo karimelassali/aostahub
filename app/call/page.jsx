@@ -1,9 +1,8 @@
 import React from 'react'
-import  Chat  from '@/components/component/chat'
-
+import VideoCall from '@/components/component/videoCall'
 function Page() {
   return (
-    <Chat type={'mainPage'} />
+    <VideoCall />
   )
 }
 
