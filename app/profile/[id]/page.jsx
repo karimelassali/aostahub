@@ -65,7 +65,7 @@ function Page({params}) {
   
     async function handelFriendshipRequest() {
       const fname = user?.firstName;
-      const theProfile = me.imgName ? me.imgName : `https://api.dicebear.com/6.x/micah/svg?seed=${fname}`;
+      const theProfile = me.imgName ? `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${me.imgName}` : `https://api.dicebear.com/6.x/micah/svg?seed=${fname}`;
       const { data, error } = await supabase.from('friends').insert({
         useruid:currentUserUid,
         userName:userName,

@@ -151,7 +151,7 @@ export default function FriendsPage() {
                       className="bg-gray-50 p-4 rounded-lg">
                       <div className="flex items-center mb-3">
                         <Avatar className="w-12 h-12 mr-4">
-                          <Image width={40} height={40} alt={`${user.userName}`} src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.userProfile}`} />
+                          <Image width={40} height={40} alt={`${user.userName}`} src={user.userProfile} />
                         </Avatar>
                         <div className='p-2 mb-2' >
                           <h3 className="font-medium first-letter:capitalize  ">{user.userName}</h3>
