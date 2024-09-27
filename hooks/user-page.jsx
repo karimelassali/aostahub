@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useUser } from "@clerk/nextjs";
 import { createClient } from "@/utils/supabase/client";
 import Image from "next/image"
+import Link from "next/link"
 
 export default function FriendsPage() {
 
@@ -30,7 +31,8 @@ export default function FriendsPage() {
     const { data, error } = await supabase
       .from('friends')
       .select('*')
-      .eq('useruid', currentUserUid)
+      .or(`useruid.eq.${currentUserUid},frienduid.eq.${currentUserUid}`)
+      .eq('frienduid', currentUserUid)
       .eq('status','accept')
       .order('id', { ascending: false });
     if (data) {
@@ -151,7 +153,7 @@ export default function FriendsPage() {
                       className="bg-gray-50 p-4 rounded-lg">
                       <div className="flex items-center mb-3">
                         <Avatar className="w-12 h-12 mr-4">
-                          <Image width={40} height={40} alt={`${user.userName}`} src={user.userProfile} />
+                          <AvatarImage src={user.userProfile} />
                         </Avatar>
                         <div className='p-2 mb-2' >
                           <h3 className="font-medium first-letter:capitalize  ">{user.userName}</h3>
@@ -219,23 +221,22 @@ export default function FriendsPage() {
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
                     className="flex items-center justify-between mb-4 p-2 hover:bg-gray-100 rounded-lg">
-                    <div className="flex items-center">
+                    <Link href={`profile/${friend.userid}`} className="flex cursor-pointer items-center">
                       <Avatar className="w-10 h-10 mr-3">
-                        <AvatarImage src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${friend.userProfile}`} />
+                        <AvatarImage src={friend.userProfile} />
                         <AvatarFallback>{friend.userName}</AvatarFallback>
                       </Avatar>
                       <div>
                         <span className="font-medium">{friend.userName}</span>
-                        <p className="text-xs text-[#050315]/70">{friend.userAge} years • {friend.userLocation  ? friend.userLocation : null} • {friend.userSkill ? friend.userSkill : null} </p>
+                        <p className="text-xs text-[#050315]/70">{friend.userAge} years • {friend.userLocation && friend.userSkill  ? friend.userLocation + '•' : null}   {friend.userSkill ? friend.userSkill + '•' : null} </p>
                       </div>
-                    </div>
-                    <Button
-                      variant="ghost"
+                    </Link>
+                    <button
                       size="sm"
                       onClick={() => removeFriend(friend.id)}
-                      className="text-red-500 hover:text-red-700">
+                      className=" border border-red-400 text-red-400 p-1 rounded hover:p-0  z-20  hover:bg-red-400 ">
                       Remove
-                    </Button>
+                    </button>
                   </motion.div>
                 ))}
               </AnimatePresence>

@@ -18,13 +18,14 @@ import { IoTime } from "react-icons/io5"
 import { IoSad } from "react-icons/io5"
 import { IoRemove } from "react-icons/io5"
 import {OctagonPause} from 'lucide-react'
+import {useRouter} from "next/navigation"
 
 
 
 
 function Page({params}) {
   const id = params.id;
-
+  const router =  useRouter();
 
   const supabase = createClient();
   const [userP, setUserP] = useState([]);
@@ -54,7 +55,7 @@ function Page({params}) {
     useEffect(()=>{
       async function fetchUser(){
         const { data,error } = await supabase.from('users').select().eq('id', id).single();
-        data ? setUserP(data) : alert('User not found');
+        data ? setUserP(data) : alert('User not found') + router.push('/explore');
 
     }
     fetchUser();
@@ -80,7 +81,6 @@ function Page({params}) {
         toast.error(`Error: ${error.message}`);
       } else {
         checkFriendshipStatus();
-        toast.success(`Friend request sent to ${userP.fname}`);
       }
     }
     // Fixing friendship status check
@@ -244,11 +244,7 @@ function Page({params}) {
             <div className="flex gap-6 text-center">
               <div>
                 <p className="text-2xl font-semibold text-[#2f27ce]">{userAsfriend.length}</p>
-                <p className="text-[#050315]">Followers</p>
-              </div>
-              <div>
-                <p className="text-2xl font-semibold text-[#2f27ce]">{userAsUser.length}</p>
-                <p className="text-[#050315]">Following</p>
+                <p className="text-[#050315]">Friend`s</p>
               </div>
             </div>
           </div>
@@ -262,7 +258,7 @@ function Page({params}) {
             <Card className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden">
               <CardContent className="p-6">
                 <h2 className="text-2xl font-semibold mb-4 text-black flex items-center">
-                  <MdBoy className="h-6 w-6 mr-2" />
+                  <MdBoy style={{color:'#433bff'}} className="h-6 w-6 mr-2" />
                   About Me
                 </h2>
                 <p className="text-[#050315] first-letter:capitalize">
@@ -275,7 +271,7 @@ function Page({params}) {
             <Card className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden">
               <CardContent className="p-6">
                 <h2 className="text-2xl font-semibold mb-4 text-black flex items-center">
-                  <BookmarkPlus className="h-6 w-6 mr-2" />
+                  <BookmarkPlus style={{color:'#433bff'}}  className="h-6 w-6 mr-2" />
                   Interests
                 </h2>
                 {/* <span>
@@ -306,7 +302,7 @@ function Page({params}) {
             <Card className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden">
               <CardContent className="p-6 space-y-4">
                 <h2 className="text-2xl font-semibold mb-4 text-text flex items-center">
-                  <Phone className="h-6 w-6 mr-2" />
+                  <Phone  className="h-6 w-6 mr-2" />
                   Contact
                 </h2>
                 <div>
@@ -341,7 +337,7 @@ function Page({params}) {
                     {
                       userP.occupation && (
                         <div className="flex items-center text-[#050315]">
-                          <BsBriefcase className="h-5 w-5 mr-3 text-[#2f27ce]" />
+                          <BsBriefcase style={{color:'#433bff'}}  className="h-5 w-5 mr-3 text-[#2f27ce]" />
                           Occupation: {userP.occupation}
                         </div>
                       )
@@ -350,7 +346,7 @@ function Page({params}) {
                       userP.personaleWebsite && (
                         <div className="flex items-center text-[#050315]">
                           <Link className="flex items-center text-blue-500 hover:text-blue-600" href={userP.personaleWebsite}>
-                            <IoIosLink className="h-5 w-5 mr-3 text-[#2f27ce]" />
+                            <IoIosLink style={{color:'#433bff'}}  className="h-5 w-5 mr-3 " />
                             Personal Website
                           </Link>
                         </div>
@@ -367,8 +363,8 @@ function Page({params}) {
 
         {/* Similar Users */}
         <div className="mt-12">
-          <h2 className="text-2xl font-semibold mb-6 text-[#2f27ce] flex items-center">
-            <Users className="h-6 w-6 mr-2" />
+          <h2 className="flex text-2xl font-semibold mb-6  text-textflex items-center">
+            <Users style={{color:'#433bff'}}  className="h-6 w-6 mr-2" />
             Similar Users
           </h2>
           <div
