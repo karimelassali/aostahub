@@ -6,11 +6,13 @@ import {
     SignedIn,
     SignedOut,
     UserButton,
+    ClerkLoaded
   } from "@clerk/nextjs";
   import Image from "next/image";
   import Link from "next/link";
   import { IoMdHome } from "react-icons/io";
   import { IoIosCreate } from "react-icons/io";
+  import { FaUserFriends } from "react-icons/fa";
   import { IoChatbox } from "react-icons/io5";
 
 export default function Template({ children }) {
@@ -26,6 +28,7 @@ export default function Template({ children }) {
     }, []);
 
     return (
+      <ClerkLoaded>
         <>
          <nav className="bg-primary font-poppins w-full">
       <div className=" p-2 gap-2 ">
@@ -69,7 +72,7 @@ export default function Template({ children }) {
                   <Link href="/explore" className="rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
                   <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
                   <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link>
-                  <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Friends <IoChatbox /></Link>
+                  <Link href="/friends" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white before:content-['*'] before:text-red-400 ">Friends  <FaUserFriends /></Link>
 
                   </>
                 )
@@ -102,7 +105,7 @@ export default function Template({ children }) {
               <Link href="/explore" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
               <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
               <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link> 
-              <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Friends <IoChatbox /></Link> 
+              <Link href="/friends" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Friends <IoChatbox /></Link> 
 
             </>
           )
@@ -113,5 +116,7 @@ export default function Template({ children }) {
     </nav>
             {children}
         </>
+        </ClerkLoaded>
+        
     );
 }

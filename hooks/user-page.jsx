@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { motion, AnimatePresence } from "framer-motion"
 import { useUser } from "@clerk/nextjs";
 import { createClient } from "@/utils/supabase/client";
+import Image from "next/image"
 
 export default function FriendsPage() {
 
@@ -115,19 +116,19 @@ export default function FriendsPage() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-8 max-w-[1920px] mx-auto">
+          className="mb-8 max-w-[1920px] mx-auto break-words line-clamp-1 max-sm:text-sm ">
           <h1 className="text-4xl font-bold mb-2">Welcome, {myName} !</h1>
           <p className="text-lg text-[#050315]/70">Manage your friends and connections</p>
         </motion.header>
 
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-8 max-w-[1920px] mx-auto">
+        <div className="grid grid-cols-2 max-sm:grid-cols-1 xl:grid-cols-4 gap-8 max-w-[1920px] mx-auto max-sm:max-w-[100%] max-sm:text-sm ">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="xl:col-span-3 bg-white rounded-lg shadow-lg p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold flex items-center">
+            className="xl:col-span-3 bg-white rounded-lg shadow-lg p-6 max-sm:p-1  ">
+            <div className="grid grid-cols-2  justify-between items-center mb-6 max-sm:grid-col-1">
+              <h2 className="text-md max-sm:text-sm font-semibold flex items-center">
                 <UserPlus className="mr-2 text-[#2f27ce]" />
                 Friend Requests
               </h2>
@@ -150,8 +151,7 @@ export default function FriendsPage() {
                       className="bg-gray-50 p-4 rounded-lg">
                       <div className="flex items-center mb-3">
                         <Avatar className="w-12 h-12 mr-4">
-                          <AvatarImage src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.userProfile}`} />
-                          <AvatarFallback>{user.userName}</AvatarFallback>
+                          <Image width={40} height={40} alt={`${user.userName}`} src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.userProfile}`} />
                         </Avatar>
                         <div className='p-2 mb-2' >
                           <h3 className="font-medium first-letter:capitalize  ">{user.userName}</h3>
@@ -182,8 +182,8 @@ export default function FriendsPage() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white rounded-lg shadow-lg p-6">
-            <div className="flex justify-between items-center mb-6">
+            className="bg-white rounded-lg shadow-lg p-3 max-sm:p-1 ">
+            <div className="flex justify-between items-center mb-6 max-sm:flex-col">
               <h2 className="text-2xl font-semibold flex items-center">
                 <Users className="mr-2 text-[#2f27ce]" />
                 Friends
@@ -226,7 +226,7 @@ export default function FriendsPage() {
                       </Avatar>
                       <div>
                         <span className="font-medium">{friend.userName}</span>
-                        <p className="text-xs text-[#050315]/70">{friend.userAge} years • {friend.userLocation} • {friend.userSkill}</p>
+                        <p className="text-xs text-[#050315]/70">{friend.userAge} years • {friend.userLocation  ? friend.userLocation : null} • {friend.userSkill ? friend.userSkill : null} </p>
                       </div>
                     </div>
                     <Button
