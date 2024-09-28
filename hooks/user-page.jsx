@@ -33,7 +33,7 @@ export default function FriendsPage() {
     const { data, error } = await supabase
       .from('friends')
       .select('*')
-      .or(`useruid.eq.${currentUserUid},frienduid.eq.${currentUserUid}`)
+      .eq('useruid',currentUserUid)
       .eq('status','accept')
       .order('id', { ascending: false });
     if (data) {
@@ -226,14 +226,14 @@ export default function FriendsPage() {
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
                     className="flex items-center justify-between mb-4 p-2 hover:bg-gray-100 rounded-lg">
-                    <Link href={`profile/${friend.userid}`} className="flex cursor-pointer items-center">
+                    <Link href={`profile/${friend.receiverId}`} className="flex cursor-pointer items-center">
                       <Avatar className="w-10 h-10 mr-3">
-                        <AvatarImage src={friend.userProfile} />
-                        <AvatarFallback>{friend.userName}</AvatarFallback>
+                        <AvatarImage src={friend.friendProfile} />
+                        <AvatarFallback>{friend.friendProfie}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <span className="font-medium">{friend.userName}</span>
-                        <p className="text-xs text-[#050315]/70">{friend.userAge} years • {friend.userLocation && friend.userSkill  ? friend.userLocation + '•' : null}   {friend.userSkill ? friend.userSkill + '•' : null} </p>
+                        <span className="font-medium">{friend.friendName}</span>
+                        <p className="text-xs text-[#050315]/70">{friend.friendAge} years • {friend.friendLocation && friend.userSkill  ? friend.friendLocation + '•' : null}   {friend.friendSkill ? friend.friendSkill + '•' : null} </p>
                       </div>
                     </Link>
                     <button

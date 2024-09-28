@@ -34,6 +34,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "clx": "^1.0.0",
+    "crypto": "^1.0.1",
     "framer-motion": "^11.7.0",
     "lucide-react": "^0.435.0",
     "motion": "^10.18.0",

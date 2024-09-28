@@ -10,30 +10,33 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SendIcon, MenuIcon, MapPinIcon, UserPlusIcon, HeartIcon, XIcon, CoffeeIcon, MountainIcon, WineIcon, SearchIcon, ImageIcon, Delete } from "lucide-react"
+import { SendIcon, MenuIcon, MapPinIcon, UserPlusIcon, HeartIcon, XIcon, CoffeeIcon, MountainIcon, WineIcon, SearchIcon, ImageIcon, Delete, BlocksIcon } from "lucide-react"
 import  Image  from 'next/image'
 import { useUser } from "@clerk/nextjs";
 import { Toaster, toast } from "sonner";
 import { createClient } from "@/utils/supabase/client";
 import Link from 'next/link'
 import { VideoIcon } from 'lucide-react'
-import { MdDelete } from 'react-icons/md'
-import VideoCall from '@/components/component/videoCall'
+// import VideoCall from '@/components/component/videoCall'
+import { ImEyeBlocked } from "react-icons/im";
+import { useRouter } from 'next/navigation'
+import VideoCall from '@/components/video-call'
 
 
-export default function Chat({type}) {
+export default function Chat({type,msgsId}) {
+  const router = useRouter();
   const pType = type ;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [myFriends, setMyFriends] = useState([]);
   const [currentFriend, setCurrentFriend] = useState(null);
   const [showSuggestion, setShowSuggestion] = useState(true);
   const [friendFilter, setFriendFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [isVideoCall, setIsVideoCall] = useState(false);
-
+  const [chatUid, setChatUid] = useState('')
+  const [me,setMe] = useState([]);
   const supabase = createClient();
-
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const { user } = useUser();
@@ -52,23 +55,7 @@ export default function Chat({type}) {
     }
   }, [])
 
-  useEffect(() => {
-    // Simulate loading data
-    setTimeout(() => {
-      
-      setCurrentFriend({
-        id: 1,
-        name: 'Sofia Rossi',
-        age: 28,
-        interests: ['Hiking', 'Wine tasting', 'Skiing'],
-        lastSeen: 'Just now',
-        distance: '0.5 km',
-        status: 'online',
-        favorite: true
-      })
-      setIsLoading(false)
-    }, 2000)
-  }, [])
+
 
   useEffect(() => {
     scrollToBottom()
@@ -119,26 +106,47 @@ export default function Chat({type}) {
   }
   //--------------
   useEffect(() => {
+    async function fetchMe(){
+      const {data,error} = await supabase.from('users').select().eq('uid',currentUserId);
+      data ? setMe(data) : alert('You are not allowed to access this page.');
+    }
+    fetchMe();
+
+
     async function fetchMyFriends() {
       const { data, error } = await supabase
         .from("friends")
         .select()
-        .eq('receiver',currentUserId)
+        .eq('requester',currentUserId)
         .eq('status','accept')
         .order("id", { ascending: false });
       data ? setMyFriends(data) : toast.message("No friends .");
     }
     fetchMyFriends();
-
+    //fetch msg receiver 
+    async function fetchCurrentFrien() {
+      const { data, error } = await supabase
+       .from("users")
+       .select()
+       .eq("uid",msgsId)
+       .single();
+      if (data) {
+        setCurrentFriend(data);
+      }
+    }
+    //end of fetchCurrentFriend
     async function fetchMessages() {
       const { data, error } = await supabase
         .from("msgs")
         .select("*")
-        .order("id", { ascending: true });
+        // .eq('msgReceiverUid',msgsId)
+        // .eq('msgSenderUid',currentUserId)
+        .or(`and(msgReceiverUid.eq.${msgsId},msgSenderUid.eq.${currentUserId}),and(msgReceiverUid.eq.${currentUserId},msgSenderUid.eq.${msgsId})`)        .order("id", { ascending: true });
       data ? setMessages(data) : toast.message("No messages yet wait.");
+      
       scrollToBottom(); // Call scrollToBottom after setting messages
     }
-    fetchMessages();
+    msgsId ? fetchCurrentFrien() + fetchMessages() : null;
 
     async function realTimeFetchMessages() {
       const { data, error } = await supabase
@@ -162,6 +170,9 @@ export default function Chat({type}) {
         .subscribe();
     }
     realTimeFetchMessages();
+    // setChatUid()
+    // )
+    currentFriend ? alert(me.id + currentFriend.id) : null ;
   },[currentUser,currentUserId,supabase] );
 
   
@@ -171,13 +182,19 @@ export default function Chat({type}) {
       minute: "2-digit",
     });
 
-    if (message.length > 0 && currentUserId) {
+    if (message.length > 0 && currentUserId && currentFriend) {
       const { data, error } = await supabase.from("msgs").insert({
         msgSenderUid: currentUserId,
         message,
         msgSender: currentUser,
-        msgSenderPicture: userProfile,
+        msgSenderPicture: me.imgName ?  me.imgName : `https://api.dicebear.com/6.x/micah/svg?seed=${me.fname}`,
         time,
+        msgReceiver:currentFriend.username,
+        msgReceiverPicture: currentFriend.imgName,
+        msgReceiverUid:currentFriend.uid,
+        msgSenderVerification:'1',
+        msgsId:msgsId
+
         // msgReceiverUid: users[0].id,
         // msgReceiver: users[0].fullName,
         // read: false,
@@ -197,19 +214,20 @@ export default function Chat({type}) {
 
   return (
     (
-    <div className="flex h-screen w-full  bg-[#fbfbfe] text-[#050315]">
+    <div className="flex h-screen w-full transition-all  bg-[#fbfbfe] text-[#050315]">
       {/* Potential Friends List */}
       <AnimatePresence>
         <motion.div
           initial={false}
-          animate={{ x: 0, opacity: 1 }}
+          animate={{ x: 0, opacity: 1  }}
+          transition={{delay:1}}
           exit="closed"
           variants={menuVariants}
-          className={`w-full sm:w-1/3 lg:w-1/4 xl:w-1/5 bg-[#fbfbfe] border-r border-[#dedcff] fixed sm:relative inset-0 z-50 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
+          className={`w-full sm:w-1/3 lg:w-1/4 xl:w-1/5 bg-[#fbfbfe] border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-50 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
           <div
             className="p-4 border-b border-[#dedcff] flex justify-start   items-center bg-accent text-[#fbfbfe]">
               <Avatar className="h-8 w-8 ml-2">
-                    <AvatarImage src={`https://api.dicebear.com/6.x/micah/svg?seed=${currentUser}`} alt="You" />
+                    <AvatarImage src={myFriends.userProfile} alt="You" />
                     <AvatarFallback>You</AvatarFallback>
               </Avatar>
 
@@ -269,12 +287,12 @@ export default function Chat({type}) {
                       <div className="flex items-center">
                         <Avatar className="h-12 w-12">
                           <AvatarImage
-                            src={`https://api.dicebear.com/6.x/micah/svg?seed=${friend.userName}`}
-                            alt={friend.userName} />
-                          <AvatarFallback>{friend.userName}</AvatarFallback>
+                            src={friend.friendProfile}
+                            alt={friend.friendName} />
+                          <AvatarFallback>{friend.friendName}</AvatarFallback>
                         </Avatar>
                         <div className="ml-4">
-                          <h3 className="font-semibold">{friend.userName}, {friend.userAge}</h3>
+                          <h3 className="font-semibold">{friend.friendName}, {friend.friendAge}</h3>
                           <p className="text-sm text-[#050315] flex items-center">
                             <MapPinIcon className="h-4 w-4 mr-1" /> 34km
                           </p>
@@ -303,24 +321,28 @@ export default function Chat({type}) {
       </AnimatePresence>
       {/* Chat Window */}
       {
-        pType === 'mainPage'  ? (
+        pType === 'mainPage'   ? (
           <div className='w-full h-full flex flex-col items-center justify-center  ' >
-            <div className='border flex font-poppins flex-col items-center  justify-center p-2 rounded' >
+            <div className='border flex font-poppins flex-col items-center  gap-y-5 justify-center p-2 rounded' >
               <h1>Welcome to the Chat App!</h1>
-              <p>Please select a friend from the left side to start a conversation.</p>
+              <p className='text-center' >Please select a friend from the left side to start a conversation.</p>
+              <Button onClick={e=>{setIsMobileMenuOpen(true)}} >
+                Pick a friend !
+              </Button>
             </div>
           </div>
-        )  : 
-        (
-          <div className="flex-1 flex flex-col h-screen max-sm:w-full ">
+        )  : null },
+        {
+          currentFriend ? (
+            <div className="flex-1 flex flex-col h-screen max-sm:w-full ">
             {
               isVideoCall && (
-                <>
+                <div className='absolute left-0 top-0 w-full h-full border border-red-300 z-50 ' >
                 <Button onClick={()=>{setIsVideoCall(false)}}>
                   Close Video Call
                 </Button>
                 <VideoCall />
-                </>
+                </div>
                 
               )
             }
@@ -339,25 +361,32 @@ export default function Chat({type}) {
                         <>
                           <Avatar className="h-10 w-10">
                             <AvatarImage
-                              src={`https://api.dicebear.com/6.x/micah/svg?seed=${currentFriend.name}`}
-                              alt={currentFriend.name} />
-                            <AvatarFallback>{currentFriend.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                              src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`}
+                              alt={currentFriend.fname} />
+                            <AvatarFallback>{currentFriend.fname.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                           </Avatar>
                           <div className="ml-4">
-                            <h3 className="font-semibold">{currentFriend.name}</h3>
-                            <p className="text-sm text-[#050315]">{currentFriend.lastSeen}</p>
-                          </div>
+                            <h3 className="font-semibold">{currentFriend.fname + ' ' +   currentFriend.lname}</h3>
+                            <div className="status grid grid-cols-2 gap-1">
+                              <p className="text-sm text-[#050315]">@{currentFriend.username}-</p>
+                              <p className="text-sm text-[#050315]">now</p>
+                            </div>
+                            </div>
                         </>
                       )}
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border border-red-400 text-[#050315] hover:bg-red-400 hover:text-[#fbfbfe]">
-                        <MdDelete className="h-4 w-4 mr-2" />
-                        Delete Friend
-                      </Button>
+                      {
+                        currentFriend && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="border border-red-400 text-[#050315] text-sm line-clamp-1 flex hover:bg-red-400 hover:text-[#fbfbfe]">
+                            <ImEyeBlocked className="h-4 w-4 mr-2" />
+                            Block {currentFriend.username}
+                          </Button>
+                        )
+                      }
                       <Button
                       onClick={()=>{setIsVideoCall(true)}}
                         variant="outline"
@@ -392,8 +421,8 @@ export default function Chat({type}) {
                           {message.msgSenderUid !== currentUserId && (
                             <Avatar className="h-8 w-8 mr-2">
                               <AvatarImage
-                                src={`https://api.dicebear.com/6.x/micah/svg?seed=${message.msgSender}`}
-                                alt={message.msgSender} />
+                              src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`}
+                              alt={message.msgSender} />
                               <AvatarFallback>{message.msgSender.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                             </Avatar>
                           )}
@@ -403,12 +432,12 @@ export default function Chat({type}) {
                             <p
                               className={`text-xs mt-1 ${message.msgSenderUid === currentUserId ? 'text-gray-300 text-sm ' : ' text-sm text-slate-700 '}`}>{message.time}</p>
                           </div>
-                          {message.msgSenderUid === currentUserId && (
-                            <Avatar className="h-8 w-8 ml-2">
-                              <AvatarImage src={`https://api.dicebear.com/6.x/micah/svg?seed=${currentUser}`} alt="You" />
-                              <AvatarFallback>You</AvatarFallback>
-                            </Avatar>
-                          )}
+                          {/* {message.msgSenderUid === currentUserId && (
+                            // <Avatar className="h-8 w-8 ml-2">
+                            //   <AvatarImage src={me.msgSenderPicture} alt="You" />
+                            //   <AvatarFallback>You</AvatarFallback>
+                            // </Avatar>
+                          )} */}
                         </motion.div>
                       ))
                     )}
@@ -443,8 +472,24 @@ export default function Chat({type}) {
                     </div>
                   </form>
                 </div>
-        )
+          ) : (
+            <>
+              {/* {
+                type != 'mainPage' && (
+                  <div className='flex p-2 rounded ' >
+                    <h4 className='text-center text-red-400 h-min p-1 border border-red-400 rounded font-poppins ' >No Chat Avaialabel with this id</h4>
+                    {
+                      setTimeout(()=>{
+                        router.push('/chat');
+                      },2000)
+                    }
+                </div>
+                )
+              } */}
+            </>
+          )
       }
+      
       
       {/* Friend Suggestion Overlay */}
       <AnimatePresence>

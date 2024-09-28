@@ -84,7 +84,8 @@ function Page({params}) {
         friendLocation:userP.location,
         friendInterests:userP.interests ? userP.interests : 'No interest available',
         requester:currentUserUid,
-        receiver:userP.uid
+        receiver:userP.uid,
+        receiverId:userP.id,
       });
       if (error) {
         toast.error(`Error: ${error.message}`);

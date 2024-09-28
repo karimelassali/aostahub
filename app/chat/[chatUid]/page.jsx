@@ -5,8 +5,7 @@ export default function Page({params}) {
     const chatUid = params.chatUid;
   return (
     <>
-        Welcome to {chatUid}
-        <Chat  />
+        <Chat msgsId={chatUid} />
 
     </>
   )
