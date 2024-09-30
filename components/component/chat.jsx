@@ -24,6 +24,10 @@ import VideoCall from '@/components/video-call'
 
 
 export default function Chat({type,msgsId}) {
+  const [chatImg,setChatImg] = useState(null);
+  const [chatImgName,setChatImgName] = useState(null);
+  const [chatImgFile,setChatImgFile] = useState(null);
+  //end chat immg confige
   const router = useRouter();
   const pType = type ;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -181,7 +185,10 @@ export default function Chat({type,msgsId}) {
       hour: "2-digit",
       minute: "2-digit",
     });
-
+    if(chatImg){
+      const {data,error} = await supabase.storage.from('images').upload(`chatImages/${Date.now()}${chatImgName}`,chatImgFile);
+      data ? toast.success('img uploaded succes') + setChatImg(null) : toast.error(error);
+    }
     if (message.length > 0 && currentUserId && currentFriend) {
       const { data, error } = await supabase.from("msgs").insert({
         msgSenderUid: currentUserId,
@@ -358,7 +365,7 @@ export default function Chat({type,msgsId}) {
             }
                   {/* Chat Header */}
                   <div
-                    className="p-4 border-b border-[#dedcff] bg-[#fbfbfe] flex justify-between items-center ">
+                    className="p-4 max-sm:p-1 border-b border-[#dedcff] bg-[#fbfbfe] flex justify-between items-center ">
                     <div className="flex items-center">
                       <Button
                         variant="ghost"
@@ -385,7 +392,7 @@ export default function Chat({type,msgsId}) {
                         </>
                       )}
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-1 items-center space-x-2">
                       {
                         currentFriend && (
                           <Button
@@ -412,6 +419,7 @@ export default function Chat({type,msgsId}) {
                   <div
                     ref={chatContainerRef}
                     className="flex-1 overflow-y-auto p-4  ">
+                      <img src="/ass/logo.png" className='border border-red-400' alt="" />
                     {isLoading ? (
                       Array(5).fill(0).map((_, index) => (
                         <div
@@ -458,8 +466,32 @@ export default function Chat({type,msgsId}) {
                   <form
                     onSubmit={(e)=>{e.preventDefault(),sendMessage()}} 
                     className="p-4 bg-[#fbfbfe] border-t border-[#dedcff]">
+                      {
+                        chatImg && (
+                          
+                          <div className='flex gap-2 p-3 items-center'>
+                            <Image src={chatImg} width={40} height={40} alt='img' className='w-20 h-20 rounded'  />
+                          </div>
+                        )
+                      }
+                      {/* <div className='w-full border border-red-400 p-2' >
+                        <Image src={'/ass/logo.png'} width={40} height={40} alt='tst'  />
+                      </div> */}
                     <div className="flex gap-2 items-center">
+                    <input onChange={(e)=>{
+                      const img = e.target.files[0];
+                      if(img){
+                        const imgUrl = URL.createObjectURL(img);
+                        setChatImgFile(img);
+                        setChatImgName(img.name);
+                        setChatImg(imgUrl);
+                      }
+                    }} id='msgImg' type="file" hidden />
+
                     <Button
+                        onClick={()=>{
+                          document.getElementById('msgImg').click();
+                        }}
                         type="button"
                         size="icon"
                         className="ml-2  bg-white text-accent border border-accent ">
