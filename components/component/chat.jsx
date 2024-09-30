@@ -27,7 +27,7 @@ export default function Chat({type,msgsId}) {
   const router = useRouter();
   const pType = type ;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [myFriends, setMyFriends] = useState([]);
   const [currentFriend, setCurrentFriend] = useState(null);
   const [showSuggestion, setShowSuggestion] = useState(true);
@@ -211,7 +211,11 @@ export default function Chat({type,msgsId}) {
       toast.message("Message cannot be empty");
     }
   }
-
+  useEffect(()=>{
+    setTimeout(()=>{
+      setIsLoading(false);
+    },2000)
+  },[])
   return (
     (
     <div className="flex h-screen w-full transition-all  bg-[#fbfbfe] text-[#050315]">
@@ -291,10 +295,11 @@ export default function Chat({type,msgsId}) {
                             alt={friend.friendName} />
                           <AvatarFallback>{friend.friendName}</AvatarFallback>
                         </Avatar>
-                        <div className="ml-4">
+                        <div className="ml-4 gap-3 ">
                           <h3 className="font-semibold">{friend.friendName}, {friend.friendAge}</h3>
+
                           <p className="text-sm text-[#050315] flex items-center">
-                            <MapPinIcon className="h-4 w-4 mr-1" /> 34km
+                            <MapPinIcon className="h-4 w-4 mr-1" /> {friend.friendLocation}
                           </p>
                         </div>
                       </div>
@@ -303,14 +308,19 @@ export default function Chat({type,msgsId}) {
                         className={friend.status === 'online' ? 'bg-[#433bff] text-[#fbfbfe]' : 'bg-[#dedcff] text-[#050315]'}>{friend.status}</Badge>
                     </div>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {/* {friend.interests.map((interest, index) => (
-                        <Badge key={index} variant="outline" className="bg-[#dedcff] text-[#050315]">
-                          {interest === 'Hiking' && <MountainIcon className="h-3 w-3 mr-1" />}
-                          {interest === 'Wine tasting' && <WineIcon className="h-3 w-3 mr-1" />}
-                          {interest === 'Coffee' && <CoffeeIcon className="h-3 w-3 mr-1" />}
-                          {interest}
+                      {
+                        <Badge key={friend.id} variant="outline" className="bg-[#dedcff] gap-2 text-[#050315]">
+                         {
+                          
+                            friend.friendInterests.split(/[,.:&;\s]|and/).filter(Boolean).map((int, index) => (
+                              <Badge key={index} variant="outline" className="bg-[#dedcff] text-[#050315]">
+                                {int}
+                              </Badge>
+                            ))
+                          }
+                        
                         </Badge>
-                      ))} */}
+                      }
                     </div>
                   </Card>
                 </Link>
@@ -326,7 +336,7 @@ export default function Chat({type,msgsId}) {
             <div className='border flex font-poppins flex-col items-center  gap-y-5 justify-center p-2 rounded' >
               <h1>Welcome to the Chat App!</h1>
               <p className='text-center' >Please select a friend from the left side to start a conversation.</p>
-              <Button onClick={e=>{setIsMobileMenuOpen(true)}} >
+              <Button className='text-white' onClick={e=>{setIsMobileMenuOpen(true)}} >
                 Pick a friend !
               </Button>
             </div>

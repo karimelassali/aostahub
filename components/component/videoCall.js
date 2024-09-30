@@ -1,66 +1,101 @@
 'use client'
-
-import { useEffect, useRef, useState } from 'react';
+import { useState, useEffect } from 'react';
 import Peer from 'peerjs';
 
-const VideoCall = () => {
-    const [peerId, setPeerId] = useState('');
-    const [callId, setCallId] = useState('');
-    const localVideoRef = useRef(null);
-    const remoteVideoRef = useRef(null);
-    const peer = useRef(null);
+const VideoChat = () => {
+  const [peerId, setPeerId] = useState('');
+  const [remotePeerId, setRemotePeerId] = useState('');
+  const [peer, setPeer] = useState(null);
+  const [call, setCall] = useState(null);
+  const [incomingCall, setIncomingCall] = useState(null);
+  const [callerName, setCallerName] = useState('');
 
-    useEffect(() => {
-        // Create a new Peer instance
-        peer.current = new Peer();
+  useEffect(() => {
+    const newPeer = new Peer();
 
-        // Generate a peer ID and set it
-        peer.current.on('open', (id) => {
-            setPeerId(id);
-        });
-        console.log(peer.current)
-        // Handle incoming calls
-        peer.current.on('call', (call) => {
-            call.answer(localVideoRef.current.srcObject);
-            call.on('stream', (remoteStream) => {
-                remoteVideoRef.current.srcObject = remoteStream;
-            });
-        });
+    newPeer.on('open', (id) => {
+      setPeerId(id);
+    });
 
-        return () => {
-            // Cleanup
-            peer.current.destroy();
-        };
-    }, []);
+    newPeer.on('call', (incomingCall) => {
+      setIncomingCall(incomingCall);
+      setCallerName(incomingCall.peer);
+    });
 
-    const startCall = () => {
-        const call = peer.current.call(callId, localVideoRef.current.srcObject);
-        call.on('stream', (remoteStream) => {
-            remoteVideoRef.current.srcObject = remoteStream;
-        });
-    };
+    setPeer(newPeer);
+  }, []);
 
-    const getUserMedia = async () => {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        localVideoRef.current.srcObject = stream;
-    };
+  const startCall = (remoteId) => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+      const call = peer.call(remoteId, stream);
 
-    return (
+      const localVideo = document.getElementById('local-video');
+      localVideo.srcObject = stream;
+      localVideo.play();
+
+      call.on('stream', (remoteStream) => {
+        const remoteVideo = document.getElementById('remote-video');
+        remoteVideo.srcObject = remoteStream;
+        remoteVideo.play();
+      });
+
+      setCall(call);
+    });
+  };
+
+  const answerCall = () => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+      incomingCall.answer(stream);
+
+      const localVideo = document.getElementById('local-video');
+      localVideo.srcObject = stream;
+      localVideo.play();
+
+      incomingCall.on('stream', (remoteStream) => {
+        const remoteVideo = document.getElementById('remote-video');
+        remoteVideo.srcObject = remoteStream;
+        remoteVideo.play();
+      });
+
+      setCall(incomingCall);
+      setIncomingCall(null);
+    });
+  };
+
+  const rejectCall = () => {
+    setIncomingCall(null);
+  };
+
+  const endCall = () => {
+    if (call) {
+      call.close();
+    }
+    setCall(null);
+  };
+
+  return (
+    <div>
+      <video id="local-video" autoPlay muted></video>
+      <video id="remote-video" autoPlay></video>
+      {peerId}
+      <input 
+        type="text" 
+        placeholder="Remote Peer ID" 
+        value={remotePeerId} 
+        onChange={(e) => setRemotePeerId(e.target.value)} 
+      />
+      
+      <button onClick={() => startCall(remotePeerId)}>Start Call</button>
+      {incomingCall && (
         <div>
-            <h1>Video Call</h1>
-            <video ref={localVideoRef} autoPlay muted />
-            <video ref={remoteVideoRef} autoPlay />
-            <input 
-                type="text" 
-                placeholder="Enter peer ID to call" 
-                value={callId} 
-                onChange={(e) => setCallId(e.target.value)} 
-            />
-            <button onClick={getUserMedia}>Get Media</button>
-            <button onClick={startCall}>Start Call</button>
-            <p>Your Peer ID: {peerId}</p>
+          <p>Incoming call from: {callerName}</p>
+          <button onClick={answerCall}>Answer</button>
+          <button onClick={rejectCall}>Reject</button>
         </div>
-    );
+      )}
+      {call && <button onClick={endCall}>End Call</button>}
+    </div>
+  );
 };
 
-export default VideoCall;
+export default VideoChat;

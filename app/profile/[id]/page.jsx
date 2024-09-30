@@ -1,7 +1,7 @@
 'use client'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Facebook, Instagram, MapPin, Phone, Users, Mail, Cake, Heart, MessageCircle, BookmarkPlus } from "lucide-react"
+import { Facebook, Instagram, MapPin, Phone, Users , MessageCircle, BookmarkPlus } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { MdBoy } from "react-icons/md";
@@ -10,7 +10,6 @@ import  ProfileSkeleton from "@/components/component/profileSkeleton"
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { UserProfile, useUser } from "@clerk/nextjs";
-import {sonner} from 'sonner'
 import { BsBriefcase } from "react-icons/bs";
 import { IoIosLink } from "react-icons/io";
 import { toast, Toaster } from 'sonner';
@@ -183,7 +182,7 @@ function Page({params}) {
               className="rounded-full border-4 border-[#fbfbfe] shadow-lg" />
             {/* userP Info */}
             <div className="text-center md:text-left flex-grow">
-              <h1 className="text-3xl font-bold text-[#050315] mb-2">{userP.fname + userP.lname}, {userP.age}</h1>
+              <h1 className="text-3xl flex items-center gap-2 font-bold text-[#050315] mb-2">{userP.fname + userP.lname}, {userP.age}  {userP.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}</h1>
               <p
                 className="text-lg text-[#050315] flex items-center justify-center md:justify-start mb-4">
                 <MapPin className="h-5 w-5 mr-2 text-[#2f27ce]" />
@@ -196,7 +195,7 @@ function Page({params}) {
                     <Link
                       href={`/chat/${userP.uid}`}
                       variant="outline"
-                      className="border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
+                      className="border-[#2f27ce] text-[#2f27ce] flex rounded p-2  items-center hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
                       <MessageCircle className="h-4 w-4 mr-2" />
                       Message
                     </Link> 

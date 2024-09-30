@@ -1,8 +1,8 @@
 import React from 'react'
-import VideoCall from '@/components/component/videoCall'
+import VideoChat from '@/components/component/videoCall'
 function Page() {
   return (
-    <VideoCall />
+    <VideoChat />
   )
 }
 

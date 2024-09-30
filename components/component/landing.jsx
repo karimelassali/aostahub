@@ -15,6 +15,8 @@ import { FocusCards } from "../ui/focusimg";
 import { FlipWords } from "../ui/flipWords";
 import { ShootingStars } from "../ui/stars";
 import { BackgroundBeams } from "../ui/beams";
+import SparklesText from "../ui/sparkles-text";
+import { CoolMode } from "../ui/cool-mode";
 
 import {
   FaCompass,
@@ -203,16 +205,18 @@ export default function Landing() {
                   ease: "easeIn",
                 }}
               >
-                <h2 className="text-3xl md:text-4xl font-poppins mb-4">
+
+                <h2 className="text-3xl  shrink-0 md:text-4xl font-poppins mb-4">
                   {language === "en"
                     ? "Connect and Share with "
                     : "Connetti e condividi con "}
-                  <span
+                  {/* <span
                     style={{ fontWeight: "bold" }}
                     className="text-primary font-body "
                   >
                     AostaHub
-                  </span>
+                  </span> */}
+                  <SparklesText className="text-md" text={'AOSTAHUB'} />
                 </h2>
                 <motion.p
                   initial={{
@@ -258,6 +262,7 @@ export default function Landing() {
                   }}
                   className="flex gap-4"
                 >
+                  <CoolMode>
                   <Button
                     style={{ borderRadius: "4px" }}
                     containerClassName="rounded-full"
@@ -266,16 +271,19 @@ export default function Landing() {
                   >
                     <Link href={"/explore"}>Sign up </Link>
                   </Button>
-
-                  <Button
-                    style={{ borderRadius: "4px" }}
-                    duration={1}
-                    containerClassName="rounded-full"
-                    as="button"
-                    className="p-3  font-open rounded-md bg-primary w-max md:w-40 text-secondary text-lg"
-                  >
-                    <Link href={"/explore"}>Explore </Link>
-                  </Button>
+                  </CoolMode>
+                  <CoolMode>
+                    <Button
+                      style={{ borderRadius: "4px" }}
+                      duration={1}
+                      containerClassName="rounded-full"
+                      as="button"
+                      className="p-3  font-open rounded-md bg-primary w-max md:w-40 text-secondary text-lg"
+                    >
+                      <Link href={"/explore"}>Explore </Link>
+                    </Button>
+                  </CoolMode>
+                  
                 </motion.div>
               </motion.div>
               <div>
@@ -444,11 +452,6 @@ export default function Landing() {
           <div className="container mx-auto px-4 md:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               <div>
-                <ShootingStars
-                  minDelay={1}
-                  minSpeed={1}
-                  className={" -z-2 font-poppins   "}
-                />
               </div>
               {language === "en"
                 ? `Join AostaHub Today`
