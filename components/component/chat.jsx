@@ -22,11 +22,21 @@ import { ImEyeBlocked } from "react-icons/im";
 import { useRouter } from 'next/navigation'
 import VideoCall from '@/components/video-call'
 import { MdOutlineVerified } from "react-icons/md";
-import LightboxComponent from '../ui/lightbox'
+import Lightboxcomponent from '../ui/lightbox'
 
 
 
 export default function Chat({type,msgsId}) {
+  const slides = [
+   { src: "/ass/logo.png", alt: "Slide 1" },
+   { src: "/ass/logo.png", alt: "Slide 2" },
+   { src: "/ass/logo.png", alt: "Slide 3" },
+   { src: "/ass/logo.png", alt: "Slide 4" },
+   { src: "/ass/logo.png", alt: "Slide 5" },
+  ]
+  const [lopen,setLopen] = useState(false);
+
+
   const [chatImg,setChatImg] = useState(null);
   const [chatImgName,setChatImgName] = useState(null);
   const [chatImgFile,setChatImgFile] = useState(null);
@@ -451,7 +461,15 @@ export default function Chat({type,msgsId}) {
                             className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${message.msgSenderUid === currentUserId ? 'bg-[#2f27ce] max-w-[80%]  text-[#fbfbfe] rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'  : 'bg-[#dedcff] max-w-[80%] text-text break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg '}`}>
                               {
                                  message.chatImg != null && (
-                                    <LightboxComponent image={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`} />
+                                 <>
+                                  <Lightboxcomponent open={lopen} onclose={setLopen(false)} slides={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}  /> 
+                                  <Image
+                                  width={100} 
+                                  height={100}
+                                  className='w-full h-full rounded-lg'
+                                  src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}
+                                  alt={message.msgSender} />   
+                                 </>                                
                                  )
                               }
                             <p>
