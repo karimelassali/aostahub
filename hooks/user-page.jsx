@@ -12,6 +12,8 @@ import { createClient } from "@/utils/supabase/client";
 import Image from "next/image"
 import Link from "next/link"
 import { toast, Toaster } from 'sonner';
+import { MdOutlineVerified } from "react-icons/md";
+
 
 
 export default function FriendsPage() {
@@ -161,7 +163,7 @@ export default function FriendsPage() {
                           <AvatarImage src={user.userProfile} />
                         </Avatar>
                         <div className='p-2 mb-2' >
-                          <h3 className="font-medium first-letter:capitalize  ">{user.userName}</h3>
+                          <h3 className="font-medium first-letter:capitalize flex items-center p-1 ">{user.userName}{user.userVerification == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} /> }</h3>
                           <p className="text-sm text-[#050315]/70">{user.userAge} years • {user.userLocation}</p>
                           <p className="text-sm text-[#050315]/70">{user.userSkill}</p>
                         </div>
@@ -232,7 +234,7 @@ export default function FriendsPage() {
                         <AvatarFallback>{friend.friendProfie}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <span className="font-medium">{friend.friendName}</span>
+                        <span className="font-medium flex items-center p-1 gap-1 ">{friend.friendName} <span>{friend.friendVerification == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}</span> </span>
                         <p className="text-xs text-[#050315]/70">{friend.friendAge} years • {friend.friendLocation && friend.userSkill  ? friend.friendLocation + '•' : null}   {friend.friendSkill ? friend.friendSkill + '•' : null} </p>
                       </div>
                     </Link>
@@ -249,6 +251,6 @@ export default function FriendsPage() {
           </motion.div>
         </div>
       </div>
-    </div>)
+    </ div>)
   );
 }

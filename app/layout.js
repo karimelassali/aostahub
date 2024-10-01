@@ -73,7 +73,7 @@ export default function RootLayout({ children }) {
             {/* </div> */}
           </footer>
         </body>
-        <script async src="https://automatic.chat/embed.js" id="cm1nplcpf007ggfpj4hgrt0sr" ></script>
+        {/* <script async src="https://automatic.chat/embed.js" id="cm1nplcpf007ggfpj4hgrt0sr" ></script> */}
       </html>
     </ClerkProvider>
   );

@@ -21,6 +21,8 @@ import { VideoIcon } from 'lucide-react'
 import { ImEyeBlocked } from "react-icons/im";
 import { useRouter } from 'next/navigation'
 import VideoCall from '@/components/video-call'
+import { MdOutlineVerified } from "react-icons/md";
+
 
 
 export default function Chat({type,msgsId}) {
@@ -242,7 +244,7 @@ export default function Chat({type,msgsId}) {
                     <AvatarFallback>You</AvatarFallback>
               </Avatar>
 
-            <h2 className="text-xl font-poppins font-semibold">{currentUser}</h2>
+            <h2 className="text-xl flex items-center font-poppins font-semibold">{currentUser}  <span>{me.verified == 1 && <MdOutlineVerified size={30} style={{ color: '#0284c7' }} />}</span></h2>
             <Button
               variant="ghost"
               size="icon"
@@ -303,8 +305,7 @@ export default function Chat({type,msgsId}) {
                           <AvatarFallback>{friend.friendName}</AvatarFallback>
                         </Avatar>
                         <div className="ml-4 gap-3 ">
-                          <h3 className="font-semibold">{friend.friendName}, {friend.friendAge}</h3>
-
+                          <h3 className="font-semibold flex items-center gap-x-1 ">{friend.friendName}{ friend.friendVerification == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}, {friend.friendAge}</h3>
                           <p className="text-sm text-[#050315] flex items-center">
                             <MapPinIcon className="h-4 w-4 mr-1" /> {friend.friendLocation}
                           </p>
@@ -383,8 +384,8 @@ export default function Chat({type,msgsId}) {
                             <AvatarFallback>{currentFriend.fname.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                           </Avatar>
                           <div className="ml-4">
-                            <h3 className="font-semibold">{currentFriend.fname + ' ' +   currentFriend.lname}</h3>
-                            <div className="status grid grid-cols-2 gap-1">
+                            <h3 className="font-semibold flex items-center gap-x-2 ">{currentFriend.fname + ' ' +   currentFriend.lname}{ currentFriend.verified == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}</h3>
+                            <div className="status grid grid-cols-2 max-sm:grid-cols-1 gap-1">
                               <p className="text-sm text-[#050315]">@{currentFriend.username}-</p>
                               <p className="text-sm text-[#050315]">now</p>
                             </div>
@@ -392,7 +393,7 @@ export default function Chat({type,msgsId}) {
                         </>
                       )}
                     </div>
-                    <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-1 items-center space-x-2">
+                    <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-1 items-center ">
                       {
                         currentFriend && (
                           <Button

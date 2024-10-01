@@ -18,6 +18,7 @@ import { IoSad } from "react-icons/io5"
 import { IoRemove } from "react-icons/io5"
 import {OctagonPause} from 'lucide-react'
 import {useRouter} from "next/navigation"
+import NumberTicker from "@/components/ui/number-ticker"
 
 
 
@@ -74,6 +75,7 @@ function Page({params}) {
         userSkill:me.skill ? me.skill : 'No skill available',
         userLocation:me.location,
         userInterests:me.interests ? me.interests : 'No interest available',
+        userVerification:me.verified,
         status:'pending',
         frienduid:userP.uid,
         friendName:userP.username,
@@ -82,9 +84,11 @@ function Page({params}) {
         friendSkill:userP.skill ? userP.skill : 'No skill available',
         friendLocation:userP.location,
         friendInterests:userP.interests ? userP.interests : 'No interest available',
+        friendVerification:userP.verified,
         requester:currentUserUid,
         receiver:userP.uid,
         receiverId:userP.id,
+
       });
       if (error) {
         toast.error(`Error: ${error.message}`);
@@ -169,7 +173,7 @@ function Page({params}) {
           className="absolute inset-0 bg-gradient-to-t from-[#fbfbfe] to-transparent"></div>
       </div>
       {/* Profile Content */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-32">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-32 max-sm:px-1 ">
         <div className="relative z-10 bg-[#fbfbfe] rounded-lg shadow-xl p-6 mb-6">
           <div
             className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
@@ -182,7 +186,10 @@ function Page({params}) {
               className="rounded-full border-4 border-[#fbfbfe] shadow-lg" />
             {/* userP Info */}
             <div className="text-center md:text-left flex-grow">
-              <h1 className="text-3xl flex items-center gap-2 font-bold text-[#050315] mb-2">{userP.fname + userP.lname}, {userP.age}  {userP.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}</h1>
+              <div className="flex items-center max-sm:flex-col gap-2 max-sm:line-clamp-2" >
+                <h1 className="text-3xl max-sm:text-md flex items-center  font-bold max-sm:font-extralight text-[#050315] mb-2">{userP.fname + userP.lname} <span>{userP.verified == 1 && <MdOutlineVerified size={30} style={{ color: '#0284c7' }} />}</span>,  </h1>
+                <span className="text-3xl max-sm:font-extralight" >{userP.age}</span>
+              </div>
               <p
                 className="text-lg text-[#050315] flex items-center justify-center md:justify-start mb-4">
                 <MapPin className="h-5 w-5 mr-2 text-[#2f27ce]" />
@@ -253,7 +260,7 @@ function Page({params}) {
             {/* Stats */}
             <div className="flex gap-6 text-center">
               <div>
-                <p className="text-2xl font-semibold text-[#2f27ce]">{userAsfriend.length}</p>
+                <p className="text-2xl font-semibold text-[#2f27ce]"><NumberTicker value={userAsfriend.length} /></p>
                 <p className="text-[#050315]">Friend`s</p>
               </div>
             </div>
@@ -290,17 +297,30 @@ function Page({params}) {
                 }
                 </span> */}
                 <div className="flex flex-wrap gap-2">
-                  {
-                    userP.interests &&
-                    userP.interests.split(/[,./;:&\s]|and/).map((interest) => (
-                      <span
-                        key={interest}
-                        className="bg-[#dedcff] flex items-center first-letter:capitalize  text-text  px-3 py-1 gap-2   mqrgin-2 rounded-full text-md font-medium">
-                        <img  width={30} height={30} src={`https://api.dicebear.com/9.x/notionists-neutral/svg?seed=${interest}&backgroundColor=dedcff`} />
-                        {interest}
-                      </span>
-                    ))
-                  }
+                {
+                  userP.interests &&  userP.interests !== 'No Interest available' ? (
+                    userP.interests
+                      .split(/[,./;:&\s]+|and/)
+                      .filter((interest) => interest.trim() !== "") // Remove empty values
+                      .map((interest, index) => (
+                        <span
+                          key={index}
+                          className="bg-[#dedcff] flex items-center first-letter:capitalize text-text px-3 py-1 gap-2 margin-2 rounded-full text-md font-medium">
+                          <img
+                            width={30}
+                            height={30}
+                            src={`https://api.dicebear.com/9.x/notionists-neutral/svg?seed=${interest}&backgroundColor=dedcff`}
+                            alt={`icon for ${interest}`}
+                          />
+                          {interest}
+                        </span>
+                      ))
+                  ) : (
+                    <p className="text-gray-500 text-center">No Interest available</p>
+                  )
+                }
+
+
                 </div>
               </CardContent>
             </Card>
