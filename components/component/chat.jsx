@@ -179,7 +179,7 @@ export default function Chat({type,msgsId}) {
     // setChatUid()
     // )
     currentFriend ? alert(me.id + currentFriend.id) : null ;
-  },[currentUser,currentUserId,supabase] );
+  },[currentUser,currentUserId,supabase] ); 
 
   
   async function sendMessage() {
@@ -188,13 +188,14 @@ export default function Chat({type,msgsId}) {
       minute: "2-digit",
     });
     if(chatImg){
-      const {data,error} = await supabase.storage.from('images').upload(`chatImages/${Date.now()}${chatImgName}`,chatImgFile);
+      const {data,error} = await supabase.storage.from('images').upload(`chatImages/${chatImgName}`,chatImgFile);
+      setChatImg(null)
       data ? toast.success('img uploaded succes') + setChatImg(null) : toast.error(error);
     }
     if (message.length > 0 && currentUserId && currentFriend) {
       const { data, error } = await supabase.from("msgs").insert({
         msgSenderUid: currentUserId,
-        message,
+        message: message,
         msgSender: currentUser,
         msgSenderPicture: me.imgName ?  me.imgName : `https://api.dicebear.com/6.x/micah/svg?seed=${me.fname}`,
         time,
@@ -202,8 +203,8 @@ export default function Chat({type,msgsId}) {
         msgReceiverPicture: currentFriend.imgName,
         msgReceiverUid:currentFriend.uid,
         msgSenderVerification:'1',
-        msgsId:msgsId
-
+        msgsId:msgsId,
+        chatImg: chatImg ? chatImgName : null,
         // msgReceiverUid: users[0].id,
         // msgReceiver: users[0].fullName,
         // read: false,
@@ -220,6 +221,7 @@ export default function Chat({type,msgsId}) {
       toast.message("Message cannot be empty");
     }
   }
+
   useEffect(()=>{
     setTimeout(()=>{
       setIsLoading(false);
@@ -349,7 +351,7 @@ export default function Chat({type,msgsId}) {
               </Button>
             </div>
           </div>
-        )  : null },
+        )  : null }
         {
           currentFriend ? (
             <div className="flex-1 flex flex-col h-screen max-sm:w-full ">
@@ -420,7 +422,6 @@ export default function Chat({type,msgsId}) {
                   <div
                     ref={chatContainerRef}
                     className="flex-1 overflow-y-auto p-4  ">
-                      <img src="/ass/logo.png" className='border border-red-400' alt="" />
                     {isLoading ? (
                       Array(5).fill(0).map((_, index) => (
                         <div
@@ -447,7 +448,19 @@ export default function Chat({type,msgsId}) {
                           )}
                           <div
                             className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${message.msgSenderUid === currentUserId ? 'bg-[#2f27ce] max-w-[80%]  text-[#fbfbfe] rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'  : 'bg-[#dedcff] max-w-[80%] text-text break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg '}`}>
-                            <p>{message.message}</p>
+                              {
+                                 message.chatImg != null && (
+                                  <Image
+                                    width={100} 
+                                    height={100}
+                                    className='w-full h-full rounded-lg'
+                                    src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}
+                                    alt={message.msgSender} />
+                                 )
+                              }
+                            <p>
+                            {message.message}
+                            </p>
                             <p
                               className={`text-xs mt-1 ${message.msgSenderUid === currentUserId ? 'text-gray-300 text-sm ' : ' text-sm text-slate-700 '}`}>{message.time}</p>
                           </div>
