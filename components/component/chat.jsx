@@ -22,6 +22,7 @@ import { ImEyeBlocked } from "react-icons/im";
 import { useRouter } from 'next/navigation'
 import VideoCall from '@/components/video-call'
 import { MdOutlineVerified } from "react-icons/md";
+import LightboxComponent from '../ui/lightbox'
 
 
 
@@ -450,12 +451,7 @@ export default function Chat({type,msgsId}) {
                             className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${message.msgSenderUid === currentUserId ? 'bg-[#2f27ce] max-w-[80%]  text-[#fbfbfe] rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'  : 'bg-[#dedcff] max-w-[80%] text-text break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg '}`}>
                               {
                                  message.chatImg != null && (
-                                  <Image
-                                    width={100} 
-                                    height={100}
-                                    className='w-full h-full rounded-lg'
-                                    src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}
-                                    alt={message.msgSender} />
+                                    <LightboxComponent image={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`} />
                                  )
                               }
                             <p>
