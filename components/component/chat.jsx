@@ -27,13 +27,13 @@ import Lightboxcomponent from '../ui/lightbox'
 
 
 export default function Chat({type,msgsId}) {
-  const slides = [
-   { src: "/ass/logo.png", alt: "Slide 1" },
-   { src: "/ass/logo.png", alt: "Slide 2" },
-   { src: "/ass/logo.png", alt: "Slide 3" },
-   { src: "/ass/logo.png", alt: "Slide 4" },
-   { src: "/ass/logo.png", alt: "Slide 5" },
-  ]
+  // const slides = [
+  //  { src: "/ass/logo.png", alt: "Slide 1" },
+  //  { src: "/ass/logo.png", alt: "Slide 2" },
+  //  { src: "/ass/logo.png", alt: "Slide 3" },
+  //  { src: "/ass/logo.png", alt: "Slide 4" },
+  //  { src: "/ass/logo.png", alt: "Slide 5" },
+  // ]
   const [lopen,setLopen] = useState(false);
 
 
