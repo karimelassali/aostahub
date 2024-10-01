@@ -27,13 +27,13 @@ import Lightboxcomponent from '../ui/lightbox'
 
 
 export default function Chat({type,msgsId}) {
-  // const slides = [
-  //  { src: "/ass/logo.png", alt: "Slide 1" },
-  //  { src: "/ass/logo.png", alt: "Slide 2" },
-  //  { src: "/ass/logo.png", alt: "Slide 3" },
-  //  { src: "/ass/logo.png", alt: "Slide 4" },
-  //  { src: "/ass/logo.png", alt: "Slide 5" },
-  // ]
+  const slides = [
+   { src: "/ass/logo.png", alt: "Slide 1" },
+   { src: "/ass/logo.png", alt: "Slide 2" },
+   { src: "/ass/logo.png", alt: "Slide 3" },
+   { src: "/ass/logo.png", alt: "Slide 4" },
+   { src: "/ass/logo.png", alt: "Slide 5" },
+  ]
   const [lopen,setLopen] = useState(false);
 
 
@@ -462,13 +462,17 @@ export default function Chat({type,msgsId}) {
                               {
                                  message.chatImg != null && (
                                  <>
-                                  <Lightboxcomponent open={lopen} onclose={setLopen(false)} slides={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}  /> 
+                                  <Lightboxcomponent open={lopen} onClose={()=>setLopen(false)} src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}
+  /> 
                                   <Image
                                   width={100} 
                                   height={100}
                                   className='w-full h-full rounded-lg'
                                   src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}
-                                  alt={message.msgSender} />   
+                                  alt={message.msgSender}
+                                  onClick={()=>{setLopen(true)}}
+                                  />   
+                                  
                                  </>                                
                                  )
                               }
