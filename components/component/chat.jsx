@@ -215,7 +215,6 @@ export default function Chat({type,msgsId}) {
         // read: false,
         // delivered: false,
 
-        // created_at: new Date().toISOString(),
       });
       const sA = new Audio("/ass/sent.wav");
       sA.play();
