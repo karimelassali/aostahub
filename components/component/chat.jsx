@@ -459,13 +459,13 @@ export default function Chat({type,msgsId}) {
                               {
                                  message.chatImg != null && (
                                  <>
-                                     <ModalImage
+                                     {/* <ModalImage
                                         key={message.id}    
                                         small={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}   // Thumbnail image URL
                                         large={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}   // Full-size image URL
                                         alt={`${message.message}`}
-                                        
-                                    />  
+
+                                    />   */}
                                   
                                  </>                                
                                  )
