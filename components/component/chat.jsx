@@ -22,14 +22,16 @@ import { ImEyeBlocked } from "react-icons/im";
 import { useRouter } from 'next/navigation'
 import VideoCall from '@/components/video-call'
 import { MdOutlineVerified } from "react-icons/md";
-import Lightboxcomponent from '../ui/lightbox'
+import ModalImage from 'react-modal-image';
+
+
 
 
 
 export default function Chat({type,msgsId}) {
   
   const [lopen,setLopen] = useState(false);
-  const handleCloseLightBox = () => setLopen(false)
+  const handleCloseLightBox = () => { setLopen(false) ; console.log('x clicked') }
 
   const [chatImg,setChatImg] = useState(null);
   const [chatImgName,setChatImgName] = useState(null);
@@ -231,6 +233,8 @@ export default function Chat({type,msgsId}) {
       setIsLoading(false);
     },2000)
   },[])
+
+  
   return (
     (
     <div className="flex h-screen w-full transition-all  bg-[#fbfbfe] text-[#050315]">
@@ -455,19 +459,12 @@ export default function Chat({type,msgsId}) {
                               {
                                  message.chatImg != null && (
                                  <>
-                                 {
-                                  lopen && (
-                                    <Lightboxcomponent src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`} close={handleCloseLightBox}  open={lopen}  />  
-                                  )
-                                 }
-                                  <Image
-                                  width={100} 
-                                  height={100}
-                                  className='w-full h-full rounded-lg'
-                                  src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}
-                                  alt={message.msgSender}
-                                  onClick={()=>{setLopen(true)}}
-                                  />   
+                                     <ModalImage
+                                        key={message.id}    
+                                        small={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}   // Thumbnail image URL
+                                        large={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}   // Full-size image URL
+                                        alt={`${message.message}`}
+                                    />  
                                   
                                  </>                                
                                  )

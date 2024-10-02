@@ -5,3 +5,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.react-modal-image__modal {
+    z-index: 1000; /* Make sure the modal appears on top */
+}
