@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SendIcon, MenuIcon, MapPinIcon, UserPlusIcon, HeartIcon, XIcon, CoffeeIcon, MountainIcon, WineIcon, SearchIcon, ImageIcon, Delete, BlocksIcon } from "lucide-react"
+import { SendIcon, MenuIcon, MapPinIcon, UserPlusIcon, HeartIcon, XIcon, CoffeeIcon, MountainIcon, WineIcon, SearchIcon, Delete, BlocksIcon } from "lucide-react"
 import  Image  from 'next/image'
 import { useUser } from "@clerk/nextjs";
 import { Toaster, toast } from "sonner";
@@ -23,6 +23,8 @@ import { useRouter } from 'next/navigation'
 import VideoCall from '@/components/video-call'
 import { MdOutlineVerified } from "react-icons/md";
 import ModalImage from 'react-modal-image';
+import { MdAttachFile } from "react-icons/md";
+
 
 
 
@@ -31,11 +33,10 @@ import ModalImage from 'react-modal-image';
 export default function Chat({type,msgsId}) {
   
   const [lopen,setLopen] = useState(false);
-  const handleCloseLightBox = () => { setLopen(false) ; console.log('x clicked') }
 
-  const [chatImg,setChatImg] = useState(null);
-  const [chatImgName,setChatImgName] = useState(null);
-  const [chatImgFile,setChatImgFile] = useState(null);
+  const [chatFile,setchatFile] = useState(null);
+  const [chatFileName,setchatFileName] = useState(null);
+  const [chatFileFile,setchatFileFile] = useState(null);
   //end chat immg confige
   const router = useRouter();
   const pType = type ;
@@ -59,6 +60,10 @@ export default function Chat({type,msgsId}) {
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
 
+
+  const imgsExtensions = [
+    '.jpg','.jpeg','.png','.gif','.webp',
+  ]
   const scrollToBottom = useCallback(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
@@ -154,7 +159,7 @@ export default function Chat({type,msgsId}) {
         .select("*")
         // .eq('msgReceiverUid',msgsId)
         // .eq('msgSenderUid',currentUserId)
-        .or(`and(msgReceiverUid.eq.${msgsId},msgSenderUid.eq.${currentUserId}),and(msgReceiverUid.eq.${currentUserId},msgSenderUid.eq.${msgsId})`)        .order("id", { ascending: true });
+        .or(`and(msgReceiverUid.eq.${msgsId},msgSenderUid.eq.${currentUserId}),and(msgReceiverUid.eq.${currentUserId},msgSenderUid.eq.${msgsId})`).order("id", { ascending: true });
       data ? setMessages(data) : toast.message("No messages yet wait.");
       
       scrollToBottom(); // Call scrollToBottom after setting messages
@@ -194,10 +199,10 @@ export default function Chat({type,msgsId}) {
       hour: "2-digit",
       minute: "2-digit",
     });
-    if(chatImg){
-      const {data,error} = await supabase.storage.from('images').upload(`chatImages/${chatImgName}`,chatImgFile);
-      setChatImg(null)
-      data ? toast.success('img uploaded succes') + setChatImg(null) : toast.error(error);
+    if(chatFile){
+      const {data,error} = await supabase.storage.from('images').upload(`chatFiles/${chatFileName}`,chatFileFile);
+      setchatFile(null)
+      data ? toast.success('img uploaded succes') + setchatFile(null) : toast.error(error);
     }
     if (message.length > 0 && currentUserId && currentFriend) {
       const { data, error } = await supabase.from("msgs").insert({
@@ -211,7 +216,7 @@ export default function Chat({type,msgsId}) {
         msgReceiverUid:currentFriend.uid,
         msgSenderVerification:'1',
         msgsId:msgsId,
-        chatImg: chatImg ? chatImgName : null,
+        chatFile: chatFile ? chatFileName : null,
         // msgReceiverUid: users[0].id,
         // msgReceiver: users[0].fullName,
         // read: false,
@@ -457,18 +462,29 @@ export default function Chat({type,msgsId}) {
                           <div
                             className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${message.msgSenderUid === currentUserId ? 'bg-[#2f27ce] max-w-[80%]  text-[#fbfbfe] rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'  : 'bg-[#dedcff] max-w-[80%] text-text break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg '}`}>
                               {
-                                 message.chatImg != null && (
+                                 message.chatFile != null && imgsExtensions.some(ext =>  message.chatFile.endsWith(ext)) &&  (
                                  <>
                                      <ModalImage
-                                        key={message.id}    
-                                        small={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}   // Thumbnail image URL
-                                        large={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}   // Full-size image URL
-                                        alt={`${message.message}`}
-                                        
+                                        key={message.id}
+                                        small={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatFile}`}   // Thumbnail image URL
+                                        large={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatFile}`}   // Full-size image URL
+                                        alt={`${message.mesage}`}
                                     />  
                                   
                                  </>                                
                                  )
+                              }
+                              {
+                               message.chatFile != null &&  message.chatFile.endsWith('.mp4') && (
+                                 <>
+                                     <video
+                                       className='object-cover w-full h-24 rounded-md'
+                                       controls
+                                       src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}
+                                     />  
+                                   </>                                
+  
+                               )
                               }
                             <p>
                             {message.message}
@@ -493,10 +509,10 @@ export default function Chat({type,msgsId}) {
                     onSubmit={(e)=>{e.preventDefault(),sendMessage()}} 
                     className="p-4 bg-[#fbfbfe] border-t border-[#dedcff]">
                       {
-                        chatImg && (
+                        chatFile && (
                           
                           <div className='flex gap-2 p-3 items-center'>
-                            <Image src={chatImg} width={40} height={40} alt='img' className='w-20 h-20 rounded'  />
+                            <Image src={chatFile} width={40} height={40} alt='img' className='w-20 h-20 rounded'  />
                           </div>
                         )
                       }
@@ -508,9 +524,9 @@ export default function Chat({type,msgsId}) {
                       const img = e.target.files[0];
                       if(img){
                         const imgUrl = URL.createObjectURL(img);
-                        setChatImgFile(img);
-                        setChatImgName(img.name);
-                        setChatImg(imgUrl);
+                        setchatFileFile(img);
+                        setchatFileName(img.name);
+                        setchatFile(imgUrl);
                       }
                     }} id='msgImg' type="file" hidden />
 
@@ -521,7 +537,7 @@ export default function Chat({type,msgsId}) {
                         type="button"
                         size="icon"
                         className="ml-2  bg-white text-accent border border-accent ">
-                        <ImageIcon className="h-5 w-5" />
+                        <MdAttachFile className="h-5 w-5" />
                         <span className="sr-only">Send image</span>
                       </Button>
                       <Input
