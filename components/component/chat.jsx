@@ -27,15 +27,9 @@ import Lightboxcomponent from '../ui/lightbox'
 
 
 export default function Chat({type,msgsId}) {
-  const slides = [
-   { src: "/ass/logo.png", alt: "Slide 1" },
-   { src: "/ass/logo.png", alt: "Slide 2" },
-   { src: "/ass/logo.png", alt: "Slide 3" },
-   { src: "/ass/logo.png", alt: "Slide 4" },
-   { src: "/ass/logo.png", alt: "Slide 5" },
-  ]
+  
   const [lopen,setLopen] = useState(false);
-
+  const handleCloseLightBox = () => setLopen(false)
 
   const [chatImg,setChatImg] = useState(null);
   const [chatImgName,setChatImgName] = useState(null);
@@ -163,7 +157,7 @@ export default function Chat({type,msgsId}) {
       
       scrollToBottom(); // Call scrollToBottom after setting messages
     }
-    msgsId ? fetchCurrentFrien() + fetchMessages() : null;
+    msgsId ? fetchCurrentFrien() + fetchMessages() : null ;
 
     async function realTimeFetchMessages() {
       const { data, error } = await supabase
@@ -462,8 +456,11 @@ export default function Chat({type,msgsId}) {
                               {
                                  message.chatImg != null && (
                                  <>
-                                  <Lightboxcomponent open={lopen} onClose={()=>setLopen(false)} src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}
-  /> 
+                                 {
+                                  lopen && (
+                                    <Lightboxcomponent src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`} close={handleCloseLightBox}  open={lopen}  />  
+                                  )
+                                 }
                                   <Image
                                   width={100} 
                                   height={100}
