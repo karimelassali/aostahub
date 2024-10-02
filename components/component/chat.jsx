@@ -464,6 +464,7 @@ export default function Chat({type,msgsId}) {
                                         small={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}   // Thumbnail image URL
                                         large={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatImg}`}   // Full-size image URL
                                         alt={`${message.message}`}
+                                        
                                     />  
                                   
                                  </>                                
