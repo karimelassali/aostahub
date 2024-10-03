@@ -24,6 +24,8 @@ import VideoCall from '@/components/video-call'
 import { MdOutlineVerified } from "react-icons/md";
 import ModalImage from 'react-modal-image';
 import { MdAttachFile } from "react-icons/md";
+import ShowModal from './showModal';
+
 
 
 
@@ -33,6 +35,7 @@ import { MdAttachFile } from "react-icons/md";
 export default function Chat({type,msgsId}) {
   
   const [lopen,setLopen] = useState(false);
+  const [file,setFile] = useState(' ');
 
   const [chatFile,setchatFile] = useState(null);
   const [chatFileName,setchatFileName] = useState(null);
@@ -239,10 +242,23 @@ export default function Chat({type,msgsId}) {
     },2000)
   },[])
 
-  
+  const handleClose = ()=>{
+    setLopen(false);
+  }
   return (
     (
     <div className="flex h-screen w-full transition-all  bg-[#fbfbfe] text-[#050315]">
+       <>
+       {
+        lopen && (
+          <>
+         
+        <ShowModal fileType={'img'} onClose={handleClose}  src={file}  />
+        </>
+        )
+       }
+       
+         </>
       {/* Potential Friends List */}
       <AnimatePresence>
         <motion.div
@@ -464,11 +480,12 @@ export default function Chat({type,msgsId}) {
                               {
                                  message.chatFile != null && imgsExtensions.some(ext =>  message.chatFile.endsWith(ext)) &&  (
                                  <>
-                                     <ModalImage
-                                        key={message.id}
-                                        small={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatFile}`}   // Thumbnail image URL
-                                        large={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatImages/${message.chatFile}`}   // Full-size image URL
+                                     <Image
+                                        width={200} 
+                                        height={200}
+                                        src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}   // Thumbnail image URL
                                         alt={`${message.mesage}`}
+                                        onClick={()=>{setLopen(true);setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`)}}
                                     />  
                                   
                                  </>                                
