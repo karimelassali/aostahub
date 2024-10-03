@@ -35,7 +35,7 @@ import ShowModal from './showModal';
 export default function Chat({type,msgsId}) {
   
   const [lopen,setLopen] = useState(false);
-  const [file,setFile] = useState(' ');
+  const [file,setFile] = useState('');
 
   const [chatFile,setchatFile] = useState(null);
   const [chatFileName,setchatFileName] = useState(null);
@@ -62,6 +62,8 @@ export default function Chat({type,msgsId}) {
   const currentUser = user?.fullName;
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
+  const [msgStatu,setMsgStatu] = useState(false);
+  const [modalType,setModalType] = useState('');
 
 
   const imgsExtensions = [
@@ -230,6 +232,7 @@ export default function Chat({type,msgsId}) {
       sA.play();
       scrollToBottom();
       setMessage("");
+      setMsgStatu(false)
     } else {
       setMessage("");
       toast.message("Message cannot be empty");
@@ -254,7 +257,7 @@ export default function Chat({type,msgsId}) {
         lopen && (
           <>
          
-        <ShowModal fileType={'img'} onClose={handleClose}  src={file}  />
+        <ShowModal fileType={modalType} onClose={handleClose}  src={file}  />
         </>
         )
        }
@@ -479,7 +482,7 @@ export default function Chat({type,msgsId}) {
                                         height={200}
                                         src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}   // Thumbnail image URL
                                         alt={`${message.mesage}`}
-                                        onClick={()=>{setLopen(true);setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`)}}
+                                        onClick={()=>{setLopen(true);setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`);setModalType('img')}}
                                     />  
                                   
                                  </>                                
@@ -489,6 +492,7 @@ export default function Chat({type,msgsId}) {
                                message.chatFile != null &&  message.chatFile.endsWith('.mp4') && (
                                  <>
                                      <video
+                                      onClick={()=>{setLopen(true);setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`);setModalType('video')}}
                                        className='object-cover w-full h-24  max-h-[250px] min-h-[200px]  rounded-md'
                                        controls
                                        src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}
@@ -511,7 +515,6 @@ export default function Chat({type,msgsId}) {
                           )} */}
                         </motion.div>
                       ))}
-                    
                     <div ref={messagesEndRef} />
                   </div>
 
@@ -519,6 +522,13 @@ export default function Chat({type,msgsId}) {
                   <form
                     onSubmit={(e)=>{e.preventDefault(),sendMessage()}} 
                     className="p-4 bg-[#fbfbfe] border-t border-[#dedcff]">
+                      {
+                        msgStatu && (
+                          <div className='w-full bg-red-500  p-2'  >
+                              Sending...
+                          </div>
+                        )
+                      }
                       {
                         chatFile && (
                           
