@@ -207,7 +207,7 @@ export default function Chat({type,msgsId}) {
       setchatFile(null)
       data ? toast.success('img uploaded succes') + setchatFile(null) : toast.error(error);
     }
-    if (message.length > 0 && currentUserId && currentFriend) {
+    if (message.length > 0 && currentUserId && currentFriend || chatFile ) {
       const { data, error } = await supabase.from("msgs").insert({
         msgSenderUid: currentUserId,
         message: message,
@@ -245,6 +245,7 @@ export default function Chat({type,msgsId}) {
   const handleClose = ()=>{
     setLopen(false);
   }
+  
   return (
     (
     <div className="flex h-screen w-full transition-all  bg-[#fbfbfe] text-[#050315]">
@@ -451,16 +452,8 @@ export default function Chat({type,msgsId}) {
                   <div
                     ref={chatContainerRef}
                     className="flex-1 overflow-y-auto p-4  ">
-                    {isLoading ? (
-                      Array(5).fill(0).map((_, index) => (
-                        <div
-                          key={index}
-                          className={`flex mb-4 ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
-                          <Skeleton className={`h-16 w-64 rounded-lg ${index % 2 === 0 ? 'mr-12' : 'ml-12'}`} />
-                        </div>
-                      ))
-                    ) : (
-                      messages.map((message) => (
+
+                      {messages.map((message) => (
                         <motion.div
                           key={message.id}
                           initial={{ opacity: 0, y: 20 }}
@@ -481,6 +474,7 @@ export default function Chat({type,msgsId}) {
                                  message.chatFile != null && imgsExtensions.some(ext =>  message.chatFile.endsWith(ext)) &&  (
                                  <>
                                      <Image
+                                        className='cursor-pointer  rounded max-h-[250px] min-h-[200px]  object-cover '
                                         width={200} 
                                         height={200}
                                         src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}   // Thumbnail image URL
@@ -495,7 +489,7 @@ export default function Chat({type,msgsId}) {
                                message.chatFile != null &&  message.chatFile.endsWith('.mp4') && (
                                  <>
                                      <video
-                                       className='object-cover w-full h-24 rounded-md'
+                                       className='object-cover w-full h-24  max-h-[250px] min-h-[200px]  rounded-md'
                                        controls
                                        src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}
                                      />  
@@ -516,8 +510,8 @@ export default function Chat({type,msgsId}) {
                             // </Avatar>
                           )} */}
                         </motion.div>
-                      ))
-                    )}
+                      ))}
+                    
                     <div ref={messagesEndRef} />
                   </div>
 
