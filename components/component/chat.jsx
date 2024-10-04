@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SendIcon, MenuIcon, MapPinIcon, UserPlusIcon, HeartIcon, XIcon, CoffeeIcon, MountainIcon, WineIcon, SearchIcon, Delete, BlocksIcon } from "lucide-react"
+import { SendIcon, MenuIcon, MapPinIcon, UserPlusIcon, HeartIcon, XIcon, CoffeeIcon, MountainIcon, WineIcon, SearchIcon, Delete, BlocksIcon, ArrowBigDown, ArrowBigLeftIcon } from "lucide-react"
 import  Image  from 'next/image'
 import { useUser } from "@clerk/nextjs";
 import { Toaster, toast } from "sonner";
@@ -67,6 +67,7 @@ export default function Chat({type,msgsId}) {
   const userProfile = user?.imageUrl;
   const currentUser = user?.fullName;
   const messagesEndRef = useRef(null);
+  const messagesStartRef = useRef(null);
   const chatContainerRef = useRef(null);
   const [msgStatu,setMsgStatu] = useState(false);
   const [modalType,setModalType] = useState('');
@@ -84,9 +85,16 @@ export default function Chat({type,msgsId}) {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
     }
+    
   }, [])
 
-
+  function firstMessage(){
+    const firstMessageDiv = document.getElementById('firstMessageDiv');
+    if (firstMessageDiv){
+      firstMessageDiv.scrollIntoView({behavior:'smooth'});
+    }
+    
+  }
 
   useEffect(() => {
     scrollToBottom()
@@ -422,21 +430,23 @@ export default function Chat({type,msgsId}) {
                         <MenuIcon className="h-6 w-6" />
                       </Button>
                       {currentFriend && (
-                        <Link className={'flex items-center justify-center p-2  cursor-pointer '}  href={`/profile/${currentFriend.uid}`} >
+                        <div className={'flex items-center justify-center p-2  cursor-pointer '}   >
                           <Avatar className="h-10 w-10">
                             <AvatarImage
+                            className={'cursor-pointer'}
+                            onClick={()=>{setLopen(true);setModalType('img');setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`)}}
                               src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`}
                               alt={currentFriend.fname} />
                             <AvatarFallback>{currentFriend.fname.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                           </Avatar>
-                          <div className="ml-4">
+                          <Link href={`/profile/${currentFriend.uid}`}  className="ml-4">
                             <h3 className="font-semibold flex items-center gap-x-2 ">{currentFriend.fname + ' ' +   currentFriend.lname}{ currentFriend.verified == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}</h3>
                             <div className="status grid grid-cols-2 max-sm:grid-cols-1 gap-1">
                               <p className="text-sm text-[#050315]  ">@{currentFriend.username}-</p>
                               <p className="text-sm text-[#050315]">now</p>
                             </div>
-                            </div>
-                        </Link >
+                            </Link>
+                        </div >
                       )}
                     </div>
                     <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-1 items-center ">
@@ -468,7 +478,7 @@ export default function Chat({type,msgsId}) {
                   <div
                     ref={chatContainerRef}
                     className="flex-1 overflow-y-auto p-4  ">
-
+                      <div id='firstMessageDiv'  ></div>
                       {messages.map((message) => (
                         <motion.div
                           key={message.id}
@@ -488,7 +498,6 @@ export default function Chat({type,msgsId}) {
                             className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${message.msgSenderUid === currentUserId ? 'bg-[#2f27ce] max-w-[80%]  text-[#fbfbfe] rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'  : 'bg-[#dedcff] max-w-[80%] text-text break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg '}`}>
                               {
                                  message.chatFile != null && imgsExtensions.some(ext =>  message.chatFile.endsWith(ext)) &&  (
-                                 <>
                                      <Image
                                         className='cursor-pointer  rounded max-h-[250px] min-h-[200px]  object-cover '
                                         width={200} 
@@ -497,21 +506,16 @@ export default function Chat({type,msgsId}) {
                                         alt={`${message.mesage}`}
                                         onClick={()=>{setLopen(true);setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`);setModalType('img')}}
                                     />  
-                                  
-                                 </>                                
                                  )
                               }
                               {
                                message.chatFile != null &&  message.chatFile.endsWith('.mp4') && (
-                                 <>
                                      <video
                                       onClick={()=>{setLopen(true);setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`);setModalType('video')}}
                                        className='object-cover w-full h-24  max-h-[250px] min-h-[200px]  rounded-md'
                                        controls
                                        src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}
                                      />  
-                                   </>                                
-  
                                )
                               }
                             <p>
@@ -533,8 +537,12 @@ export default function Chat({type,msgsId}) {
 
                   {/* Message Input */}
                   <form
-                    onSubmit={(e)=>{e.preventDefault(),sendMessage()}} 
+                    onSubmit={(e)=>{e.preventDefault();sendMessage()}} 
                     className="p-4 bg-[#fbfbfe] border-t border-[#dedcff]">
+                      <div className='flex w-full justify-between  items-center p-2 gap-2 text-accent ' >
+                        <ArrowBigDown  onClick={()=>{scrollToBottom()}}  className='w-5 h-5 border border-accent  rounded  cursor-pointer  ' size={50} />
+                        <ArrowBigLeftIcon onClick={()=>{firstMessage()}}  className='w-5 h-5 rotate-90 border border-accent  cursor-pointer  rounded  ' size={50}  />
+                      </div>
                       {
                         msgStatu && (
                           <div className='w-full bg-red-500  p-2'  >
@@ -553,7 +561,7 @@ export default function Chat({type,msgsId}) {
                       {/* <div className='w-full border border-red-400 p-2' >
                         <Image src={'/ass/logo.png'} width={40} height={40} alt='tst'  />
                       </div> */}
-                    <div className="flex gap-2 border-b border-accent p-2 rounded  items-center">
+                    <div className="flex gap-2 border-b border-accent p-1  rounded  items-center">
                     <input onChange={(e)=>{
                       const img = e.target.files[0];
                       if(img){
