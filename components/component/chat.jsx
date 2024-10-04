@@ -24,15 +24,7 @@ import VideoCall from '@/components/video-call'
 import { MdBlock, MdOutlineVerified } from "react-icons/md";
 import { MdAttachFile } from "react-icons/md";
 import ShowModal from './showModal';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 
 
 
@@ -57,7 +49,6 @@ export default function Chat({type,msgsId}) {
   const [friendFilter, setFriendFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [isVideoCall, setIsVideoCall] = useState(false);
-  const [chatUid, setChatUid] = useState('')
   const [me,setMe] = useState([]);
   const supabase = createClient();
   const [messages, setMessages] = useState([]);
@@ -67,7 +58,6 @@ export default function Chat({type,msgsId}) {
   const userProfile = user?.imageUrl;
   const currentUser = user?.fullName;
   const messagesEndRef = useRef(null);
-  const messagesStartRef = useRef(null);
   const chatContainerRef = useRef(null);
   const [msgStatu,setMsgStatu] = useState(false);
   const [modalType,setModalType] = useState('');
