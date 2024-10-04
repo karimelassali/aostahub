@@ -21,7 +21,7 @@ import { VideoIcon } from 'lucide-react'
 import { ImEyeBlocked } from "react-icons/im";
 import { useRouter } from 'next/navigation'
 import VideoCall from '@/components/video-call'
-import { MdOutlineVerified } from "react-icons/md";
+import { MdBlock, MdOutlineVerified } from "react-icons/md";
 import { MdAttachFile } from "react-icons/md";
 import ShowModal from './showModal';
 import {
@@ -156,14 +156,28 @@ export default function Chat({type,msgsId}) {
     fetchMyFriends();
     //fetch msg receiver 
     async function fetchCurrentFrien() {
-      const { data, error } = await supabase
-       .from("users")
-       .select()
-       .eq("uid",msgsId)
-       .single();
-      if (data) {
-        setCurrentFriend(data);
+      const {data:chckFriend,error:chckFriendError} = await supabase
+      .from('friends')
+      .select()
+      .or(`and(requester.eq.${msgsId},receiver.eq.${currentUserId}),and(requester.eq.${currentUserId},receiver.eq.${msgsId})`).order("id", { ascending: true }).single();
+      if(chckFriend){
+        const { data, error } = await supabase
+        .from("users")
+        .select()
+        .eq("uid",msgsId)
+        .single();
+       if (data) {
+         setCurrentFriend(data);
+       }
+       else{
+        router.push('/chat');
+       }
       }
+      else{
+        toast.error('plz select a firend');
+      }
+
+     
     }
     //end of fetchCurrentFriend
     async function fetchMessages() {
@@ -247,6 +261,14 @@ export default function Chat({type,msgsId}) {
     }
   }
 
+  async function blockFriend(uid,name){
+    const {data,error} = await supabase
+    .from('friends')
+    .delete()
+    .eq('receiver',currentUserId)
+    .eq('requester',uid)
+    data ? toast.success(`${name} Is not your friend `) : toast.error(error)
+  }
   useEffect(()=>{
       setIsLoading(false);
   },[])
@@ -257,18 +279,12 @@ export default function Chat({type,msgsId}) {
   
   return (
     (
-    <div className="flex h-screen w-full transition-all  bg-[#fbfbfe] text-[#050315]">
-       <>
+    <div className="flex h-screen w-full transition-all z-20  bg-[#fbfbfe] text-[#050315]">
        {
         lopen && (
-          <>
-         
-        <ShowModal fileType={modalType} onClose={handleClose}  src={file}  />
-        </>
+          <ShowModal fileType={modalType} onClose={handleClose}  src={file}  />
         )
        }
-       
-         </>
       {/* Potential Friends List */}
       <AnimatePresence>
         <motion.div
@@ -394,17 +410,6 @@ export default function Chat({type,msgsId}) {
         {
           currentFriend ? (
             <div className="flex-1 flex flex-col h-screen max-sm:w-full ">
-            {
-              isVideoCall && (
-                <div className='absolute left-0 top-0 w-full h-full border border-red-300 z-50 ' >
-                <Button onClick={()=>{setIsVideoCall(false)}}>
-                  Close Video Call
-                </Button>
-                <VideoCall />
-                </div>
-                
-              )
-            }
                   {/* Chat Header */}
                   <div
                     className="p-4 max-sm:p-1 border-b border-[#dedcff] bg-[#fbfbfe] flex justify-between items-center ">
@@ -438,10 +443,11 @@ export default function Chat({type,msgsId}) {
                           {
                             currentFriend && (
                               <Button
+                                onClick={()=>{blockFriend(currentFriend.uid,currentFriend.username)}}
                                 variant="outline"
                                 size="sm"
                                 className="border border-red-400 text-[#050315] text-sm line-clamp-1 w-full  flex hover:bg-red-400 hover:text-[#fbfbfe]">
-                                <ImEyeBlocked className="h-4 w-4 mr-2" />
+                                <MdBlock className="h-4 w-4 mr-2" />
                                 Block {currentFriend.username}
                               </Button>
                             )

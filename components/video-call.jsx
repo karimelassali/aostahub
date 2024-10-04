@@ -9,7 +9,7 @@ import { Mic, Video, Phone } from 'lucide-react'
 export default function VideoCall() {
   return (
     (<div
-      className="flex items-center justify-center min-w-screen min-h-screen bg-[#fbfbfe] text-[#050315]">
+      className="flex fixed top-0 left-0 z-50  items-center justify-center min-w-screen min-h-screen bg-[#fbfbfe] text-[#050315]">
       <Card className="w-full max-w-4xl p-6 shadow-lg rounded-2xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="relative aspect-video bg-[#dedcff] rounded-xl overflow-hidden">
