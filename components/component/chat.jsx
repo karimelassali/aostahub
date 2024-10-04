@@ -22,11 +22,17 @@ import { ImEyeBlocked } from "react-icons/im";
 import { useRouter } from 'next/navigation'
 import VideoCall from '@/components/video-call'
 import { MdOutlineVerified } from "react-icons/md";
-import ModalImage from 'react-modal-image';
 import { MdAttachFile } from "react-icons/md";
 import ShowModal from './showModal';
-
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 
 
@@ -64,6 +70,8 @@ export default function Chat({type,msgsId}) {
   const chatContainerRef = useRef(null);
   const [msgStatu,setMsgStatu] = useState(false);
   const [modalType,setModalType] = useState('');
+  
+
 
 
   const imgsExtensions = [
@@ -240,9 +248,7 @@ export default function Chat({type,msgsId}) {
   }
 
   useEffect(()=>{
-    setTimeout(()=>{
       setIsLoading(false);
-    },2000)
   },[])
 
   const handleClose = ()=>{
@@ -273,9 +279,9 @@ export default function Chat({type,msgsId}) {
           variants={menuVariants}
           className={`w-full sm:w-1/3 lg:w-1/4 xl:w-1/5 bg-[#fbfbfe] border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-50 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
           <div
-            className="p-4 border-b border-[#dedcff] flex justify-start   items-center bg-accent text-[#fbfbfe]">
-              <Avatar className="h-8 w-8 ml-2">
-                    <AvatarImage src={myFriends.userProfile} alt="You" />
+            className="p-4 border-b border-[#dedcff] flex justify-start gap-2   items-center bg-accent text-[#fbfbfe]">
+              <Avatar className="h-8 w-8 ">
+                    <AvatarImage src={userProfile} alt="You" />
                     <AvatarFallback>You</AvatarFallback>
               </Avatar>
 
@@ -411,7 +417,7 @@ export default function Chat({type,msgsId}) {
                         <MenuIcon className="h-6 w-6" />
                       </Button>
                       {currentFriend && (
-                        <>
+                        <Link className={'flex items-center justify-center p-2  cursor-pointer '}  href={`/profile/${currentFriend.uid}`} >
                           <Avatar className="h-10 w-10">
                             <AvatarImage
                               src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`}
@@ -421,25 +427,26 @@ export default function Chat({type,msgsId}) {
                           <div className="ml-4">
                             <h3 className="font-semibold flex items-center gap-x-2 ">{currentFriend.fname + ' ' +   currentFriend.lname}{ currentFriend.verified == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}</h3>
                             <div className="status grid grid-cols-2 max-sm:grid-cols-1 gap-1">
-                              <p className="text-sm text-[#050315]">@{currentFriend.username}-</p>
+                              <p className="text-sm text-[#050315]  ">@{currentFriend.username}-</p>
                               <p className="text-sm text-[#050315]">now</p>
                             </div>
                             </div>
-                        </>
+                        </Link >
                       )}
                     </div>
                     <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-1 items-center ">
-                      {
-                        currentFriend && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="border border-red-400 text-[#050315] text-sm line-clamp-1 flex hover:bg-red-400 hover:text-[#fbfbfe]">
-                            <ImEyeBlocked className="h-4 w-4 mr-2" />
-                            Block {currentFriend.username}
-                          </Button>
-                        )
-                      }
+                          {
+                            currentFriend && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="border border-red-400 text-[#050315] text-sm line-clamp-1 w-full  flex hover:bg-red-400 hover:text-[#fbfbfe]">
+                                <ImEyeBlocked className="h-4 w-4 mr-2" />
+                                Block {currentFriend.username}
+                              </Button>
+                            )
+                          }
+                     
                       <Button
                       onClick={()=>{setIsVideoCall(true)}}
                         variant="outline"
@@ -540,7 +547,7 @@ export default function Chat({type,msgsId}) {
                       {/* <div className='w-full border border-red-400 p-2' >
                         <Image src={'/ass/logo.png'} width={40} height={40} alt='tst'  />
                       </div> */}
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-2 border-b border-accent p-2 rounded  items-center">
                     <input onChange={(e)=>{
                       const img = e.target.files[0];
                       if(img){
@@ -557,7 +564,7 @@ export default function Chat({type,msgsId}) {
                         }}
                         type="button"
                         size="icon"
-                        className="ml-2  bg-white text-accent border border-accent ">
+                        className="ml-2  bg-white text-accent border border-accent hover:text-white ">
                         <MdAttachFile className="h-5 w-5" />
                         <span className="sr-only">Send image</span>
                       </Button>
@@ -566,7 +573,7 @@ export default function Chat({type,msgsId}) {
                         placeholder="Type a message..."
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        className="flex-1 border-b focus:outline-none border-accent" />
+                        className="flex-1 border-none text-md  focus:outline-none outline-none  " />
                       <Button
                         type="submit"
                         size="icon"
