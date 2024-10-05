@@ -98,7 +98,6 @@ export default function Chat({type,msgsId}) {
     return () => clearTimeout(timer);
   }, [scrollToBottom])
 
-  
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
@@ -142,7 +141,7 @@ export default function Chat({type,msgsId}) {
     fetchMe();
 
 
-    async function fetchMyFriends() {
+    async function fetchMyFriends() { 
       const { data, error } = await supabase
         .from("friends")
         .select()
@@ -157,7 +156,7 @@ export default function Chat({type,msgsId}) {
       const {data:chckFriend,error:chckFriendError} = await supabase
       .from('friends')
       .select()
-      .or(`and(requester.eq.${msgsId},receiver.eq.${currentUserId}),and(requester.eq.${currentUserId},receiver.eq.${msgsId})`).order("id", { ascending: true }).single();
+      .or(`and(requester.eq.${msgsId},receiver.eq.${currentUserId}),and(requester.eq.${currentUserId},receiver.eq.${msgsId})`).eq('status','accept').order("id", { ascending: true });
       if(chckFriend){
         const { data, error } = await supabase
         .from("users")
@@ -275,6 +274,10 @@ export default function Chat({type,msgsId}) {
     setLopen(false);
   }
   
+  const handleStopCall = ()=>{
+    setIsVideoCall(false);
+  }
+
   return (
     (
     <div className="flex h-screen w-full transition-all z-20  bg-[#fbfbfe] text-[#050315]">
@@ -285,7 +288,7 @@ export default function Chat({type,msgsId}) {
        }
        {
         isVideoCall && (
-          <VideoCall />
+          <VideoCall onCloseCall={handleStopCall}  />
         )
        }
       {/* Potential Friends List */}
@@ -296,14 +299,14 @@ export default function Chat({type,msgsId}) {
           transition={{delay:1}}
           exit="closed"
           variants={menuVariants}
-          className={`w-full sm:w-1/3 lg:w-1/4 xl:w-1/5 bg-[#fbfbfe] border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-50 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
+          style={isVideoCall && { display: "none" }}
+          className={`w-full sm:w-1/3   lg:w-1/4 xl:w-1/5 bg-[#fbfbfe] border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-50 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
           <div
             className="p-4 border-b border-[#dedcff] flex justify-start gap-2   items-center bg-accent text-[#fbfbfe]">
               <Avatar className="h-8 w-8 ">
                     <AvatarImage src={userProfile} alt="You" />
                     <AvatarFallback>You</AvatarFallback>
               </Avatar>
-
             <h2 className="text-xl flex items-center font-poppins font-semibold">{currentUser}  <span>{me.verified == 1 && <MdOutlineVerified size={30} style={{ color: '#0284c7' }} />}</span></h2>
             <Button
               variant="ghost"

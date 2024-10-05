@@ -6,5 +6,6 @@
     "Codegeex.Chat.LanguagePreference": "English",
     "Codegeex.Comment.LanguagePreference": "English",
     "Codegeex.CommitMessage.LanguagePreference": "English",
-    "Codegeex.CommitMessageStyle": "ConventionalCommits"
+    "Codegeex.CommitMessageStyle": "ConventionalCommits",
+    "Codegeex.RepoIndex": true
 }
