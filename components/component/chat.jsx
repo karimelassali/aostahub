@@ -284,7 +284,9 @@ export default function Chat({type,msgsId}) {
         )
        }
        {
-        isVideoCall 
+        isVideoCall && (
+          <VideoCall />
+        )
        }
       {/* Potential Friends List */}
       <AnimatePresence>
