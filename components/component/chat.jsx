@@ -283,6 +283,9 @@ export default function Chat({type,msgsId}) {
           <ShowModal fileType={modalType} onClose={handleClose}  src={file}  />
         )
        }
+       {
+        isVideoCall 
+       }
       {/* Potential Friends List */}
       <AnimatePresence>
         <motion.div

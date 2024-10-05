@@ -24,12 +24,12 @@ import {
   FaUtensils,
   FaLandmark,
   FaTree,
-  FaCalendar,
+  FaCalendar
 } from "react-icons/fa";
 
 export const metadata = {
   title: "Home",
-  description: "Welcome to Next.js",
+  description: "Welcome to Next.js"
 };
 
 const content = [
@@ -48,7 +48,7 @@ const content = [
           alt="ruins"
         />
       </div>
-    ),
+    )
   },
 
   {
@@ -66,7 +66,7 @@ const content = [
           alt="linear board demo"
         />
       </div>
-    ),
+    )
   },
   {
     title: "Connect and Chat Amidst Aosta's Natural Wonders",
@@ -83,8 +83,8 @@ const content = [
           alt="linear board demo"
         />
       </div>
-    ),
-  },
+    )
+  }
 ];
 
 //for infos comp
@@ -95,43 +95,43 @@ const infos = [
       "Discover hidden gems and breathtaking landscapes in the heart of the Alps.",
     name: "Aosta Valley Explorer",
     title: "Adventure Awaits",
-    icon: "compass", // or 'mountain'
+    icon: "compass" // or 'mountain'
   },
   {
     quote:
       "Share your stories, connect with locals, and experience the true spirit of Aosta.",
     name: "Aosta Storyteller",
     title: "Unforgettable Moments",
-    icon: "chat", // or 'users'
+    icon: "chat" // or 'users'
   },
   {
     quote:
       "Indulge in the rich flavors of Aosta's culinary heritage, from traditional dishes to innovative creations.",
     name: "Aosta Food Lover",
     title: "A Gastronomic Journey",
-    icon: "utensils", // or 'pizza'
+    icon: "utensils" // or 'pizza'
   },
   {
     quote:
       "Explore ancient castles, Roman ruins, and charming villages that whisper tales of the past.",
     name: "Aosta History Buff",
     title: "Timeless Wonders",
-    icon: "landmark", // or 'castle'
+    icon: "landmark" // or 'castle'
   },
   {
     quote:
       "Find serenity amidst stunning natural beauty, from snow-capped peaks to lush valleys.",
     name: "Aosta Nature Enthusiast",
     title: "Peaceful Escapes",
-    icon: "tree", // or 'leaf'
+    icon: "tree" // or 'leaf'
   },
   {
     quote:
       "Embrace the vibrant energy of Aosta's festivals and events, celebrating culture and community.",
     name: "Aosta Festivity Seeker",
     title: "Joyful Celebrations",
-    icon: "calendar", // or 'music'
-  },
+    icon: "calendar" // or 'music'
+  }
 ];
 
 //for focus images annimation
@@ -140,18 +140,18 @@ const focusImages = [
   {
     title: "Parco del gran paradiso",
     src: "/ass/parcopa.jpg",
-    alt: "parcopa",
+    alt: "parcopa"
   },
   {
     title: "Architecture",
     src: "/ass/aostaarch.jpg",
-    alt: "arch",
+    alt: "arch"
   },
   {
     title: "Aosta Chruch",
     src: "/ass/aostacath.jpg",
-    alt: "chruch",
-  },
+    alt: "chruch"
+  }
 ];
 // for uinue vsit aosta words
 const aostaWords = ["storica", "panoramica", "affascinante", "avventurosa"];
@@ -168,14 +168,14 @@ export default function Landing() {
       <motion.div
         initial={{
           opacity: 0,
-          y: -50,
+          y: -50
         }}
         animate={{
           opacity: 1,
-          y: 0,
+          y: 0
         }}
         transition={{
-          delay: 0.5,
+          delay: 0.5
         }}
         className="flex flex-col min-h-[100dvh] bg-[#f5f5f5] text-[#333]"
       >
@@ -193,19 +193,18 @@ export default function Landing() {
               <motion.div
                 initial={{
                   opacity: 0,
-                  x: -50,
+                  x: -50
                 }}
                 animate={{
                   opacity: 1,
-                  x: 0,
+                  x: 0
                 }}
                 transition={{
                   duration: 0.3,
                   delay: 0.9,
-                  ease: "easeIn",
+                  ease: "easeIn"
                 }}
               >
-
                 <h2 className="text-3xl  shrink-0 md:text-4xl font-poppins mb-4">
                   {language === "en"
                     ? "Connect and Share with "
@@ -216,19 +215,19 @@ export default function Landing() {
                   >
                     AostaHub
                   </span> */}
-                  <SparklesText className="text-md" text={'AOSTAHUB'} />
+                  <SparklesText className="text-md" text={"AOSTAHUB"} />
                 </h2>
                 <motion.p
                   initial={{
-                    opacity: 0,
+                    opacity: 0
                   }}
                   animate={{
-                    opacity: 1,
+                    opacity: 1
                   }}
                   transition={{
                     duration: 1.1,
                     delay: 1.2,
-                    ease: "easeIn",
+                    ease: "easeIn"
                   }}
                   className="text-xl text-text font-poppins "
                 >
@@ -249,28 +248,28 @@ export default function Landing() {
                 <motion.div
                   initial={{
                     opacity: 0,
-                    y: 50,
+                    y: 50
                   }}
                   animate={{
                     opacity: 1,
-                    y: 0,
+                    y: 0
                   }}
                   transition={{
                     duration: 0.3,
                     delay: 1.2,
-                    ease: "easeIn",
+                    ease: "easeIn"
                   }}
                   className="flex gap-4"
                 >
                   <CoolMode>
-                  <Button
-                    style={{ borderRadius: "4px" }}
-                    containerClassName="rounded-full"
-                    as="button"
-                    className="p-3 font-open  rounded-md bg-secondary w-max md:w-40 text-text text-lg hover:text-white"
-                  >
-                    <Link href={"/explore"}>Sign up </Link>
-                  </Button>
+                    <Button
+                      style={{ borderRadius: "4px" }}
+                      containerClassName="rounded-full"
+                      as="button"
+                      className="p-3 font-open  rounded-md bg-secondary w-max md:w-40 text-text text-lg hover:text-white"
+                    >
+                      <Link href={"/explore"}>Sign up </Link>
+                    </Button>
                   </CoolMode>
                   <CoolMode>
                     <Button
@@ -283,21 +282,20 @@ export default function Landing() {
                       <Link href={"/explore"}>Explore </Link>
                     </Button>
                   </CoolMode>
-                  
                 </motion.div>
               </motion.div>
               <div>
                 <motion.img
                   initial={{
                     opacity: 0,
-                    x: 50,
+                    x: 50
                   }}
                   animate={{
                     opacity: 1,
-                    x: 0,
+                    x: 0
                   }}
                   transition={{
-                    delay: 1.4,
+                    delay: 1.4
                   }}
                   src="/ass/aosta.jpg"
                   width="550"
@@ -307,7 +305,7 @@ export default function Landing() {
                   style={{
                     aspectRatio: "550/400",
                     objectFit: "cover",
-                    borderRadius: "6px",
+                    borderRadius: "6px"
                   }}
                 />
               </div>
@@ -327,7 +325,10 @@ export default function Landing() {
             Di Aosta
           </div>
         </div>
-        <FocusCards style={{ borderRadius: "9px",paddinf:'1rem' }} cards={focusImages} />
+        <FocusCards
+          style={{ borderRadius: "9px", paddinf: "1rem" }}
+          cards={focusImages}
+        />
         {/* <section className=" text-white py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
@@ -389,12 +390,14 @@ export default function Landing() {
         <h1 className="text-center font-poppins font-bold mt-9 text-3xl ">
           Perche <span className="text-accent">Aosta Hub</span> ?
         </h1>
-        <StickyScroll contentClassName={'font-poppins'} content={content} />
+        <StickyScroll contentClassName={"font-poppins"} content={content} />
+        <br />
+        <br />
         <br />
         <br />
         <InfiniteMovingCards
           style={{
-            marginTop: "1.4rem",
+            marginTop: "1.4rem"
           }}
           items={infos}
           direction="right"
@@ -451,8 +454,7 @@ export default function Landing() {
         <section className="py-12 md:py-20">
           <div className="container mx-auto px-4 md:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <div>
-              </div>
+              <div></div>
               {language === "en"
                 ? `Join AostaHub Today`
                 : "Unisciti ad AostaHub oggi"}
