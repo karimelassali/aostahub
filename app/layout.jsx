@@ -16,27 +16,44 @@ import { IoChatboxOutline } from "react-icons/io5";
 export const metadata = {
   title: "Welcome to Aosta Hub",
   description:
-    "Discover Aosta Hub, a unique hub where people come together to share their stories",
+    "Discover Aosta Hub, a vibrant community platform where locals and visitors share their stories and experiences about the beautiful Valle di Aosta region.",
   keywords:
-    "Aosta Hub, Story Sharing, Community, Valle di Aosta, amici, storytelling, social platform, local community",
+    "Aosta Hub, Story Sharing, Community, Valle di Aosta, local stories, storytelling, social platform, local community, travel, culture, adventure",
   icons: {
     icon: "/ass/logo.png",
   },
   openGraph: {
     title: "Welcome to Aosta Hub",
     description:
-      "Discover Aosta Hub, a unique hub where people come together to share their stories",
+      "Discover Aosta Hub, a vibrant community platform where locals and visitors share their stories and experiences about the beautiful Valle di Aosta region.",
     url: "https://aostahub.vercel.app",
     images: {
       url: "/ass/logo.png",
       width: 800,
       height: 600,
     },
+    site_name: "Aosta Hub",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Welcome to Aosta Hub",
+    description:
+      "Discover Aosta Hub, a vibrant community platform where locals and visitors share their stories and experiences about the beautiful Valle di Aosta region.",
+    images: {
+      url: "/ass/logo.png",
+      width: 800,
+      height: 600,
+    },
+    site: "@aostahub",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: true,
+    googlebot: "index,follow",
   },
   googleSiteVerification: "TFC9KKJST9sPJHv4r0wz0xnmUb09ZFJFC8crGzgUSnk",
 };
-
-
 
 export default function RootLayout({ children }) {
   return (
@@ -53,27 +70,28 @@ export default function RootLayout({ children }) {
           />
         </head>
         <body className="bg-background">
-            {children }
-          <footer className="flex justify-center  w-full rounded-md  ">
-            {/* <div className="w-full max-w-4xl p-4 rounded-lg flex justify-center gap-8 rounded-sm" style={{ backdropFilter: 'blur(30px)' }}>
-                <Link
-              
-                href={'/create'} className="flex items-center justify-center p-3 rounded-lg text-white font-semibold transition-colors duration-300 transform hover:bg-purple-600 hover:scale-105 hover:cursor-pointer" style={{ backgroundColor: '#38bdf8' }}>
-                  <IoCreateOutline size={24} />
-                  <span className="ml-2">Create</span>
-                </Link>
-                <Link
-                href={'/profile'} className="flex items-center justify-center p-3 rounded-lg text-white font-semibold transition-colors duration-300 transform hover:bg-purple-600 hover:scale-105 hover:cursor-pointer" style={{ backgroundColor: '#38bdf8' }}>
-                  <IoChatboxOutline size={24} />
-                  <span className="ml-2">Profile</span>
-                </Link>
-              </div> */}
-            {/* <div className="p-2 w-full flex   justify-center  rounded-lg sm:justify-end" style={{backdropFilter:'blur(20px)',borderRadius:'5px'}}> */}
-            
-            {/* </div> */}
+          {children}
+          <footer className="flex justify-center w-full rounded-md">
+            <div className="w-full max-w-4xl p-4 rounded-lg flex justify-center gap-8 rounded-sm" style={{ backdropFilter: 'blur(30px)' }}>
+              <Link
+                href={'/create'}
+                className="flex items-center justify-center p-3 rounded-lg text-white font-semibold transition-colors duration-300 transform hover:bg-purple-600 hover:scale-105 hover:cursor-pointer"
+                style={{ backgroundColor: '#38bdf8' }}
+              >
+                <IoCreateOutline size={24} />
+                <span className="ml-2">Create</span>
+              </Link>
+              <Link
+                href={'/profile'}
+                className="flex items-center justify-center p-3 rounded-lg text-white font-semibold transition-colors duration-300 transform hover:bg-purple-600 hover:scale-105 hover:cursor-pointer"
+                style={{ backgroundColor: '#38bdf8' }}
+              >
+                <IoChatboxOutline size={24} />
+                <span className="ml-2">Profile</span>
+              </Link>
+            </div>
           </footer>
         </body>
-        {/* <script async src="https://automatic.chat/embed.js" id="cm1nplcpf007ggfpj4hgrt0sr" ></script> */}
       </html>
     </ClerkProvider>
   );
