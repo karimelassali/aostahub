@@ -42,8 +42,7 @@ export default function Chat({type,msgsId}) {
   const router = useRouter();
   const pType = type ;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [myFriends, setMyFriends] = useState([]);
+    const [myFriends, setMyFriends] = useState([]);
   const [currentFriend, setCurrentFriend] = useState(null);
   const [showSuggestion, setShowSuggestion] = useState(true);
   const [friendFilter, setFriendFilter] = useState("all");
@@ -61,6 +60,7 @@ export default function Chat({type,msgsId}) {
   const chatContainerRef = useRef(null);
   const [msgStatu,setMsgStatu] = useState(false);
   const [modalType,setModalType] = useState('');
+  const [userSearch,setUserSearch] = useState('');
   
 
 
@@ -88,7 +88,7 @@ export default function Chat({type,msgsId}) {
 
   useEffect(() => {
     scrollToBottom()
-  }, [messages, isLoading, scrollToBottom])
+  }, [messages,, scrollToBottom])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -132,7 +132,15 @@ export default function Chat({type,msgsId}) {
       }
     }
   }
-  //--------------
+   //search function 
+   async function search(){
+    const {data,error} = await supabase
+    .from('friends')
+    .select('*')
+    .textSearch('userName',userSearch)
+  }
+    //--------------
+
   useEffect(() => {
     async function fetchMe(){
       const {data,error} = await supabase.from('users').select().eq('uid',currentUserId);
@@ -140,12 +148,12 @@ export default function Chat({type,msgsId}) {
     }
     fetchMe();
 
-
+   
     async function fetchMyFriends() { 
       const { data, error } = await supabase
         .from("friends")
         .select()
-        .eq('requester',currentUserId)
+        .or(`requester.eq.${currentUserId},receiver.eq.${currentUserId}`)
         .eq('status','accept')
         .order("id", { ascending: false });
       data ? setMyFriends(data) : toast.message("No friends .");
@@ -266,9 +274,7 @@ export default function Chat({type,msgsId}) {
     .eq('requester',uid)
     data ? toast.success(`${name} Is not your friend `) : toast.error(error)
   }
-  useEffect(()=>{
-      setIsLoading(false);
-  },[])
+
 
   const handleClose = ()=>{
     setLopen(false);
@@ -296,10 +302,8 @@ export default function Chat({type,msgsId}) {
         <motion.div
           initial={false}
           animate={{ x: 0, opacity: 1  }}
-          transition={{delay:1}}
           exit="closed"
           variants={menuVariants}
-          style={isVideoCall && { display: "none" }}
           className={`w-full sm:w-1/3   lg:w-1/4 xl:w-1/5 bg-[#fbfbfe] border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-50 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
           <div
             className="p-4 border-b border-[#dedcff] flex justify-start gap-2   items-center bg-accent text-[#fbfbfe]">
@@ -321,10 +325,12 @@ export default function Chat({type,msgsId}) {
               <SearchIcon
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#050315]" />
               <Input
+                onChange={(e)=>{
+                  setUserSearch(e.target.value);
+                  search();
+                }}
                 type="text"
                 placeholder="Search friends..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 border-[#dedcff] text-[#050315]" />
             </div>
             <Tabs defaultValue="all" onValueChange={setFriendFilter}>
@@ -342,13 +348,7 @@ export default function Chat({type,msgsId}) {
             </Tabs>
           </div>
           <ScrollArea className="h-[calc(100vh-13rem)]">
-            {isLoading ? (
-              Array(4).fill(0).map((_, index) => (
-                <div key={index} className="p-4">
-                  <Skeleton className="h-24 w-full rounded-lg" />
-                </div>
-              ))
-            ) : (
+            {
               filteredFriends.map((friend) => (
                 <Link
                   href={`/chat/${friend.frienduid}`}
@@ -395,7 +395,7 @@ export default function Chat({type,msgsId}) {
                     </div>
                   </Card>
                 </Link>
-              ))
+              )
             )}
           </ScrollArea>
         </motion.div>
@@ -532,7 +532,6 @@ export default function Chat({type,msgsId}) {
                       ))}
                     <div ref={messagesEndRef} />
                   </div>
-
                   {/* Message Input */}
                   <form
                     onSubmit={(e)=>{e.preventDefault();sendMessage()}} 
@@ -617,7 +616,7 @@ export default function Chat({type,msgsId}) {
       
       {/* Friend Suggestion Overlay */}
       <AnimatePresence>
-        {!isLoading && showSuggestion && (
+        {showSuggestion && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
