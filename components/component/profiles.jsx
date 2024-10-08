@@ -171,7 +171,7 @@ async function like(liker, receiver) {
                   <HeartIcon className="w-6 h-6" />
                   <span className="sr-only">Like</span>
                 </button>
-                <Link href={`profile/${user.uid}`}  variant="ghost" size="icon" className="text-white hover:text-green-300cursor-pointer">
+                <Link href={`profile/${user.id}`}  variant="ghost" size="icon" className="text-white hover:text-green-300cursor-pointer">
                   <PersonStandingIcon className="w-6 h-6" />
                   <span className="sr-only">Profile</span>
                 </Link>
