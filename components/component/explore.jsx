@@ -88,7 +88,7 @@ export default function Explore() {
         <div className="cards">
           <Profiles />
         </div>    
-        <aside className='w-[30%] h-full border  p-1  border-red-300 max-md:hidden '  >
+        <aside className='w-[30%] h-full  p-1  0 max-md:hidden '  >
           <h1 className='flex gap-x-3     font-poppins  items-center justify-center text-2xl font-bold p-2 border-b border-gray-300  ' >Top Users  <Star className='h-5 w-5 animate-change   '  />  </h1>
           <TopUsers   />
          </aside>    
