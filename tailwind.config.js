@@ -31,7 +31,10 @@ module.exports = {
   			scroll: 'scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite',
   			skeleton: 'skeleton 1.5s ease-in-out infinite',
   			pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate',
-  			grid: 'grid 15s linear infinite'
+  			grid: 'grid 15s linear infinite',
+			change: 'change 3s ease-in-out infinite alternate ' // 3 seconds, smooth animation, infinite loop
+
+
   		},
   		backgroundSize: {
   			skeleton: '200% 100%'
@@ -68,7 +71,11 @@ module.exports = {
   				'100%': {
   					transform: 'translateY(0)'
   				}
-  			}
+  			},
+			change: {
+					'0%': { color: '#433bff' },  // Blue color (#1D4ED8)
+					'100%': { color: '#FFD700' }  // Gold color (#FFD700)
+					}
   		}
   	},
   	keyframes: {

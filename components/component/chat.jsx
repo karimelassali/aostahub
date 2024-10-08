@@ -563,7 +563,7 @@ export default function Chat({type,msgsId}) {
                       const img = e.target.files[0];
                       if(img){
                         const imgUrl = URL.createObjectURL(img);
-                        setchatFileFile(img);
+                        setchatFileFile(img); 
                         setchatFileName(img.name);
                         setchatFile(imgUrl);
                       }

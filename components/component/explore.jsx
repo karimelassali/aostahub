@@ -1,6 +1,6 @@
 'use client'
 import { Input } from "@/components/ui/input"
-import { Cards } from "@/components/component/cards";
+import Profiles from "@/components/component/profiles";
 import Link from "next/link"
 import Image from "next/image";
 import { useState,useEffect } from "react";
@@ -12,7 +12,9 @@ import { IoCreateOutline } from "react-icons/io5";
 import {motion} from 'framer-motion'
 import { Suspense } from 'react';
 import  CardSkeleton from "@/components/ui/cardSkeleton";
-
+import { Star } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import TopUsers from "./topUsers";
 
 
 
@@ -82,7 +84,16 @@ export default function Explore() {
           ))}
         </div>
       }>
-        <Cards />
+      <div className='flex justify-center w-full h-full'  >
+        <div className="cards">
+          <Profiles />
+        </div>    
+        <aside className='w-[30%] h-full border  p-1  border-red-300 max-md:hidden '  >
+          <h1 className='flex gap-x-3     font-poppins  items-center justify-center text-2xl font-bold p-2 border-b border-gray-300  ' >Top Users  <Star className='h-5 w-5 animate-change   '  />  </h1>
+          <TopUsers   />
+         </aside>    
+      </div>
+
       </Suspense>
 
 

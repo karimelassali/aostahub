@@ -3,39 +3,16 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-  import { createClient } from "@/utils/supabase/client";
-import { useState, useEffect } from "react";
-import { MdOutlineVerified } from "react-icons/md";
-import {motion} from 'framer-motion'
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/modalProfile"
-import { Suspense } from 'react';
 
-import { useUser } from "@clerk/nextjs";
+
+import {motion} from 'framer-motion'
+
+
 
 
 
 export function Cards() {
-  const router = useRouter();
-
-  const supabase = createClient();
-  const [loading, setLoading] = useState(false);
-
-  const [users,setUsers] = useState([]);
-
-  const { user } = useUser();
-  const currentUserId = user?.id;
+ 
 
   let [isOpen, setIsOpen] = useState(true)
 
@@ -56,35 +33,6 @@ export function Cards() {
       }
   }
 
-  useEffect(()=>{
-    async function fetchUsers(){
-      setLoading(true);
-      const {data,error} = await supabase.from('users').select('*').order('id',{ascending:false});
-      
-      if(data){
-          setUsers(data) 
-          setLoading(false);
-      }
-      else{
-        setLoading(false);
-        toast.error('No users found.');
-      }
-    }
-    fetchUsers();
-
-    async function realTimeFetchAnounces(){
-      const {data,error} = await supabase.channel('annListen').on('postgres_changes',{event:'*',schema:'public',table:'users'},(payload)=>{
-        const newCh = new Audio('/ass/ann.mp3');
-        newCh.play();
-        fetchUsers();
-      })
-      .subscribe();
-      return () => {
-        supabase.removeChannel(subscription); // Unsubscribe when the component unmounts
-      };
-    }
-    realTimeFetchAnounces();
-},[])
 
 
 return (
