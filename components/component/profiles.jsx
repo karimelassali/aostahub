@@ -21,7 +21,8 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react";
 import { MdOutlineVerified } from "react-icons/md";
-
+import { PersonStandingIcon } from "lucide-react"
+import { toast, Toaster } from 'sonner';
 
 export default  function Profiles() {
   const router = useRouter();
@@ -34,7 +35,20 @@ export default  function Profiles() {
   const { user } = useUser();
   const currentUserId = user?.id;
 
-  
+async function like(liker, receiver) {
+  const { data, error } = await supabase.from('likes').insert({
+    liker: liker,
+    receiver: receiver
+  });
+
+  if (error) {
+    toast.error('Something went wrong.');
+  } else {
+    toast.success('You liked this user.');
+  }
+}
+
+
   useEffect(()=>{
     async function fetchUsers(){
       setLoading(true);
@@ -66,7 +80,7 @@ export default  function Profiles() {
 },[])
   return (
     (<div className="w-full max-w-[800px] mx-auto">
-    
+      <Toaster richColors />
       <Carousel className="rounded-lg overflow-hidden" useArrowKeys={true}>
         <CarouselContent>
         {
@@ -74,11 +88,11 @@ export default  function Profiles() {
           <CarouselItem key={user.id} >
           <div className="relative h-auto md:h-[500px] lg:h-[600px]">
             <img
-              src="/placeholder.svg"
+              src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`}
               alt="Slide 1"
               width={800}
               height={600}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover bg-gradient-to-b from-black via-black to-transparent "
               style={{ aspectRatio: "800/600", objectFit: "cover" }} />
             <div
               className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
@@ -87,41 +101,60 @@ export default  function Profiles() {
               <div className="flex flex-col md:flex-row items-center justify-between">
                 <div className="flex items-center gap-4">
                   <Avatar className="w-12 h-12 md:w-16 md:h-16">
-                    <AvatarImage src="/placeholder-user.jpg" alt="User 1" />
-                    <AvatarFallback>JD</AvatarFallback>
+                  {
+                    user.permission == "true" ? (
+                      <Image width={100} height={100} src={user.profilePic} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />
+
+                    ):
+                    (
+                      <Image width={100} height={100} src={'/ass/logo.png'} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />
+
+                    )
+                  }                       
+                  <AvatarFallback>JD</AvatarFallback>
                   </Avatar>
                   <div>
-                    <h3 className="text-lg font-semibold text-white">{user.fname  +  user.lname}</h3>
+                    <h3 className="text-lg font-semibold flex justify-center items-center p-2 gap-x-2  text-white">{user.fname  +  user.lname} {user.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
+                    </h3>
                     <p className="text-sm text-gray-300">Cover, {user.age}</p>
                     <p className="text-sm text-gray-300 line-clamp-2 md:line-clamp-none">
                      {user.description}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 mt-4 md:mt-0">
-                  <Link href="#" className="text-white hover:text-gray-300" prefetch={false}>
-                    <InstagramIcon className="w-6 h-6" />
-                  </Link>
-                  <Link href="#" className="text-white hover:text-gray-300" prefetch={false}>
-                    <FacebookIcon className="w-6 h-6" />
-                  </Link>
-                  <Link href="#" className="text-white hover:text-gray-300" prefetch={false}>
-                    <PhoneIcon className="w-6 h-6" />
-                  </Link>
+                <div className="flex items-center space-x-3 rounded-sm p-1" style={{ backdropFilter: 'blur(30px)', border: '0.2px solid #e2e8f0',borderRadius:'4px' }}>
+                  {user.instagram && (
+                    <Link href={"https://www.instagram.com/"+user.instagram} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
+                      <InstagramIcon className="w-5 h-5" style={{ color: '#c026d3' }} />
+                    </Link>
+                  )}
+                  {user.facebook && (
+                    <Link href={"https://www.facebook.com/"+user.facebook} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
+                      <FacebookIcon className="w-5 h-5" style={{ color: '#06b6d4' }} />
+                    </Link>
+                  )}
+                  {user.number && (
+                    <Link href={"tel:"+user.number} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
+                      <PhoneIcon className="w-5 h-5" style={{ color: '#4ade80' }} />
+                    </Link>
+                  )}
                 </div>
               </div>
               <div className="flex justify-between items-center mt-4">
-                <Button variant="ghost" size="icon" className="text-white hover:text-gray-300">
+                <button  className='text-white hover:text-red-400'  onClick={() => like(currentUserId,user.uid) }>
                   <HeartIcon className="w-6 h-6" />
                   <span className="sr-only">Like</span>
-                </Button>
+                </button>
+                <Link href={`profile/${user.uid}`}  variant="ghost" size="icon" className="text-white hover:text-green-300">
+                  <PersonStandingIcon className="w-6 h-6" />
+                  <span className="sr-only">Profile</span>
+                </Link>
               </div>
             </div>
           </div>
         </CarouselItem>
         ))
       }
-         
         </CarouselContent>
         <div className="flex justify-between items-center mt-4 px-4 sm:px-0">
           <CarouselPrevious className="text-white hover:text-gray-300">

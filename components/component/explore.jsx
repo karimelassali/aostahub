@@ -84,8 +84,8 @@ export default function Explore() {
           ))}
         </div>
       }>
-      <div className='flex justify-center w-full h-full'  >
-        <div className="cards">
+      <div className='flex justify-center p-3  w-full h-full'  >
+        <div className="profiles p-1">
           <Profiles />
         </div>    
         <aside className='w-[30%] h-full  p-1  0 max-md:hidden '  >
