@@ -42,7 +42,7 @@ export default function Chat({type,msgsId}) {
   const router = useRouter();
   const pType = type ;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [myFriends, setMyFriends] = useState([]);
+  const [myFriends, setMyFriends] = useState([]);
   const [currentFriend, setCurrentFriend] = useState(null);
   const [showSuggestion, setShowSuggestion] = useState(true);
   const [friendFilter, setFriendFilter] = useState("all");

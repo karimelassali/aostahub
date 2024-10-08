@@ -67,7 +67,13 @@ export default function Explore() {
     }
   }
 }
-
+useEffect(() => {
+  const scrollToBottom = ()=>{
+    const bottomDiv = document.getElementById('bottom');
+    bottomDiv?.scrollIntoView({ behavior: 'smooth' });
+  }
+  scrollToBottom();
+},[])
   //end search fuunc
 
   /////
@@ -84,19 +90,18 @@ export default function Explore() {
           ))}
         </div>
       }>
-      <div className='flex justify-center p-3  w-full h-full'  >
-        <div className="profiles p-1">
+      <div className='flex fixed  justify-center p-5 border border-red-300  w-full h-full'  >
+        <div className="profiles h-full w-full  ">
           <Profiles />
         </div>    
         <aside className='w-[30%] h-full  p-1  0 max-md:hidden '  >
-          <h1 className='flex gap-x-3     font-poppins  items-center justify-center text-2xl font-bold p-2 border-b border-gray-300  ' >Top Users  <Star className='h-5 w-5 animate-change   '  />  </h1>
+          <h1 className='flex gap-x-3 font-poppins  items-center justify-center text-2xl font-bold p-2 border-b border-gray-300  ' >Top Users  <Star className='h-5 w-5 animate-change   '  />  </h1>
           <TopUsers   />
-         </aside>    
+         </aside> 
+         <div id="bottom"></div>    
       </div>
 
       </Suspense>
-
-
       {/* <footer className="flex justify-center p-4 w-full bg-gray-900 fixed bottom-0 " style={{}}>
          <FloatingDock  items={links} />
         </footer> */}

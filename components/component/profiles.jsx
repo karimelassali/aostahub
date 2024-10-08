@@ -24,11 +24,16 @@ import { MdOutlineVerified } from "react-icons/md";
 import { PersonStandingIcon } from "lucide-react"
 import { toast, Toaster } from 'sonner';
 
+
 export default  function Profiles() {
   const router = useRouter();
 
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [lopen,setLopen] = useState(false);
+  const [file,setFile] = useState('');
 
   const [users,setUsers] = useState([]);
 
@@ -36,17 +41,28 @@ export default  function Profiles() {
   const currentUserId = user?.id;
 
 async function like(liker, receiver) {
-  const { data, error } = await supabase.from('likes').insert({
+  if (liker === receiver) {
+    toast.error('You cannot like yourself.');
+    return;
+  }
+  const { data, error } = await supabase.from('likes').select('*').eq('liker', liker).eq('receiver', receiver);
+  if (data.length > 0) {
+    toast.error('You have already liked this user.');
+    return;
+  }else{
+    const { data, error } = await supabase.from('likes').insert({
     liker: liker,
     receiver: receiver
   });
-
-  if (error) {
-    toast.error('Something went wrong.');
-  } else {
-    toast.success('You liked this user.');
+    const aud = new Audio('/ass/like.wav')
+    if (error) {
+      toast.error('Something went wrong.');
+    } else {
+      aud.play();
+      toast.success('You liked this user.');
+    }
+    }
   }
-}
 
 
   useEffect(()=>{
@@ -78,15 +94,26 @@ async function like(liker, receiver) {
     }
     realTimeFetchAnounces();
 },[])
+
+  // Function to go to the previous slide
+  const goToPrevious = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + users.length) % users.length);
+  };
+
+  // Function to go to the next slide
+  const goToNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % users.length);
+  };
+
   return (
-    (<div className="w-full max-w-[800px] mx-auto">
+    (<div className="w-full max-w-[800px]  mx-auto">
       <Toaster richColors />
-      <Carousel className="rounded-lg overflow-hidden" useArrowKeys={true}>
+      <Carousel className={`rounded-lg overflow-hidden `} useArrowKeys={true}>
         <CarouselContent>
         {
-        users.map((user) => (
-          <CarouselItem key={user.id} >
-          <div className="relative h-auto md:h-[500px] lg:h-[600px]">
+        users.map((user,index) => (
+          <CarouselItem className={`${index == currentIndex ? 'block' : 'hidden'}}`}  key={user.id} >
+          <div className="relative h-auto min-h-[60%] lg:h-[600px]">
             <img
               src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`}
               alt="Slide 1"
@@ -104,14 +131,13 @@ async function like(liker, receiver) {
                   {
                     user.permission == "true" ? (
                       <Image width={100} height={100} src={user.profilePic} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />
-
-                    ):
+                    )
+                    :
                     (
                       <Image width={100} height={100} src={'/ass/logo.png'} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />
-
                     )
                   }                       
-                  <AvatarFallback>JD</AvatarFallback>
+                  <AvatarFallback>cover image</AvatarFallback>
                   </Avatar>
                   <div>
                     <h3 className="text-lg font-semibold flex justify-center items-center p-2 gap-x-2  text-white">{user.fname  +  user.lname} {user.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
@@ -141,11 +167,11 @@ async function like(liker, receiver) {
                 </div>
               </div>
               <div className="flex justify-between items-center mt-4">
-                <button  className='text-white hover:text-red-400'  onClick={() => like(currentUserId,user.uid) }>
+                <button  className='text-white hover:text-red-400 cursor-pointer'  onClick={() => like(currentUserId,user.uid) }>
                   <HeartIcon className="w-6 h-6" />
                   <span className="sr-only">Like</span>
                 </button>
-                <Link href={`profile/${user.uid}`}  variant="ghost" size="icon" className="text-white hover:text-green-300">
+                <Link href={`profile/${user.uid}`}  variant="ghost" size="icon" className="text-white hover:text-green-300cursor-pointer">
                   <PersonStandingIcon className="w-6 h-6" />
                   <span className="sr-only">Profile</span>
                 </Link>
@@ -157,14 +183,14 @@ async function like(liker, receiver) {
       }
         </CarouselContent>
         <div className="flex justify-between items-center mt-4 px-4 sm:px-0">
-          <CarouselPrevious className="text-white hover:text-gray-300">
+          <button className="text-white hover:text-gray-300" onClick={goToPrevious}>
             <ChevronLeftIcon className="w-8 h-8" />
             <span className="sr-only">Previous</span>
-          </CarouselPrevious>
-          <CarouselNext className="text-white hover:text-gray-300">
+          </button>
+          <button className="text-white hover:text-gray-300" onClick={goToNext}>
             <ChevronRightIcon className="w-8 h-8" />
             <span className="sr-only">Next</span>
-          </CarouselNext>
+          </button>
         </div>
       </Carousel>
     </div>)

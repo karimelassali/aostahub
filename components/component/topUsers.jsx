@@ -23,11 +23,11 @@ export default function TopUsers() {
   },[])
   return (
     <div className='w-auto'  >
-      <div className='gap-y-2 items-center'>
+      <div className='gap-y-2 h-full pb-20  max-h-[500px]  overflow-y-auto   scroll-m-80   items-center'>
         {
             topUsers.map((user)=>(
               <>    
-                    <div className="user border border-secondary rounded">
+                    <div className="user border border-secondary   rounded">
                         <div className="info">
                             <div className="profile p-2 gap-2  flex items-center">
                             <Avatar>
@@ -35,14 +35,14 @@ export default function TopUsers() {
                                 <AvatarFallback>{user.username}</AvatarFallback>
                             </Avatar>
                             <h3 className='font-bold text-lg'  >{user.fname + user.lname}</h3> <br />
-                            <p className='text-sm text-slate-600'  >{user.age}</p>
+                            <p className='text-sm text-slate-600'>{user.age}</p>
                             </div>
-                            <div className="grid gap-2 p-2  ">
+                            <div className="grid gap-2 p-2 font-poppins text-slate-700  ">
                                 <p>Skill: React Developer</p>
                                 <p>Location: {user.location}</p>
                             </div>
                         </div>
-                        <div className="flex items-center space-x-3 rounded-sm p-1" style={{ backdropFilter: 'blur(30px)',borderRadius:'4px' }}>
+                        <div className="flex items-center justify-center   space-x-3 rounded-sm p-1" style={{ backdropFilter: 'blur(30px)',borderRadius:'4px' }}>
                         {user.instagram && (
                             <Link href={"https://www.instagram.com/"+user.instagram} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
                             <InstagramIcon className="w-5 h-5" style={{ color: '#c026d3' }} />
@@ -63,9 +63,9 @@ export default function TopUsers() {
                     <br />
               </>
             ))
-        }
+             }
             <br />
-        </div>
+         </div>
     </div>
   )
 }
