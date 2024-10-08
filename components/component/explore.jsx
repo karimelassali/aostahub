@@ -90,11 +90,11 @@ useEffect(() => {
           ))}
         </div>
       }>
-      <div className='flex fixed  justify-center p-5 border border-red-300  w-full h-full'  >
-        <div className="profiles h-full w-full  ">
+      <div className='flex fixed max-md:flex-col  justify-center p-5 border border-red-300  w-full h-full'  >
+        <div className="profiles  w-full  ">
           <Profiles />
         </div>    
-        <aside className='w-[30%] h-full  p-1  0 max-md:hidden '  >
+        <aside className='w-[30%] h-full  p-1 max-md:w-full max-md:h-[30%]  '  >
           <h1 className='flex gap-x-3 font-poppins  items-center justify-center text-2xl font-bold p-2 border-b border-gray-300  ' >Top Users  <Star className='h-5 w-5 animate-change   '  />  </h1>
           <TopUsers   />
          </aside> 
