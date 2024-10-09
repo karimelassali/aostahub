@@ -1,253 +1,249 @@
-'use client'
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import Link from "next/link"
+"use client"
+
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { ChevronLeft, ChevronRight, Heart, ExternalLink } from 'lucide-react'
 import { Button } from "@/components/ui/button"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/modalProfile"
-import { Suspense } from 'react';
-import { createClient } from "@/utils/supabase/client";
-import { useUser } from "@clerk/nextjs";
+import { toast, Toaster } from 'sonner'
+import { createClient } from "@/utils/supabase/client"
+import { useUser } from "@clerk/nextjs"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { useState, useEffect } from "react";
-import { MdOutlineVerified } from "react-icons/md";
-import { PersonStandingIcon } from "lucide-react"
-import { toast, Toaster } from 'sonner';
-import ShowModal from "./showModal"
+import Link from "next/link"
 
+const useKeyPress = (targetKey) => {
+  const [keyPressed, setKeyPressed] = useState(false)
 
-export default  function Profiles() {
-  const router = useRouter();
+  useEffect(() => {
+    const downHandler = ({ key }) => key === targetKey && setKeyPressed(true)
+    const upHandler = ({ key }) => key === targetKey && setKeyPressed(false)
 
-  const supabase = createClient();
-  const [loading, setLoading] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
+    window.addEventListener('keydown', downHandler)
+    window.addEventListener('keyup', upHandler)
 
-  const [lopen,setLopen] = useState(false);
-  const [file,setFile] = useState('');
+    return () => {
+      window.removeEventListener('keydown', downHandler)
+      window.removeEventListener('keyup', upHandler)
+    }
+  }, [targetKey])
 
-  const [users,setUsers] = useState([]);
+  return keyPressed
+}
 
-  const { user } = useUser();
-  const currentUserId = user?.id;
+export default function Profiles() {
+  const [dragStart, setDragStart] = useState(0)
+  const [dragEnd, setDragEnd] = useState(0)
+  const [isAnimating, setIsAnimating] = useState(false)
+  const sliderRef = useRef(null)
+  const leftPress = useKeyPress('ArrowLeft')
+  const rightPress = useKeyPress('ArrowRight')
 
-async function like(liker, receiver) {
-  if (liker === receiver) {
-    toast.error('You cannot like yourself.');
-    return;
-  }
-  const { data, error } = await supabase.from('likes').select('*').eq('liker', liker).eq('receiver', receiver);
-  if (data.length > 0) {
-    toast.error('You have already liked this user.');
-  }else{
-    const { data, error } = await supabase.from('likes').insert({
-    liker: liker,
-    receiver: receiver
-  });
-    const aud = new Audio('/ass/like.wav')
-    if (error) {
-      toast.error('Something went wrong.');
+  const supabase = createClient()
+  const [loading, setLoading] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [users, setUsers] = useState([])
+
+  const { user } = useUser()
+  const currentUserId = user?.id
+
+  async function like(liker , receiver) {
+    if (liker === receiver) {
+      toast.error('You cannot like yourself.')
+      return
+    }
+    const { data, error } = await supabase.from('likes').select('*').eq('liker', liker).eq('receiver', receiver)
+    if (data && data.length > 0) {
+      toast.error('You have already liked this user.')
     } else {
-      aud.play();
-      toast.success('You liked this user.');
-    }
+      const { error } = await supabase.from('likes').insert({
+        liker: liker,
+        receiver: receiver
+      })
+      const aud = new Audio('/ass/like.wav')
+      if (error) {
+        toast.error('Something went wrong.')
+      } else {
+        aud.play()
+        toast.success('You liked this user.')
+      }
     }
   }
 
-
-  useEffect(()=>{
-    async function fetchUsers(){
-      setLoading(true);
-      const {data,error} = await supabase.from('users').select('*').order('id',{ascending:false});
+  useEffect(() => {
+    async function fetchUsers() {
+      setLoading(true)
+      const { data, error } = await supabase.from('users').select('*').order('id', { ascending: false })
       
-      if(data){
-          setUsers(data) 
-          setLoading(false);
-      }
-      else{
-        setLoading(false);
-        toast.error('No users found.');
+      if (data) {
+        setUsers(data)
+        setLoading(false)
+      } else {
+        setLoading(false)
+        toast.error('No users found.')
       }
     }
-    fetchUsers();
+    fetchUsers()
 
-    async function realTimeFetchAnounces(){
-      const {data,error} = await supabase.channel('annListen').on('postgres_changes',{event:'*',schema:'public',table:'users'},(payload)=>{
-        const newCh = new Audio('/ass/ann.mp3');
-        newCh.play();
-        fetchUsers();
+    const subscription = supabase.channel('annListen')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, (payload) => {
+        const newCh = new Audio('/ass/ann.mp3')
+        newCh.play()
+        fetchUsers()
       })
-      .subscribe();
-      return () => {
-        supabase.removeChannel(subscription); // Unsubscribe when the component unmounts
-      };
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(subscription)
     }
-    realTimeFetchAnounces();
-},[])
 
-  // Function to go to the previous slide
-  const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + users.length) % users.length);
-  };
+   
 
-  // Function to go to the next slide
-  const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % users.length);
-  };
+  }, [])
+
+  const scrollToBottom = () => {
+    const bottom = document.getElementById('bottom');
+    if (bottom) {
+      bottom.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  scrollToBottom();
+
+  const nextSlide = useCallback(() => {
+    if (!isAnimating) {
+      setIsAnimating(true)
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % users.length)
+      setTimeout(() => setIsAnimating(false), 300)
+    }
+  }, [isAnimating, users.length])
+
+  const prevSlide = useCallback(() => {
+    if (!isAnimating) {
+      setIsAnimating(true)
+      setCurrentIndex((prevIndex) => (prevIndex - 1 + users.length) % users.length)
+      setTimeout(() => setIsAnimating(false), 300)
+    }
+  }, [isAnimating, users.length])
+
+  useEffect(() => {
+    if (leftPress) prevSlide()
+    if (rightPress) nextSlide()
+  }, [leftPress, rightPress, prevSlide, nextSlide])
+
+  const handleDragStart = (e) => {
+    if ('touches' in e) {
+      setDragStart(e.touches[0].clientX)
+    } else {
+      setDragStart(e.clientX)
+    }
+  }
+
+  const handleDragMove = (e) => {
+    if (dragStart === 0) return
+    if ('touches' in e) {
+      setDragEnd(e.touches[0].clientX)
+    } else {
+      setDragEnd(e.clientX)
+    }
+  }
+
+  const handleDragEnd = () => {
+    if (dragStart === 0) return
+    const dragThreshold = 50
+    if (dragStart - dragEnd > dragThreshold) {
+      nextSlide()
+    } else if (dragEnd - dragStart > dragThreshold) {
+      prevSlide()
+    }
+    setDragStart(0)
+    setDragEnd(0)
+  }
 
   return (
-    (<div className="w-full max-w-[800px] min-h-[40%]  mx-auto">
-      {
-        lopen && file && (
-          <ShowModal src={file} fileType={'img'} onClose={() => setLopen(false)}   />
-        )
-      }
-      <Toaster richColors />
-      <Carousel className={`rounded-lg min-h-[60%] overflow-hidden `} useArrowKeys={true}>
-        <CarouselContent>
-        {
-        users.map((user,index) => (
-          <CarouselItem className={`${index == currentIndex ? 'block' : 'hidden'}}`}  key={user.id} >
-          <div className="relative h-auto min-h-[80%] lg:h-[600px]">
-            <img
-              src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`}
-              alt="Slide 1"
-              width={800}
-              height={600}
-              className="w-full h-full object-cover bg-gradient-to-b from-black via-black to-transparent "
-              style={{ aspectRatio: "800/600", objectFit: "cover" }} />
-            <div
-              className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-            <div
-              className="absolute bottom-0 left-0 w-full p-6 max-md:p-1  bg-gradient-to-t from-black/50 to-transparent">
-              <div className="flex flex-col md:flex-col items-center justify-between">
-                <div className="flex items-center gap-4 max-md:gap-0  max-sm:flex-col ">
-                  <div className='w-full  flex items-center justify-start   p-1 gap-x-1  '  >
-                      <Avatar onClick={()=>{
-                        setLopen(true);
-                        setFile(user.profilePic);
-                      }}  className="w-12 h-12 md:w-16 md:h-16">
-                      {
-                        user.permission == "true" ? (
-                          <Image width={100} height={100} src={user.profilePic} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />
-                        )
-                        :
-                        (
-                          <Image width={100} height={100} src={'/ass/logo.png'} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />
-                        )
-                      }                       
-                      <AvatarFallback>cover image</AvatarFallback>
-                      </Avatar>
-                      <h3 className="text-lg font-semibold flex justify-center items-center p-2 gap-x-2  text-white">{user.fname  +  user.lname} {user.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
-                      </h3>
+    <div className="container mx-auto px-4 py-6 h-screen flex flex-col justify-center  ">
+      {/* <h1 className="text-3xl font-bold mb-6 text-center">User Profiles</h1> */}
+      <div className="flex-grow flex flex-col lg:flex-row gap-6">
+        <div
+          className="w-full lg:w-2/3 relative overflow-hidden"
+          ref={sliderRef}
+          onMouseDown={handleDragStart}
+          onMouseMove={handleDragMove}
+          onMouseUp={handleDragEnd}
+          onMouseLeave={handleDragEnd}
+          onTouchStart={handleDragStart}
+          onTouchMove={handleDragMove}
+          onTouchEnd={handleDragEnd}>
+          <div
+            className="flex transition-transform duration-300 ease-in-out h-full"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+            {users.map((user) => (
+              <div key={user.id} className="w-full flex-shrink-0">
+                <div className="bg-card text-card-foreground rounded-lg shadow-lg overflow-hidden h-full flex flex-col">
+                  <div className="relative h-40 lg:h-48">
+                    <img src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`} alt="" className="w-full h-full object-cover" />
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
+                      {user.permission === "true" ? (
+                        <Image width={100} height={100} src={user.profilePic} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}} alt="bgImage" />
+                      ) : (
+                        <Image width={100} height={100} src={'/ass/logo.png'} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}} alt="bgImage" />
+                      )}   
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-300">Cover, {user.age}</p>
-                    <p className="text-sm text-gray-300 line-clamp-2 md:line-clamp-none">
-                     {user.description}
-                    </p>
+                  <div className="pt-12 lg:pt-16 px-4 lg:px-6 pb-4 lg:pb-6 flex flex-col justify-between flex-grow">
+                    <div>
+                      <h2 className="text-xl lg:text-2xl font-semibold text-center">{user.fname}</h2>
+                      <p className="text-sm lg:text-base text-muted-foreground text-center">{user.age} • {user.location}</p>
+                      <p className="mt-2 lg:mt-4 text-sm lg:text-base text-center">{user.description}</p>
+                      <div className="flex justify-center space-x-4 mt-4">
+                        {user.instagram && (
+                          <Link href={`https://www.instagram.com/${user.instagram}`} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
+                            <InstagramIcon className="w-5 h-5" style={{ color: '#c026d3' }} />
+                          </Link>
+                        )}
+                        {user.facebook && (
+                          <Link href={`https://www.facebook.com/${user.facebook}`} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
+                            <FacebookIcon className="w-5 h-5" style={{ color: '#06b6d4' }} />
+                          </Link>
+                        )}
+                        {user.number && (
+                          <Link href={`tel:${user.number}`} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
+                            <PhoneIcon className="w-5 h-5" style={{ color: '#4ade80' }} />
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex justify-center space-x-4 mt-4 lg:mt-6">
+                      <Button variant="outline" size="sm" onClick={() => like(currentUserId, user.id)}>
+                        <Heart className="w-4 h-4 mr-2" />
+                        Like
+                      </Button>
+                      <Button variant="default" size="sm">
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Visit Profile
+                      </Button>
+                    </div>
                   </div>
                 </div>
-                <div className="flex w-full max-sm:justify-between max-sm:mt-1  items-center space-x-3 rounded-sm p-1" style={{borderRadius:'4px' }}>
-                  {user.instagram && (
-                    <Link href={"https://www.instagram.com/"+user.instagram} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
-                      <InstagramIcon className="w-5 h-5" style={{ color: '#c026d3' }} />
-                    </Link>
-                  )}
-                  {user.facebook && (
-                    <Link href={"https://www.facebook.com/"+user.facebook} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
-                      <FacebookIcon className="w-5 h-5" style={{ color: '#06b6d4' }} />
-                    </Link>
-                  )}
-                  {user.number && (
-                    <Link href={"tel:"+user.number} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
-                      <PhoneIcon className="w-5 h-5" style={{ color: '#4ade80' }} />
-                    </Link>
-                  )}
-                </div>
               </div>
-              <div className="flex justify-between items-center mt-4">
-                <button  className='text-white hover:text-red-400 cursor-pointer'  onClick={() => like(currentUserId,user.uid) }>
-                  <HeartIcon className="w-6 h-6" />
-                  <span className="sr-only">Like</span>
-                </button>
-                <Link href={`profile/${user.id}`}  variant="ghost" size="icon" className="text-white hover:text-green-300cursor-pointer">
-                  <PersonStandingIcon className="w-6 h-6" />
-                  <span className="sr-only">Profile</span>
-                </Link>
-              </div>
-            </div>
+            ))}
           </div>
-        </CarouselItem>
-        ))
-      }
-        </CarouselContent>
-        <div className="flex justify-between items-center mt-4 px-4 sm:px-0">
-          <button className="text-white hover:text-gray-300" onClick={goToPrevious}>
-            <ChevronLeftIcon className="w-8 h-8" />
-            <span className="sr-only">Previous</span>
-          </button>
-          <button className="text-white hover:text-gray-300" onClick={goToNext}>
-            <ChevronRightIcon className="w-8 h-8" />
-            <span className="sr-only">Next</span>
-          </button>
+          <div className="absolute bottom-4 left-0 right-0 flex justify-between px-4">
+            <Button onClick={prevSlide} variant="outline" size="icon" className="bg-background/80">
+              <ChevronLeft className="w-4 h-4" />
+            </Button>
+            <Button onClick={nextSlide} variant="outline" size="icon" className="bg-background/80">
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
-      </Carousel>
-    </div>)
-  );
+      </div>
+      <Toaster />
+      <div id="bottom"></div>
+    </div>
+  )
 }
-
-function ChevronLeftIcon(props) {
-  return (
-    (<svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <path d="m15 18-6-6 6-6" />
-    </svg>)
-  );
-}
-
-
-function ChevronRightIcon(props) {
-  return (
-    (<svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <path d="m9 18 6-6-6-6" />
-    </svg>)
-  );
-}
-
 
 function FacebookIcon(props) {
   return (
-    (<svg
+    <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -259,34 +255,13 @@ function FacebookIcon(props) {
       strokeLinecap="round"
       strokeLinejoin="round">
       <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-    </svg>)
-  );
+    </svg>
+  )
 }
-
-
-function HeartIcon(props) {
-  return (
-    (<svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <path
-        d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-    </svg>)
-  );
-}
-
 
 function InstagramIcon(props) {
   return (
-    (<svg
+    <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -300,14 +275,13 @@ function InstagramIcon(props) {
       <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
       <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
       <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-    </svg>)
-  );
+    </svg>
+  )
 }
-
 
 function PhoneIcon(props) {
   return (
-    (<svg
+    <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -320,6 +294,6 @@ function PhoneIcon(props) {
       strokeLinejoin="round">
       <path
         d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-    </svg>)
-  );
+    </svg>
+  )
 }
