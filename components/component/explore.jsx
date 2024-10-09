@@ -83,29 +83,29 @@ useEffect(() => {
 
   return (
     <>
-      {/* <Suspense fallback={
+      <Suspense fallback={
         <div className="grid p-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {[...Array(4)].map((_, index) => (
             <CardSkeleton key={index} />
           ))}
-        </div> */}
-      {/* }> */}
-      {/* <div className='flex fixed max-sm:flex-col  justify-center p-5 max-md:p-1 max-md:justify-normal  border border-red-300  w-full h-full'  >
-        <div className="profiles  w-full  "> */}
+        </div>
+        }>
+       <div className='flex  max-sm:flex-col  justify-center p-5 max-md:p-1 max-md:justify-normal  border border-red-300  w-full h-full'  >
+        <div className="profiles  w-full  "> 
           <Profiles />
-        {/* </div>    
+         </div>    
         <aside className='w-[30%] h-full  p-1 max-md:w-full max-md:h-[30%]  '  >
           <h1 className='flex gap-x-3 font-poppins  items-center justify-center text-2xl font-bold p-2 border-b border-gray-300  ' >Top Users  <Star className='h-5 w-5 animate-change   '  />  </h1>
           <TopUsers   />
          </aside> 
          <div id="bottom"></div>    
-      </div> */}
+      </div> 
 
-      {/* </Suspense>
-      {/* <footer className="flex justify-center p-4 w-full bg-gray-900 fixed bottom-0 " style={{}}>
-         <FloatingDock  items={links} />
-        </footer> */}
-      {/* <div className="pt-16"></div>  */}
+      </Suspense>
+       <footer className="flex justify-center p-4 w-full bg-gray-900 fixed bottom-0 " style={{}}>
+         {/* <FloatingDock  items={links} /> */}
+        </footer> 
+     <div className="pt-16"></div> 
     </>
     )};
   

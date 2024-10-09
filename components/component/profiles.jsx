@@ -225,6 +225,7 @@ export default function Profiles() {
               </div>
             ))}
           </div>
+          
           <div className="absolute bottom-4 left-0 right-0 flex justify-between px-4">
             <Button onClick={prevSlide} variant="outline" size="icon" className="bg-background/80">
               <ChevronLeft className="w-4 h-4" />
