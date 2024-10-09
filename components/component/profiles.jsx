@@ -106,19 +106,19 @@ async function like(liker, receiver) {
   };
 
   return (
-    (<div className="w-full max-w-[800px]  mx-auto">
+    (<div className="w-full max-w-[800px] min-h-[40%]  mx-auto">
       {
         lopen && file && (
           <ShowModal src={file} fileType={'img'} onClose={() => setLopen(false)}   />
         )
       }
       <Toaster richColors />
-      <Carousel className={`rounded-lg overflow-hidden `} useArrowKeys={true}>
+      <Carousel className={`rounded-lg min-h-[60%] overflow-hidden `} useArrowKeys={true}>
         <CarouselContent>
         {
         users.map((user,index) => (
           <CarouselItem className={`${index == currentIndex ? 'block' : 'hidden'}}`}  key={user.id} >
-          <div className="relative h-auto min-h-[60%] lg:h-[600px]">
+          <div className="relative h-auto min-h-[80%] lg:h-[600px]">
             <img
               src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`}
               alt="Slide 1"
@@ -129,34 +129,36 @@ async function like(liker, receiver) {
             <div
               className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             <div
-              className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/50 to-transparent">
+              className="absolute bottom-0 left-0 w-full p-6 max-md:p-1  bg-gradient-to-t from-black/50 to-transparent">
               <div className="flex flex-col md:flex-col items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <Avatar onClick={()=>{
-                    setLopen(true);
-                    setFile(user.profilePic);
-                  }}  className="w-12 h-12 md:w-16 md:h-16">
-                  {
-                    user.permission == "true" ? (
-                      <Image width={100} height={100} src={user.profilePic} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />
-                    )
-                    :
-                    (
-                      <Image width={100} height={100} src={'/ass/logo.png'} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />
-                    )
-                  }                       
-                  <AvatarFallback>cover image</AvatarFallback>
-                  </Avatar>
+                <div className="flex items-center gap-4 max-md:gap-0  max-sm:flex-col ">
+                  <div className='w-full  flex items-center justify-start   p-1 gap-x-1  '  >
+                      <Avatar onClick={()=>{
+                        setLopen(true);
+                        setFile(user.profilePic);
+                      }}  className="w-12 h-12 md:w-16 md:h-16">
+                      {
+                        user.permission == "true" ? (
+                          <Image width={100} height={100} src={user.profilePic} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />
+                        )
+                        :
+                        (
+                          <Image width={100} height={100} src={'/ass/logo.png'} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />
+                        )
+                      }                       
+                      <AvatarFallback>cover image</AvatarFallback>
+                      </Avatar>
+                      <h3 className="text-lg font-semibold flex justify-center items-center p-2 gap-x-2  text-white">{user.fname  +  user.lname} {user.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
+                      </h3>
+                  </div>
                   <div>
-                    <h3 className="text-lg font-semibold flex justify-center items-center p-2 gap-x-2  text-white">{user.fname  +  user.lname} {user.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
-                    </h3>
                     <p className="text-sm text-gray-300">Cover, {user.age}</p>
                     <p className="text-sm text-gray-300 line-clamp-2 md:line-clamp-none">
                      {user.description}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3 rounded-sm p-1" style={{ backdropFilter: 'blur(30px)', border: '0.2px solid #e2e8f0',borderRadius:'4px' }}>
+                <div className="flex w-full max-sm:justify-between max-sm:mt-1  items-center space-x-3 rounded-sm p-1" style={{borderRadius:'4px' }}>
                   {user.instagram && (
                     <Link href={"https://www.instagram.com/"+user.instagram} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
                       <InstagramIcon className="w-5 h-5" style={{ color: '#c026d3' }} />
