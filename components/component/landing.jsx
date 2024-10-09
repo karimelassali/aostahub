@@ -17,6 +17,9 @@ import { ShootingStars } from "../ui/stars";
 import { BackgroundBeams } from "../ui/beams";
 import SparklesText from "../ui/sparkles-text";
 import { CoolMode } from "../ui/cool-mode";
+import CoockieModal from "@/components/component/coockieModal"
+import {useEffect} from 'react';
+
 
 import {
   FaCompass,
@@ -158,13 +161,30 @@ const aostaWords = ["storica", "panoramica", "affascinante", "avventurosa"];
 
 export default function Landing() {
   const [language, setLanguage] = useState("en");
+  const [cookieStatu,setCookieStatu] = useState('');
+
   const handleLanguageChange = (lang) => {
     setLanguage(lang);
   };
 
+  useEffect(() => {
+    const cookiesModalSeen = localStorage.getItem("cookieStatu");
+    if (cookiesModalSeen == 'seen' ) {
+      return;
+    }
+    else {
+      localStorage.setItem("cookieStatu", "seen");
+      setCookieStatu('notYet');
+    }
+  },[])
   return (
     <>
       <div className={`flex flex-col overflow-hidden font-poppins `}></div>
+      {
+        cookieStatu == 'notYet' && (
+          <CoockieModal />
+        )
+      }
       <motion.div
         initial={{
           opacity: 0,
