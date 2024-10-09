@@ -28,8 +28,8 @@ import {
 } from "react-icons/fa";
 
 export const metadata = {
-  title: "Home",
-  description: "Welcome to Next.js"
+  title: "Aosta Hub",
+  description: "AostaHub is Here !"
 };
 
 const content = [
