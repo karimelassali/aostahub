@@ -23,6 +23,7 @@ import { useState, useEffect } from "react";
 import { MdOutlineVerified } from "react-icons/md";
 import { PersonStandingIcon } from "lucide-react"
 import { toast, Toaster } from 'sonner';
+import ShowModal from "./showModal"
 
 
 export default  function Profiles() {
@@ -48,7 +49,6 @@ async function like(liker, receiver) {
   const { data, error } = await supabase.from('likes').select('*').eq('liker', liker).eq('receiver', receiver);
   if (data.length > 0) {
     toast.error('You have already liked this user.');
-    return;
   }else{
     const { data, error } = await supabase.from('likes').insert({
     liker: liker,
@@ -107,6 +107,11 @@ async function like(liker, receiver) {
 
   return (
     (<div className="w-full max-w-[800px]  mx-auto">
+      {
+        lopen && file && (
+          <ShowModal src={file} fileType={'img'} onClose={() => setLopen(false)}   />
+        )
+      }
       <Toaster richColors />
       <Carousel className={`rounded-lg overflow-hidden `} useArrowKeys={true}>
         <CarouselContent>
@@ -125,9 +130,12 @@ async function like(liker, receiver) {
               className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             <div
               className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/50 to-transparent">
-              <div className="flex flex-col md:flex-row items-center justify-between">
+              <div className="flex flex-col md:flex-col items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <Avatar className="w-12 h-12 md:w-16 md:h-16">
+                  <Avatar onClick={()=>{
+                    setLopen(true);
+                    setFile(user.profilePic);
+                  }}  className="w-12 h-12 md:w-16 md:h-16">
                   {
                     user.permission == "true" ? (
                       <Image width={100} height={100} src={user.profilePic} className="w-full h-full object-cover rounded-sm" style={{borderRadius:'4px'}}  alt="bgImage" />

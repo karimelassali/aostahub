@@ -11,18 +11,16 @@ export default function ShowModal({onClose,src,fileType}) {
         <motion.div
         initial={{
         size: 0,
-        x: 1000,
         }}
         animate={{
         size: 1,
-        x: 0,
         }}
         className='fixed top-0 left-0  inset-0  p-2   flex items-center justify-center  ' style={{width:'100%',height:'100%',zIndex:'999',backdropFilter:'blur(30px)'}}  >
         <button className='fixed top-0 right-0  '  onClick={()=>{setClose(true);onClose()}} >
            <IoClose className='size-10 text-accent cursor-pointer hover:rotate-200 hover:text-secondary transition-all  ' / >
         </button>
         <br />
-        <div className='max-h-full w-full  flex items-center justify-center   overflow-y-scroll'  >
+        <div className='max-h-full w-full  flex items-center justify-center   overflow-y-scroll   '  >
         {
              fileType == 'img' && (
                 !onclose && !close  &&  (
