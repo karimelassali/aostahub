@@ -9,6 +9,7 @@ import { useUser } from "@clerk/nextjs"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
+import { ConfettiButton } from '../ui/confetti'
 
 // const profiles = [
 //   {
@@ -110,7 +111,11 @@ const Profiles = () => {
       const { error } = await supabase.from('likes').insert({
         liker: liker,
         receiver: receiver
-      })
+      })  
+        const confetti = document.getElementById('confetti');
+        if (confetti) {
+            confitty.click();
+        }
       const aud = new Audio('/ass/like.wav')
       if (error) {
         toast.error('Something went wrong.')
@@ -224,8 +229,10 @@ const Profiles = () => {
                   isLiked ? 'bg-accent' : 'bg-white'
                 }`}
             >
-            <Heart className={isLiked ? 'text-white' : 'text-accent'} />
-          </motion.button>
+                              <Heart className={isLiked ? 'text-white' : 'text-accent'} />
+                              <ConfettiButton id='confetti' className='hidden'  > ok  </ConfettiButton>
+                          </motion.button>
+                          
           <motion.button
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}

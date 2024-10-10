@@ -16,7 +16,7 @@ import { Star } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import TopUsers from "./topUsers";
 
-
+import { ConfettiButton } from "../ui/confetti";
 
 
 
