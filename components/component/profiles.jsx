@@ -114,7 +114,7 @@ const Profiles = () => {
       })  
         const confetti = document.getElementById('confetti');
         if (confetti) {
-            confitty.click();
+            confetti.click();
         }
       const aud = new Audio('/ass/like.wav')
       if (error) {
