@@ -143,8 +143,10 @@ const Profiles = () => {
         liker: liker,
         receiver: receiver
       })  
-      handleopenConfetti();
-      const aud = new Audio('/ass/like.wav')
+        handleopenConfetti();
+        
+        const aud = new Audio('/ass/like.wav')
+        nextProfile()
       if (error) {
         toast.error('Something went wrong.')
       } else {
