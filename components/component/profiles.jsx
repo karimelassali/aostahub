@@ -258,7 +258,6 @@ const Profiles = () => {
                 }`}
             >
                               <Heart className={isLiked ? 'text-white' : 'text-accent'} />
-                              <ConfettiButton id='confetti' className='hidden'  > ok  </ConfettiButton>
                           </motion.button>
                           
           <motion.button
