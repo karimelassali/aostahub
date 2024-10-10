@@ -164,7 +164,7 @@ function Page({params}) {
       {/* Cover Image */}
       <div className="relative h-64 md:h-80 lg:h-96">
         <Image
-          src={userP.permission == 'true' ? userP.profilePic : '/ass/logo.png'}
+          src={currentProfile.permission == 'true' ? currentProfile.profilePic : '/ass/logo.png'}
           alt="Cover"
           layout="fill"
           objectFit="cover"

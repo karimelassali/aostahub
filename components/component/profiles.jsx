@@ -10,6 +10,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import confetti from "canvas-confetti";
+import { MdOutlineVerified } from "react-icons/md";
+
 
 // const profiles = [
 //   {
@@ -146,7 +148,7 @@ const Profiles = () => {
         handleopenConfetti();
         
         const aud = new Audio('/ass/like.wav')
-        nextProfile()
+        nextProfile();
       if (error) {
         toast.error('Something went wrong.')
       } else {
@@ -217,8 +219,8 @@ const Profiles = () => {
         <div
           className="flex-grow flex flex-col justify-between p-4 sm:p-6 pt-12 sm:pt-16">
           <div>
-            <h2 id='bottom'  className="text-xl sm:text-2xl font-bold text-center mb-2">
-              {currentProfile.fname} {currentProfile.lname}, {currentProfile.age}
+            <h2 id='bottom'  className="text-xl flex justify-center items-center gap-x-1  sm:text-2xl font-bold text-center mb-2">
+                                  {currentProfile.fname} {currentProfile.lname}, {currentProfile.age}{currentProfile.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
             </h2>
             <p className="text-gray-600 text-center mb-2 sm:mb-4">{currentProfile.location}</p>
             <p className="text-gray-800 text-center text-sm sm:text-base mb-4 sm:mb-6">{currentProfile.description}</p>
