@@ -95,7 +95,6 @@ const Profiles = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [profiles, setProfiles] = useState([])
   const currentProfile = profiles[currentProfileIndex]
-
   const { user } = useUser()
   const currentUserId = user?.id
     const router = useRouter();
@@ -152,7 +151,13 @@ const Profiles = () => {
    
 
   }, [])
-
+  const bottom = () => {
+      const bottomDiv = document.getElementById('bottom');
+      if (bottomDiv) {
+        bottomDiv.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    bottom();
   return (
       (
           
@@ -177,7 +182,7 @@ const Profiles = () => {
         <div
           className="flex-grow flex flex-col justify-between p-4 sm:p-6 pt-12 sm:pt-16">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-center mb-2">
+            <h2 id='bottom'  className="text-xl sm:text-2xl font-bold text-center mb-2">
               {currentProfile.fname} {currentProfile.lname}, {currentProfile.age}
             </h2>
             <p className="text-gray-600 text-center mb-2 sm:mb-4">{currentProfile.location}</p>
@@ -228,8 +233,9 @@ const Profiles = () => {
                               onClick={() => { router.push(`/profile/${currentProfile.id}`) }}
             >
             <Eye className="text-accent" />
-          </motion.button>
-        </div>
+                          </motion.button>
+                      </div>
+                  {/* <div id='bottom' ></div> */}
           </div>
           <Toaster />
            </div>)
