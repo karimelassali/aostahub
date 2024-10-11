@@ -11,7 +11,7 @@ import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import confetti from "canvas-confetti";
 import { MdOutlineVerified } from "react-icons/md";
-
+import ShowModal from './showModal'
 
 // const profiles = [
 //   {
@@ -160,7 +160,9 @@ const Profiles = () => {
   const currentProfile = profiles[currentProfileIndex]
   const { user } = useUser()
   const currentUserId = user?.id
-    const router = useRouter();
+  const router = useRouter();
+
+
   async function like(liker , receiver) {
     if (liker === receiver) {
       toast.error('You cannot like yourself.')
@@ -240,11 +242,11 @@ const Profiles = () => {
             //   }
             // }
             // }
-        className="w-full  lg:max-w-[70%]  bg-white rounded-xl shadow-xl border border-red-200  overflow-hidden flex flex-col">
+        className="w-full  lg:max-w-[70%]  bg-white rounded-xl shadow-xl   overflow-hidden flex flex-col">
         <div className="relative h-48 sm:h-56 md:h-64 lg:h-72">
           <img
            src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentProfile.imgName}`} 
-            alt=""
+            alt="profile image"
             className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black bg-opacity-50" />
           {
@@ -261,7 +263,7 @@ const Profiles = () => {
             <h2 id='bottom'  className="text-xl flex justify-center items-center gap-x-1  sm:text-2xl font-bold text-center mb-2">
               {currentProfile.fname} {currentProfile.lname}, {currentProfile.age}{currentProfile.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
                 </h2>
-                <div className="navigate   flex w-full justify-between  items-center gap-x-2">
+                <div className="navigate   flex w-full justify-between max-h-[100px]  overflow-hidden  items-center gap-x-2">
                   <button onClick={()=>{
                     prevProfile()
                   }}  className='p-2 rounded-full bg-secondary hover:scale-150  text-white '  >
@@ -274,7 +276,7 @@ const Profiles = () => {
                   </button>
               </div>
             <p className="text-gray-600 text-center mb-2 sm:mb-4">{currentProfile.location}</p>
-            <p className="text-gray-800 text-center text-sm sm:text-base mb-4 sm:mb-6">{currentProfile.description}</p>
+            <p className="text-gray-800 line-clamp-3  text-center text-sm sm:text-base mb-4 sm:mb-6">{currentProfile.description}</p>
           </div>
           <div className="flex justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
             <div className="flex justify-center space-x-4 mt-4">
