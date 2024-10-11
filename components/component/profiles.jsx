@@ -199,9 +199,20 @@ const Profiles = () => {
       (
           
         profiles && profiles.length > 0 && (
-           <div className="flex items-center justify-center min-h-[40%]   p-4">
-      <div
-        className="w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden flex flex-col">
+      <div className="flex items-center justify-center min-h-[40%]  p-4">
+          <motion.div
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            drag      
+            dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
+            
+            onDrag={(e, info) => {
+              if (info.offset.x > 50) {
+                nextProfile()
+              }
+            }
+            }
+        className="w-full max-w-md bg-white rounded-xl shadow-xl border border-red-200  overflow-hidden flex flex-col">
         <div className="relative h-48 sm:h-56 md:h-64 lg:h-72">
           <img
            src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentProfile.imgName}`} 
@@ -220,7 +231,7 @@ const Profiles = () => {
           className="flex-grow flex flex-col justify-between p-4 sm:p-6 pt-12 sm:pt-16">
           <div>
             <h2 id='bottom'  className="text-xl flex justify-center items-center gap-x-1  sm:text-2xl font-bold text-center mb-2">
-                                  {currentProfile.fname} {currentProfile.lname}, {currentProfile.age}{currentProfile.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
+              {currentProfile.fname} {currentProfile.lname}, {currentProfile.age}{currentProfile.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
             </h2>
             <p className="text-gray-600 text-center mb-2 sm:mb-4">{currentProfile.location}</p>
             <p className="text-gray-800 text-center text-sm sm:text-base mb-4 sm:mb-6">{currentProfile.description}</p>
@@ -274,7 +285,7 @@ const Profiles = () => {
                           </motion.button>
                       </div>
                   {/* <div id='bottom' ></div> */}
-          </div>
+          </motion.div>
           <Toaster />
            </div>)
         )
