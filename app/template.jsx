@@ -14,10 +14,14 @@ import {
   import { IoIosCreate } from "react-icons/io";
   import { FaUserFriends } from "react-icons/fa";
   import { IoChatbox } from "react-icons/io5";
+import { Bell } from 'lucide-react';
+import NotificationModal from '@/components/ui/notificationmodal';
+import { createClient } from '@supabase/supabase-js';
 
 export default function Template({ children }) {
     const [isOpen, setIsOpen] = useState(false);
-
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  
   const toggleMenu = () => {
     setIsOpen(!isOpen);
 };
@@ -73,10 +77,13 @@ export default function Template({ children }) {
                   <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
                   <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link>
                   <Link href="/friends" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white before:content-['*'] before:text-red-400 ">Friends  <FaUserFriends /></Link>
-
+                            <button onClick={() => setIsNotificationOpen(true)} className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white  before:text-red-400 ">Notification  <Bell /></button>
                   </>
                 )
-              }
+                      }
+                       {
+                              isNotificationOpen && <NotificationModal  onClose={() => setIsNotificationOpen(false)} />
+                            }
               </div>
             </div>
           </div>

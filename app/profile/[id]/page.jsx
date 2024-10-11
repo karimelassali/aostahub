@@ -93,6 +93,12 @@ function Page({params}) {
       if (error) {
         toast.error(`Error: ${error.message}`);
       } else {
+        const {data,error} = await supabase.from('notifications').insert({
+            sender:currentUserUid,
+            senderName: userName,
+          receiver: id,
+          type:`${userName } Sent you a friend request .`
+        })
         checkFriendshipStatus();
       }
     }
@@ -131,7 +137,7 @@ function Page({params}) {
         userAsfriend  ? setUserAsFriend(userAsfriend) : console.log(userAsfriendProblem);
 
       }
-    //remove removeFriendShip
+    //remove removeFriendShip 
     async function removeFriendShip(){
       const {data,error} = await supabase.from('friends').delete().eq('useruid',currentUserUid).eq('frienduid',userP.uid);
       data ? toast.success(`${userP.name} is not your friend anymore .`) : toast.error(error);
@@ -164,7 +170,7 @@ function Page({params}) {
       {/* Cover Image */}
       <div className="relative h-64 md:h-80 lg:h-96">
         <Image
-          src={currentProfile.permission == 'true' ? currentProfile.profilePic : '/ass/logo.png'}
+          src={userP.permission == 'true' ? userP.profilePic : '/ass/logo.png'}
           alt="Cover"
           layout="fill"
           objectFit="cover"

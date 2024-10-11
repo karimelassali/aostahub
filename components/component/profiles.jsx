@@ -245,11 +245,11 @@ const Profiles = () => {
         className="w-full  lg:max-w-[70%]  bg-white rounded-xl shadow-xl   overflow-hidden flex flex-col">
         <div className="relative h-48 sm:h-56 md:h-64 lg:h-72">
           <img
-           src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentProfile.imgName}`} 
+            src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentProfile.imgName}`} 
             alt="profile image"
             className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black bg-opacity-50" />
-          {
+          { 
             currentProfile.permission ? (
             <Image width={100} height={100} src={currentProfile.profilePic} className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-white rounded "   alt="bgImage" />
             ) : (
