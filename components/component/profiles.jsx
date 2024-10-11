@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Heart, X, MessageCircle, Coffee, Music, Camera, Plane, Eye } from 'lucide-react'
+import { Heart, X, MessageCircle, Coffee, Music, Camera, Plane, Eye, ArrowBigLeft, ArrowBigRight } from 'lucide-react'
 import { toast, Toaster } from 'sonner'
 import { createClient } from "@/utils/supabase/client"
 import { useUser } from "@clerk/nextjs"
@@ -75,19 +75,48 @@ import { MdOutlineVerified } from "react-icons/md";
     setTimeout(shoot, 0);
     setTimeout(shoot, 100);
     setTimeout(shoot, 200);
+};
+  
+  const handleOpenDislikeConfetti = () => {
+    const scalar = 2;
+    const unicorn = confetti.shapeFromText({ text: "😒", scalar });
+ 
+    const defaults = {
+      spread: 360,
+      ticks: 60,
+      gravity: 0.1,
+      decay: 0.96,
+      startVelocity: 20,
+      shapes: [unicorn],
+      scalar,
+    };
+ 
+    const shoot = () => {
+      confetti({
+        ...defaults,
+        particleCount: 30,
+      });
+ 
+      confetti({
+        ...defaults,
+        particleCount: 5,
+      });
+ 
+      confetti({
+        ...defaults,
+        particleCount: 15,
+        scalar: scalar / 2,
+        shapes: ["circle"],
+      });
+    };
+ 
+    setTimeout(shoot, 0);
+    setTimeout(shoot, 100);
+    setTimeout(shoot, 200);
   };
  
-const interestIcons = {
-  Coffee: <Coffee />,
-  Travel: <Plane />,
-  Food: <Coffee />,
-  Movies: <Camera />,
-  Photography: <Camera />,
-  Art: <Coffee />,
-  Music: <Music />,
-  Cats: <Coffee />,
-  Songwriting: <Music />,
-}
+ 
+
 
 const Profiles = () => {
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0)
@@ -201,17 +230,16 @@ const Profiles = () => {
         profiles && profiles.length > 0 && (
       <div className="flex items-center justify-center min-h-[40%]  p-4">
           <motion.div
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            drag      
-            dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
-            
-            onDrag={(e, info) => {
-              if (info.offset.x > 50) {
-                nextProfile()
-              }
-            }
-            }
+            // initial={{ opacity: 0, y: 100 }}
+            // animate={{ opacity: 1, y: 0 }}
+            // drag      
+            // dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
+            // onDrag={(e, info) => {
+            //   if (info.offset.x > 30) {
+            //     nextProfile()
+            //   }
+            // }
+            // }
         className="w-full max-w-md bg-white rounded-xl shadow-xl border border-red-200  overflow-hidden flex flex-col">
         <div className="relative h-48 sm:h-56 md:h-64 lg:h-72">
           <img
@@ -232,7 +260,19 @@ const Profiles = () => {
           <div>
             <h2 id='bottom'  className="text-xl flex justify-center items-center gap-x-1  sm:text-2xl font-bold text-center mb-2">
               {currentProfile.fname} {currentProfile.lname}, {currentProfile.age}{currentProfile.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
-            </h2>
+                </h2>
+                <div className="navigate flex w-full justify-between  items-center gap-x-2">
+                  <button onClick={()=>{
+                    prevProfile()
+                  }}  className='p-2 rounded-full bg-secondary hover:scale-150  text-white '  >
+                     <ArrowBigLeft className='w-5 h-5 text-accent  '  />
+                  </button>
+                  <button onClick={()=>{
+                    nextProfile()
+                  }}  className='p-2 rounded-full bg-secondary hover:scale-150  text-white '  >
+                     <ArrowBigRight className='w-5 h-5 text-accent  '  /> 
+                  </button>
+              </div>
             <p className="text-gray-600 text-center mb-2 sm:mb-4">{currentProfile.location}</p>
             <p className="text-gray-800 text-center text-sm sm:text-base mb-4 sm:mb-6">{currentProfile.description}</p>
           </div>
@@ -258,10 +298,11 @@ const Profiles = () => {
         </div>
         <div className="p-4 bg-secondary flex justify-around">
           <motion.button
+          
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center"
-            onClick={prevProfile}>
+            onClick={() => { prevProfile() ; handleOpenDislikeConfetti()}}>
             <X className="text-accent" />
           </motion.button>
                 <motion.button
