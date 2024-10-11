@@ -240,7 +240,7 @@ const Profiles = () => {
             //   }
             // }
             // }
-        className="w-full max-w-md bg-white rounded-xl shadow-xl border border-red-200  overflow-hidden flex flex-col">
+        className="w-full  lg:max-w-[70%]  bg-white rounded-xl shadow-xl border border-red-200  overflow-hidden flex flex-col">
         <div className="relative h-48 sm:h-56 md:h-64 lg:h-72">
           <img
            src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentProfile.imgName}`} 
@@ -261,7 +261,7 @@ const Profiles = () => {
             <h2 id='bottom'  className="text-xl flex justify-center items-center gap-x-1  sm:text-2xl font-bold text-center mb-2">
               {currentProfile.fname} {currentProfile.lname}, {currentProfile.age}{currentProfile.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
                 </h2>
-                <div className="navigate flex w-full justify-between  items-center gap-x-2">
+                <div className="navigate   flex w-full justify-between  items-center gap-x-2">
                   <button onClick={()=>{
                     prevProfile()
                   }}  className='p-2 rounded-full bg-secondary hover:scale-150  text-white '  >
