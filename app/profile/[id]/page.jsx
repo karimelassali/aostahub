@@ -96,7 +96,7 @@ function Page({params}) {
         const {data,error} = await supabase.from('notifications').insert({
             sender:currentUserUid,
             senderName: userName,
-          receiver: id,
+          receiver: userP.uid,
           type:`${userName } Sent you a friend request .`
         })
         checkFriendshipStatus();

@@ -16,20 +16,31 @@ import {
   import { IoChatbox } from "react-icons/io5";
 import { Bell } from 'lucide-react';
 import NotificationModal from '@/components/ui/notificationmodal';
-import { createClient } from '@supabase/supabase-js';
-
+import { createClient } from "@/utils/supabase/client";
+import { useUser } from '@clerk/nextjs';
 export default function Template({ children }) {
     const [isOpen, setIsOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  
+  const [notificationss, setNotificationss] = useState([]);
+  const supabase = createClient();
+  const {user,isLoaded} = useUser();
+  const currentUserUid = user?.id;
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
 };
-    const [isClient, setIsClient] = useState(false);
-
+  const [isClient, setIsClient] = useState(false);
+  
+     async function notifications() {
+       const { data, error } = await supabase.from('notifications').select('*').eq('receiver', currentUserUid).order('created_at', { ascending: false }).limit(5);
+       if (data) {
+         setNotificationss(data);
+       }
+  }
     useEffect(() => {
-        setIsClient(true);
-    }, []);
+      setIsClient(true);
+      notifications();
+    }, [currentUserUid,isLoaded]);
 
     return (
       <ClerkLoaded>
@@ -77,7 +88,7 @@ export default function Template({ children }) {
                   <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
                   <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link>
                   <Link href="/friends" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white before:content-['*'] before:text-red-400 ">Friends  <FaUserFriends /></Link>
-                            <button onClick={() => setIsNotificationOpen(true)} className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white  before:text-red-400 ">Notification  <Bell /></button>
+                            <button onClick={() => setIsNotificationOpen(true)} className={`rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white  before:text-red-400 ${notificationss.length > 0 && 'before:content-['*']'}  `}>Notification  <Bell /></button>
                   </>
                 )
                       }
