@@ -52,7 +52,7 @@ export default function Template({ children }) {
       
       }).subscribe();
   }
-    useEffect(() => {
+    useEffect(() => { 
       setIsClient(true);
       if(isLoaded && currentUserUid){
         notifications();
@@ -170,7 +170,7 @@ export default function Template({ children }) {
               children
             }
             {
-              notificationss && notificationss[0] && (
+              notificationss.length > 0  && notificationss[0] && (
                 <NotificationModalInfo notificationText={notificationss[0].type} receiver={currentUserUid} />
               )
             }

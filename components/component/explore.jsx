@@ -90,7 +90,7 @@ useEffect(() => {
           ))}
         </div>
         }>
-       <div className='flex  max-sm:flex-col  justify-center p-5 max-md:p-1 max-md:justify-normal  w-full '  >
+       <div className='flex  max-sm:flex-col h-9  lg:max-h-[400px]  justify-center p-5 max-md:p-1 max-md:justify-normal  w-full '  >
         <div className="profiles  w-full  "> 
           <Profiles />
          </div>    

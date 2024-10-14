@@ -12,10 +12,12 @@
 /* WebKit (Safari, Chrome) */
 ::-webkit-scrollbar {
     width: 12px; /* Width of the entire scrollbar */
+    border-radius: 4px;
   }
   
   ::-webkit-scrollbar-track {
     background: #f1f1f1; /* Color of the tracking area */
+    border-radius: 4px;
   }
   
   ::-webkit-scrollbar-thumb {
@@ -30,6 +32,6 @@
   /* Firefox */
   * {
     scrollbar-width: thin; /* "auto", "thin", or "none" */
-    scrollbar-color: #888 #f1f1f1; /* Scrollbar color and track color */
+    scrollbar-color: blue #f1f1f1; /* Scrollbar color and track color */
   }
   

@@ -15,7 +15,7 @@ export default function NotificationModalInfo({notificationText,receiver}) {
   async function cleanNotifications() {
       const { data, error } = await supabase.from('notifications').delete().eq('receiver', receiver);
       if (data) {
-        notifications();
+        return;
       }
     }
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function NotificationModalInfo({notificationText,receiver}) {
             </div>
             <div className="ml-4 flex-shrink-0 flex">
               <button
-                onClick={() => { setIsVisible(false);cleanNotifications(receiver); }}
+                onClick={() => { setIsVisible(false);cleanNotifications(); }}
                 className="bg-white dark:bg-gray-800 rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 <span className="sr-only">Close</span>
                 <X className="h-5 w-5" />
