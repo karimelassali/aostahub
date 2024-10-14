@@ -113,10 +113,8 @@ import ShowModal from './showModal'
     setTimeout(shoot, 0);
     setTimeout(shoot, 100);
     setTimeout(shoot, 200);
-  };
- 
- 
-
+};
+  
 
 const Profiles = () => {
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0)
@@ -206,7 +204,7 @@ const Profiles = () => {
 
     const subscription = supabase.channel('annListen')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, (payload) => {
-        const newCh = new Audio('/ass/ann.mp3')
+        const newCh = new Audio('/ass/ann.wav')
         newCh.play()
         fetchUsers()
       })

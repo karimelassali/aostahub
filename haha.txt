@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -146,4 +147,9 @@ export default function Chat() {
 
 
 
-        
+        add some informatuons about aosta 
+
+        traduction
+
+        stop scrollig
+        addding pila place

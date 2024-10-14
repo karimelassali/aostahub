@@ -18,12 +18,14 @@ import { Bell } from 'lucide-react';
 import NotificationModal from '@/components/ui/notificationmodal';
 import { createClient } from "@/utils/supabase/client";
 import { useUser } from '@clerk/nextjs';
+import NotificationModalInfo from '@/components/notification-modal';
 export default function Template({ children }) {
     const [isOpen, setIsOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notificationss, setNotificationss] = useState([]);
   const supabase = createClient();
-  const {user,isLoaded} = useUser();
+  const { user, isLoaded } = useUser();
+  
   const currentUserUid = user?.id;
 
   const toggleMenu = () => {
@@ -32,20 +34,37 @@ export default function Template({ children }) {
   const [isClient, setIsClient] = useState(false);
   
      async function notifications() {
-       const { data, error } = await supabase.from('notifications').select('*').eq('receiver', currentUserUid).order('created_at', { ascending: false }).limit(5);
+       const { data, error } = await supabase.from('notifications').select('*').eq('receiver', currentUserUid).order('created_at', { ascending: false });
        if (data) {
          setNotificationss(data);
        }
   }
+    
+   function realtime() {
+    const { data, error } =  supabase
+      .channel('notiReal')
+      .on('postgres_changes', { event: '*', schemaa: 'public', table: 'notifications' }, (payload) => {
+        if (payload.new.receiver === currentUserUid) {
+            const newNotisound = new Audio('/ass/ann.wav');
+            newNotisound.play();
+            notifications();
+        }
+      
+      }).subscribe();
+  }
     useEffect(() => {
       setIsClient(true);
-      notifications();
+      if(isLoaded && currentUserUid){
+        notifications();
+        realtime();
+      }
     }, [currentUserUid,isLoaded]);
 
+    
     return (
       <ClerkLoaded>
         <>
-         <nav className="bg-primary font-poppins w-full">
+         <nav className="bg-primary font-poppins fixed top-0 left-0  z-50  w-full">
       <div className=" p-2 gap-2 ">
         <div className="relative flex h-16 items-center justify-center ">
           {
@@ -87,14 +106,28 @@ export default function Template({ children }) {
                   <Link href="/explore" className="rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
                   <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
                   <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link>
-                  <Link href="/friends" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white before:content-['*'] before:text-red-400 ">Friends  <FaUserFriends /></Link>
-                            <button onClick={() => setIsNotificationOpen(true)} className={`rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white  before:text-red-400 ${notificationss.length > 0 && 'before:content-['*']'}  `}>Notification  <Bell /></button>
+                            <Link href="/friends" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white  ">Friends  <FaUserFriends /></Link>
+                            {
+                              console.log(notificationss.length)
+                            }
+                  <button onClick={() => setIsNotificationOpen(true)} className={`rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white relative`}>
+                    <span className={`relative`}>
+                      <span>Notification</span>
+                      </span>
+                              <Bell />
+              {notificationss.length > 0 && <span className="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">{notificationss.length}</span>}
+
+                  </button>
+
                   </>
                 )
                       }
-                       {
+                      <div className='fixed top-0 right-0 flex flex-col items-center justify-center'  >
+                         {
                               isNotificationOpen && <NotificationModal  onClose={() => setIsNotificationOpen(false)} />
                             }
+                      </div>
+                      
               </div>
             </div>
           </div>
@@ -128,11 +161,22 @@ export default function Template({ children }) {
             </>
           )
         }
-         
         </div>
       </div>
-    </nav>
-            {children}
+          </nav>
+          
+          <div className='mt-20'  >
+            {
+              children
+            }
+            {
+              notificationss && notificationss[0] && (
+                <NotificationModalInfo notificationText={notificationss[0].type} receiver={currentUserUid} />
+              )
+            }
+
+          </div>
+
         </>
         </ClerkLoaded>
         
