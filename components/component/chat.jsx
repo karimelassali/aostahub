@@ -174,9 +174,9 @@ export default function Chat({type,msgsId}) {
        if (data) {
          setCurrentFriend(data);
        }
-       else{
-        router.push('/chat');
-       }
+      //  else{
+      //   router.push('/chat');
+      //  }
       }
       else{
         toast.error('plz select a firend');
@@ -260,6 +260,17 @@ export default function Chat({type,msgsId}) {
       scrollToBottom();
       setMessage("");
       setMsgStatu(false)
+      if (!error) {
+        //send a msg into notifications table
+        const { data: noti, error: notierror } = await supabase
+          .from('notifications')
+          .insert([{
+            sender: currentUserId,
+            senderName:me.fname,
+            receiver: currentFriend.uid,
+            type:`${me.fname} sent you a msg: ${message}`
+          }])
+      }
     } else {
       setMessage("");
       toast.message("Message cannot be empty");
@@ -283,10 +294,12 @@ export default function Chat({type,msgsId}) {
   const handleStopCall = ()=>{
     setIsVideoCall(false);
   }
-
+  useEffect(() => {
+  scrollToBottom();
+},[])
   return (
     (
-    <div className="flex h-screen w-full transition-all z-20  bg-[#fbfbfe] text-[#050315]">
+    <div className="flex h-screen w-full transition-all z-40  bg-[#fbfbfe] text-[#050315]">
        {
         lopen && (
           <ShowModal fileType={modalType} onClose={handleClose}  src={file}  />
@@ -304,7 +317,7 @@ export default function Chat({type,msgsId}) {
           animate={{ x: 0, opacity: 1  }}
           exit="closed"
           variants={menuVariants}
-          className={`w-full sm:w-1/3   lg:w-1/4 xl:w-1/5 bg-[#fbfbfe] border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-50 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
+          className={`w-full sm:w-1/3   lg:w-1/4 xl:w-1/5 bg-[#fbfbfe] border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-40 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
           <div
             className="p-4 border-b border-[#dedcff] flex justify-start gap-2   items-center bg-accent text-[#fbfbfe]">
               <Avatar className="h-8 w-8 ">

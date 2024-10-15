@@ -84,13 +84,13 @@ useEffect(() => {
   return (
     <>
       <Suspense fallback={
-        <div className="grid p-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {[...Array(4)].map((_, index) => (
-            <CardSkeleton key={index} />
-          ))}
-        </div>
+        <div className="grid p-2 gap-6 justify-center items-center w-full h-full">
+
+          {/* <CardSkeleton  /> */}
+
+</div>
         }>
-       <div className='flex  max-sm:flex-col h-9  lg:max-h-[400px]  justify-center p-5 max-md:p-1 max-md:justify-normal  w-full '  >
+       <div className='flex  max-sm:flex-col h-1   lg:max-h-[400px] border border-red-100  justify-center max-md:p-1 max-md:justify-normal  w-full '  >
         <div className="profiles  w-full  "> 
           <Profiles />
          </div>    
