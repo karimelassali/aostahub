@@ -153,7 +153,8 @@ export default function Chat({type,msgsId}) {
       const { data, error } = await supabase
         .from("friends")
         .select()
-        .or(`requester.eq.${currentUserId},receiver.eq.${currentUserId}`)
+        .eq('requester',currentUserId)
+        // .or(`requester.eq.${currentUserId},receiver.eq.${currentUserId}`)
         .eq('status','accept')
         .order("id", { ascending: false });
       data ? setMyFriends(data) : toast.message("No friends .");
@@ -174,9 +175,9 @@ export default function Chat({type,msgsId}) {
        if (data) {
          setCurrentFriend(data);
        }
-      //  else{
-      //   router.push('/chat');
-      //  }
+       else{
+        router.push('/chat');
+       }
       }
       else{
         toast.error('plz select a firend');
@@ -260,15 +261,25 @@ export default function Chat({type,msgsId}) {
       scrollToBottom();
       setMessage("");
       setMsgStatu(false)
+      if (data) {
+        //send a msg into notifications table
+        const { data: noti, error: notierror } = await supabase
+          .from('notifications')
+          .insert([{
+            sender: currentUserId,
+            receiver: currentFriend.uid,
+            type:`${me.username} sent you a msg: ${message}`
+          }])
+      }
       if (!error) {
         //send a msg into notifications table
         const { data: noti, error: notierror } = await supabase
           .from('notifications')
           .insert([{
             sender: currentUserId,
-            senderName:me.fname,
+            senderName:currentUser,
             receiver: currentFriend.uid,
-            type:`${me.fname} sent you a msg: ${message}`
+            type:`${currentUser} sent you a msg : ${message}`
           }])
       }
     } else {
@@ -294,9 +305,7 @@ export default function Chat({type,msgsId}) {
   const handleStopCall = ()=>{
     setIsVideoCall(false);
   }
-  useEffect(() => {
-  scrollToBottom();
-},[])
+
   return (
     (
     <div className="flex h-screen w-full transition-all z-40  bg-[#fbfbfe] text-[#050315]">

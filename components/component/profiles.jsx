@@ -183,6 +183,15 @@ const Profiles = () => {
       } else {
         aud.play()
         toast.success('You liked this user.')
+        const { data, error } = await supabase
+          .from('notifications')
+          .insert([{
+            sender:currentUserId,
+            senderName: user?.fullName,
+            receiver: receiver,
+            type:`${user?.fullName} Liked you !`,
+
+          }])
       }
     }
   }
