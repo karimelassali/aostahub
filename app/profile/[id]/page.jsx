@@ -19,6 +19,8 @@ import { IoRemove } from "react-icons/io5"
 import {OctagonPause} from 'lucide-react'
 import {useRouter} from "next/navigation"
 import NumberTicker from "@/components/ui/number-ticker"
+import showModal from "@/components/component/showModal";
+
 
 
 
@@ -32,7 +34,10 @@ function Page({params}) {
   const [isFriend, setIsFriend] = useState('');
   const [userAsUser , setUserAsUser] = useState([]);
   const [userAsfriend, setUserAsFriend] = useState([]);
-  const [me,setMe] = useState([]);
+  const [me, setMe] = useState([]);
+  const [lopen, setLopen] = useState(false);
+  const [file, setFile] = useState(false);
+  const [modalType,setModalType] = useState('')
   
   const { user } = useUser();
   const currentUserUid = user?.id;
@@ -185,12 +190,15 @@ function Page({params}) {
             className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
             {/* Profile Picture */}
             <Image
+            onClick={()=>{
+                  setLopen(true);setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${userP.imgName}`,setModalType('img'))
+            }}
               src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${userP.imgName}`}
               alt="Profile"
               width={200}
               height={200}
-              className="rounded-full border-4 border-[#fbfbfe] shadow-lg" />
-            {/* userP Info */}
+              className="rounded-full border-4 border-[#fbfbfe] cursor-pointer  shadow-lg" />
+            {/* userP Info */} 
             <div className="text-center md:text-left flex-grow">
               <div className="flex items-center max-sm:flex-col gap-2 max-sm:line-clamp-2" >
                 <h1 className="text-3xl max-sm:text-md flex items-center  font-bold max-sm:font-extralight text-[#050315] mb-2">{userP.fname + userP.lname} <span>{userP.verified == 1 && <MdOutlineVerified size={30} style={{ color: '#0284c7' }} />}</span>,  </h1>
