@@ -135,7 +135,7 @@ export default function Template({ children }) {
             <SignedOut>
               <Link
                 href="/explore"
-                className="bg-white rounded-md text-primary font-bold py-2 px-4 hover:cursor-pointer ml-4 max-sm:ml-1 "
+                className=" rounded-md text-white font-bold font-poppins  py-2 px-4 hover:cursor-pointer ml-4 max-sm:ml-1 hover:bg-white hover:text-accent transition-all ease-in-out "
                 style={{ borderRadius: "5px" }}
               >
                 Sign In

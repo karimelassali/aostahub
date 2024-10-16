@@ -236,7 +236,7 @@ function Page({params}) {
                             <IoTime className="h-4 w-4 mr-2" />
                               Request Pending
                           </Button>
-                          <button onClick={()=>{stopRequest()}} className="p-2 bg-red-400 text-white rounded flex items-center gap-x-2 hover:bg-red-300 transition-all cursor-pointer" >
+                          <button onClick={()=>{stopRequest()}} className="p-2 bg-red-400 text-white rounded flex items-center max-sm:p-1  hover:bg-red-300 transition-all cursor-pointer" >
                             <OctagonPause  className="h-4 w-4 mr-2" />
                             Pause Request
                           </button>
