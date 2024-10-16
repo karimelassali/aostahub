@@ -558,9 +558,9 @@ export default function Chat({type,msgsId}) {
                   <form
                     onSubmit={(e)=>{e.preventDefault();sendMessage()}} 
                     className="p-4 bg-[#fbfbfe] border-t border-[#dedcff]">
-                      <div className='flex w-full justify-between  items-center p-2 gap-2 text-accent ' >
-                        <ArrowBigDown  onClick={()=>{scrollToBottom()}}  className='w-5 h-5 border border-accent  rounded  cursor-pointer  ' size={50} />
-                        <ArrowBigLeftIcon onClick={()=>{firstMessage()}}  className='w-5 h-5 rotate-90 border border-accent  cursor-pointer  rounded  ' size={50}  />
+                      <div className='flex w-full justify-between  items-center p-[0.9] gap-2 text-accent ' >
+                        <ArrowBigDown  onClick={()=>{scrollToBottom()}}  className='w-5 h-5 border border-accent  rounded  cursor-pointer  ' size={100} />
+                        <ArrowBigLeftIcon onClick={()=>{firstMessage()}}  className='w-5 h-5 rotate-90 border border-accent  cursor-pointer  rounded  ' size={100}  />
                       </div>
                       {
                         msgStatu && (

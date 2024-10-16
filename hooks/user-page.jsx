@@ -35,7 +35,8 @@ export default function FriendsPage() {
     const { data, error } = await supabase
       .from('friends')
       .select('*')
-      .or(`requester.eq.${currentUserUid},receiver.eq.${currentUserUid}`)
+      // .or(`requester.eq.${currentUserUid},receiver.eq.${currentUserUid}`)
+      .eq('requester', currentUserUid)
       .eq('status','accept')
       .order('id', { ascending: false });
     if (data) {
@@ -105,7 +106,7 @@ export default function FriendsPage() {
     console.log(id);
     console.log('my id' + currentUserUid)
     setFriends(friends.filter(friend => friend.id !== id))
-    const {data,error} = await supabase.from('friends').delete().or(`useruid.eq.${currentUserUid},frienduid.eq.${id}`);
+    const {data,error} = await supabase.from('friends').delete().eq('requester',currentUserUid).eq('receiver',id);
     data ? toast.success(`${id} is not your friend anymore.`) : toast.error(error);
   }
 
@@ -241,7 +242,7 @@ export default function FriendsPage() {
                     <button
                       size="sm"
                       onClick={() => removeFriend(friend.useruid)}
-                      className=" border border-red-400 text-red-400 p-1 rounded hover:p-0  z-20  hover:bg-red-400 ">
+                      className=" border border-red-400 text-red-400 p-1 rounded hover:p-0  z-20  hover:bg-red-400 hover:text-white ">
                       Remove
                     </button>
                   </motion.div>
