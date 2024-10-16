@@ -433,7 +433,7 @@ function Page({params}) {
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
             {suggestedUsers.map((user) => (
               <Card
-                onClick={() => { router.push(`/profile/${user.id}`) }}
+                onDblclick={() => { router.push(`/profile/${user.id}`) }}
                 key={user.id}
                 className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 flex flex-col items-center text-center">
