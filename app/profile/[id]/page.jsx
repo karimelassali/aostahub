@@ -57,21 +57,7 @@ function Page({params}) {
       toast.error('User not found');
     }
   }
-  useEffect(()=>{
-    async function tst() {
-      const { data, error } = await supabase
-        .from('likes')
-        .select('*,{users:fname}')
-        .join('users', 'liker_id','users.id')
-      if (data) {
-        console.log(data);
-      }
-      else {
-        console.log(error)
-      }
-    } 
-    tst();
-  },[])
+
     useEffect(()=>{
       async function fetchUser(){
         const { data,error } = await supabase.from('users').select().eq('id', id).single();
@@ -441,16 +427,20 @@ function Page({params}) {
         <div className="mt-12">
           <h2 className="flex text-2xl font-semibold mb-6  text-textflex items-center">
             <Users style={{color:'#433bff'}}  className="h-6 w-6 mr-2" />
-            Similar Users
+            suggested Users
           </h2>
           <div
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
             {suggestedUsers.map((user) => (
               <Card
+                onClick={()=>router.push(`profile/${user.id}`)}
                 key={user.id}
                 className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 flex flex-col items-center text-center">
                   <Image
+                    onClick={() => {
+                      setLopen(true); setModalType('img'); setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`); 
+                  }}
                   src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`}
                     alt={`Similar userP ${user.id}`}
                     width={100}

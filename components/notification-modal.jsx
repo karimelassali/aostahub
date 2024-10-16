@@ -20,8 +20,7 @@ export default function NotificationModalInfo({notificationText,receiver}) {
     }
   useEffect(() => {
     // Simulate a new notification after 2 seconds
-    const timer = setTimeout(() => setIsVisible(true), 2000)
-    return () => clearTimeout(timer);
+    setIsVisible(true);
   }, [])
 
   return (
