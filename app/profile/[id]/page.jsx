@@ -19,7 +19,7 @@ import { IoRemove } from "react-icons/io5"
 import {OctagonPause} from 'lucide-react'
 import {useRouter} from "next/navigation"
 import NumberTicker from "@/components/ui/number-ticker"
-import showModal from "@/components/component/showModal";
+import ShowModal from "@/components/component/showModal"
 
 
 
@@ -37,7 +37,8 @@ function Page({params}) {
   const [me, setMe] = useState([]);
   const [lopen, setLopen] = useState(false);
   const [file, setFile] = useState(false);
-  const [modalType,setModalType] = useState('')
+  const [modalType, setModalType] = useState('')
+  const [suggestedUsers,setSuggestedUsers] = useState([])
   
   const { user } = useUser();
   const currentUserUid = user?.id;
@@ -56,15 +57,38 @@ function Page({params}) {
       toast.error('User not found');
     }
   }
-
+  useEffect(()=>{
+    async function tst() {
+      const { data, error } = await supabase
+        .from('likes')
+        .select('*,{users:fname}')
+        .join('users', 'liker_id','users.id')
+      if (data) {
+        console.log(data);
+      }
+      else {
+        console.log(error)
+      }
+    } 
+    tst();
+  },[])
     useEffect(()=>{
       async function fetchUser(){
         const { data,error } = await supabase.from('users').select().eq('id', id).single();
         data ? setUserP(data) : alert('User not found') + router.push('/explore');
 
-    }
-    fetchUser();
-    fetchMe();
+      }
+      async function fetchSuggestedUsers(){
+        const { data, error } = await supabase
+          .rpc('get_suggested_users');
+        if (data) {
+            setSuggestedUsers(data)
+        }
+      }
+
+      fetchUser();
+      fetchMe();
+      fetchSuggestedUsers();
     
 },[id])
 
@@ -168,9 +192,17 @@ function Page({params}) {
       }
       friendshipsRealtime();
 
+  const handleClose = ()=>{
+    setLopen(false);
+  }
   return (
     <>
-        <div className="min-h-screen bg-[#fbfbfe] font-poppins text-[#050315]">
+      <div className="min-h-screen bg-[#fbfbfe] font-poppins text-[#050315]">
+        {
+          lopen && (
+            <ShowModal fileType={modalType} src={file} onClose={handleClose}  />
+          )
+        }
         <Toaster richColors />
       {/* Cover Image */}
       <div className="relative h-64 md:h-80 lg:h-96">
@@ -412,20 +444,21 @@ function Page({params}) {
             Similar Users
           </h2>
           <div
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((userP) => (
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            {suggestedUsers.map((user) => (
               <Card
-                key={userP}
+                key={user.id}
                 className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 flex flex-col items-center text-center">
                   <Image
-                    src={`/placeholder.svg?height=100&width=100&text=userP${userP}`}
-                    alt={`Similar userP ${userP}`}
+                  src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`}
+                    alt={`Similar userP ${user.id}`}
                     width={100}
                     height={100}
-                    className="rounded-full mb-4" />
-                  <h3 className="font-semibold text-[#050315] mb-1">userP {userP}</h3>
-                  <p className="text-sm text-[#050315] mb-4">New York, USA</p>
+                    className="rounded-full h-20     w-20  mb-4" />
+                  <h3 className="font-semibold text-[#050315] mb-1">{user.fname} {user.lname}</h3>
+                  <p className="text-sm text-[#050315] mb-4">{user.age}</p>
+                  <p className="text-sm text-[#050315] mb-4">{user.location}</p>
                   <Button
                     variant="outline"
                     size="sm"
