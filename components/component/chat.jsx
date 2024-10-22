@@ -333,7 +333,7 @@ export default function Chat({type,msgsId}) {
                     <AvatarImage src={userProfile} alt="You" />
                     <AvatarFallback>You</AvatarFallback>
               </Avatar>
-            <h2 className="text-xl flex items-center font-poppins font-semibold">{currentUser}  <span>{me.verified == 1 && <MdOutlineVerified size={30} style={{ color: '#0284c7' }} />}</span></h2>
+            <h2 className="lg:text-xl flex items-center font-poppins font-semibold">{currentUser}  <span>{me.verified == 1 && <MdOutlineVerified size={30} style={{ color: '#0284c7' }} />}</span></h2>
             <Button
               variant="ghost"
               size="icon"
@@ -558,10 +558,7 @@ export default function Chat({type,msgsId}) {
                   <form
                     onSubmit={(e)=>{e.preventDefault();sendMessage()}} 
                     className="p-4 bg-[#fbfbfe] border-t border-[#dedcff]">
-                      <div className='flex w-full justify-between  items-center p-[0.9] gap-2 text-accent ' >
-                        <ArrowBigDown  onClick={()=>{scrollToBottom()}}  className='w-5 h-5 border border-accent  rounded  cursor-pointer  ' size={100} />
-                        <ArrowBigLeftIcon onClick={()=>{firstMessage()}}  className='w-5 h-5 rotate-90 border border-accent  cursor-pointer  rounded  ' size={100}  />
-                      </div>
+                     
                       {
                         msgStatu && (
                           <div className='w-full bg-red-500  p-2'  >
@@ -591,6 +588,13 @@ export default function Chat({type,msgsId}) {
                       }
                     }} id='msgImg' type="file" hidden />
 
+                    <div className=''  >
+                       <div className='flex justify-center  p-2 text-accent ' style={{
+                        
+                        transform : 'scale(1.5)',
+                       }} >
+                        <ArrowBigDown  onClick={()=>{scrollToBottom()}}  className='w-5 h-5 border border-accent  rounded  cursor-pointer  ' size={100} />
+                      </div>
                     <Button
                         onClick={()=>{
                           document.getElementById('msgImg').click();
@@ -601,12 +605,19 @@ export default function Chat({type,msgsId}) {
                         <MdAttachFile className="h-5 w-5" />
                         <span className="sr-only">Send image</span>
                       </Button>
+                      </div>
                       <Input
                         type="text"
                         placeholder="Type a message..."
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        className="flex-1 border-none text-md  focus:outline-none outline-none  " />
+                        className="flex-1 border-none text-md mt-[2rem]  focus:outline-none outline-none  " />
+                        <div className=''  >
+                         <div className='flex p-2 justify-center text-accent ' style={{
+                          transform: 'scale(1.5)',
+                         }} >
+                        <ArrowBigLeftIcon onClick={()=>{firstMessage()}}  className='w-5 h-5 rotate-90 border border-accent  cursor-pointer  rounded  ' size={100}  />
+                      </div>
                       <Button
                         type="submit"
                         size="icon"
@@ -614,6 +625,7 @@ export default function Chat({type,msgsId}) {
                         <SendIcon className="h-5 w-5" />
                         <span className="sr-only">Send message</span>
                       </Button>
+                      </div>
                     </div>
                   </form>
                 </div>

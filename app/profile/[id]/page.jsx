@@ -37,8 +37,9 @@ function Page({params}) {
   const [me, setMe] = useState([]);
   const [lopen, setLopen] = useState(false);
   const [file, setFile] = useState(false);
-  const [modalType, setModalType] = useState('')
-  const [suggestedUsers,setSuggestedUsers] = useState([])
+  const [modalType, setModalType] = useState('');
+  const [suggestedUsers, setSuggestedUsers] = useState([]);
+  const [request, setRequest] = useState(false);
   
   const { user } = useUser();
   const currentUserUid = user?.id;
@@ -79,7 +80,7 @@ function Page({params}) {
 },[id])
 
   
-    async function handelFriendshipRequest() {
+    async function handelFriendshipRequest(theUserUid) {
       const fname = user?.firstName;
       const theUserProfile = me.imgName ? `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${me.imgName}` : `https://api.dicebear.com/6.x/micah/svg?seed=${fname}`;
       const { data, error } = await supabase.from('friends').insert({
@@ -92,7 +93,7 @@ function Page({params}) {
         userInterests:me.interests ? me.interests : 'No interest available',
         userVerification:me.verified,
         status:'pending',
-        frienduid:userP.uid,
+        frienduid:theUserUid,
         friendName:userP.username,
         friendProfile:userP.profilePic ? `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${userP.imgName}` : `https://api.dicebear.com/6.x/micah/svg?seed=${userP.userName}`,
         friendAge:userP.age,
@@ -101,7 +102,7 @@ function Page({params}) {
         friendInterests:userP.interests ? userP.interests : 'No interest available',
         friendVerification:userP.verified,
         requester:currentUserUid,
-        receiver:userP.uid,
+        receiver:theUserUid,
         receiverId:userP.id,
 
       });
@@ -158,8 +159,8 @@ function Page({params}) {
       data ? toast.success(`${userP.name} is not your friend anymore .`) : toast.error(error);
     }
     //stop request 
-    async function stopRequest(){
-      const {data,error} = await supabase.from('friends').delete().eq('useruid',currentUserUid).eq('frienduid',userP.uid);
+    async function stopRequest(theUserUid){
+      const {data,error} = await supabase.from('friends').delete().eq('useruid',currentUserUid).eq('frienduid',theUserUid);
       data ? toast.success(`${userP.name} will not get you request`) : console.log(error);
     }
 
@@ -215,7 +216,7 @@ function Page({params}) {
               alt="Profile"
               width={200}
               height={200}
-              className="rounded-full border-4 border-[#fbfbfe] cursor-pointer  shadow-lg" />
+              className="rounded-full border-4 border-[#fbfbfe] cursor-pointer w-40 h-40  shadow-lg" />
             {/* userP Info */} 
             <div className="text-center md:text-left flex-grow">
               <div className="flex items-center max-sm:flex-col gap-2 max-sm:line-clamp-2" >
@@ -272,7 +273,7 @@ function Page({params}) {
                 {
                   isFriend == '0'  && (
                     <Button onClick={()=>{
-                      handelFriendshipRequest();
+                      handelFriendshipRequest(userP.uid);
                     }}  variant="outline" className="border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
                     <BsBriefcase className="h-4 w-4 mr-2" />
                       Add Friend
@@ -369,19 +370,19 @@ function Page({params}) {
                 </h2>
                 <div>
                 {userP.instagram && (
-                    <Link href={"https://www.instagram.com/"+userP.instagram} className="flex items-center p-2 gap-2 hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
+                    <Link href={"https://www.instagram.com/"+userP.instagram} className="flex items-center p-2 gap-2 hover:size:40 text-muted-foreground hover:text-primary" prefetch={false}>
                       <InstagramIcon className="w-5 h-5" style={{ color: '#c026d3' }} />
                       {userP.instagram}
                     </Link>
                   )}
                   {userP.facebook && (
-                    <Link href={"https://www.facebook.com/"+userP.facebook} className="flex items-center p-2 gap-2 hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
+                    <Link href={"https://www.facebook.com/"+userP.facebook} className="flex items-center p-2 gap-2 hover:size:40 text-muted-foreground hover:text-primary" prefetch={false}>
                       <FacebookIcon className="w-5 h-5" style={{ color: '#06b6d4' }} />
                       {userP.facebook}
                     </Link>
                   )}
                   {userP.number && (
-                    <Link href={"tel:"+userP.number} className="flex items-center p-2 gap-2 hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
+                    <Link href={"tel:"+userP.number} className="flex items-center p-2 gap-2 hover:size:40 text-muted-foreground hover:text-primary" prefetch={false}>
                       <PhoneIcon className="w-5 h-5" style={{ color: '#4ade80' }} />
                       {userP.number}
                     </Link>
@@ -433,15 +434,13 @@ function Page({params}) {
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
             {suggestedUsers.map((user) => (
               <Card
-                onDblclick={() => { router.push(`/profile/${user.id}`) }}
+                onClick={() => { router.push(`/profile/${user.id}`) }}
                 key={user.id}
-                className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden hover:shadow-lg transition-shadow">
-                <CardContent className="p-6 flex flex-col items-center text-center">
+                className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden hover:shadow-lg transition-shadow"   >
+                <CardContent className="p-6 flex flex-col items-center hover:cursor-pointer  text-center">
                   <Image
-                    onClick={() => {
-                      setLopen(true); setModalType('img'); setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`); 
-                  }}
-                  src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`}
+                   
+                    src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${user.imgName}`}
                     alt={`Similar userP ${user.id}`}
                     width={100}
                     height={100}
@@ -449,13 +448,37 @@ function Page({params}) {
                   <h3 className="font-semibold text-[#050315] mb-1">{user.fname} {user.lname}</h3>
                   <p className="text-sm text-[#050315] mb-4">{user.age}</p>
                   <p className="text-sm text-[#050315] mb-4">{user.location}</p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
-                    <Users className="h-4 w-4 mr-2" />
-                    Follow
-                  </Button>
+                  {
+                    request ? (
+                       <Button
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          stopRequest(user.uid);
+                          setRequest(false);
+                          }}
+                        variant="outline"
+                        size="sm"
+                        className="w-full border-red-400 bg-red-400 text-white hover:bg-red-300 hover:text-[#fbfbfe]">
+                        <Users className="h-4 w-4 mr-2" />
+                        Stop Request
+                      </Button>
+                    ):(
+                       <Button
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handelFriendshipRequest(user.uid);
+                          setRequest(true)
+                          console.log(event)
+                          }}
+                        variant="outline"
+                        size="sm"
+                        className="w-full border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
+                        <Users className="h-4 w-4 mr-2" />
+                        Follow
+                      </Button>
+                    )
+                  }
+                 
                 </CardContent>
               </Card>
             ))}
