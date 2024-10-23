@@ -1,5 +1,5 @@
 import React from 'react'
-import NotificationChart from '@/components/component/NotificationChart'
+import NotificationChart from '@/components/component/notificationChart'
 function Page() {
   return (
       <div className='w-full h-full flex flex-col items-center justify-center' >
