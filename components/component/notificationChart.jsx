@@ -52,7 +52,7 @@ const chartConfig = {
   },
 }
 
-export default function Component() {
+export default function NotificationChart() {
   const totalVisitors = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
   }, [])
