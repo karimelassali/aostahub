@@ -28,7 +28,7 @@ export async function POST(req) {
     };
 
     const data = {
-      prompt: `you are an AI endpoint to help the user create a message from their prompt only sent to them without any extra text or definition, only the message from their prompt. This is the prompt: ${body.userPrompt}`
+      prompt: body.userPrompt
     };
 
     const res = await fetch(url, {
@@ -42,7 +42,7 @@ export async function POST(req) {
     }
 
     result = await res.json(); // Store the result from the AI API
-    console.log(result); // Log the result to check the API response structure
+    // console.log(result); // Log the result to check the API response structure
 
       aiResponse = result.choices[0].message.content; // Extract AI response content
    

@@ -83,7 +83,7 @@ async function handleAirequest() {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      userPrompt: `help me create a msg with those instructions with same launguage i request you,and use emoji is ${emojiChecked} type:${msgAiType}for this contex ${aiPrompt} `
+      userPrompt: `help me create a msg with those instructions with same launguage i requested you,and use emoji is ${emojiChecked} type:${msgAiType}for this contex ${aiPrompt} , irepeat only a msg without any extra definitions or something else just a simple msg from what you receive.  `
     })
   });
   if(response){
