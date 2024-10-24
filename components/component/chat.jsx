@@ -60,11 +60,15 @@ export default function Chat({type,msgsId}) {
   const chatContainerRef = useRef(null);
   const [msgStatu,setMsgStatu] = useState(false);
   const [modalType,setModalType] = useState('');
-  const [userSearch,setUserSearch] = useState('');
+  const [userSearch, setUserSearch] = useState('');
+  const [aiClicked, setAiClicked] = useState(false);
+  const [msgAiType,setMsgAiType] = useState('');
   
 
-
-
+  //ai section
+  const handleAiOption = (e)=>{
+    setMsgAiType(e.target.value)
+  }
   const imgsExtensions = [
     '.jpg','.jpeg','.png','.gif','.webp',
   ]
@@ -308,7 +312,47 @@ export default function Chat({type,msgsId}) {
 
   return (
     (
-    <div className="flex h-screen w-full transition-all z-40  bg-[#fbfbfe] text-[#050315]">
+      <div className="flex h-screen w-full transition-all z-40  bg-[#fbfbfe] text-[#050315]">
+        {
+          aiClicked && (
+            <div className='flex bg-black justify-center items-center  bg-opacity-45  w-full h-full border border-red-300 z-50 absolute ' >
+              <button className='bg-red-400 text-white  m-3 rounded  p-3 absolute top-0 right-0 '  onClick={()=>{setAiClicked(false)}}>
+                close
+                </button>
+             <div className='flex flex-col gap-4 border border-red-400 min-w-[50%] min-h-[50%] bg-slate-600 rounded-lg p-4'>
+                <h1 className='text-white'>Ai Help</h1>
+                <div className='flex flex-col justify-center w-full'>
+                  <h3 className='text-white text-center'>
+                    AI Chat assistant
+                  </h3>
+                  <div className="aiArea h-full gap-2  w-full flex flex-col justify-end">
+                    <div className='p-2'>
+                    </div>
+                    <select className='rounded p-2 font-poppins' onChange={handleAiOption}>
+                      <option value="funny">funny</option>
+                      <option value="formal">formal</option>
+                      <option value="informal">informal</option>
+                      <option value="normal">normal</option>
+                    </select>
+                    <div className='aiResponse p-2 border border-gray-200 min-h-[150px] '>
+                        <p className='text-white'>
+                        this is a generating img hello how r  u
+                        </p>
+                    </div>
+                    <div className='aiInput flex relative bottom-0 rounded p-2 gap-4 w-full'>
+                      <input type='text' placeholder='How I can help you?..' className='p-2 rounded border-none outline-none w-full flex  items-center  ' />
+                        <button className='rounded '  >
+                          <Image width={40} height={40} alt={'ai icon'} src='/ass/ai.png' / >
+                        </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              </div>
+          )
+        }
+       
        {
         lopen && (
           <ShowModal fileType={modalType} onClose={handleClose}  src={file}  />
@@ -588,12 +632,12 @@ export default function Chat({type,msgsId}) {
                       }
                     }} id='msgImg' type="file" hidden />
 
-                    <div className=''  >
+                    <div className='flex justify-between items-center '  >
                        <div className='flex justify-center  p-2 text-accent ' style={{
                         
                         transform : 'scale(1.5)',
                        }} >
-                        <ArrowBigDown  onClick={()=>{scrollToBottom()}}  className='w-5 h-5 border border-accent  rounded  cursor-pointer  ' size={100} />
+                        {/* <ArrowBigDown  onClick={()=>{scrollToBottom()}}  className='w-5 h-5 border border-accent  rounded  cursor-pointer  ' size={100} /> */}
                       </div>
                     <Button
                         onClick={()=>{
@@ -611,13 +655,31 @@ export default function Chat({type,msgsId}) {
                         placeholder="Type a message..."
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        className="flex-1 border-none text-md mt-[2rem]  focus:outline-none outline-none  " />
-                        <div className=''  >
-                         <div className='flex p-2 justify-center text-accent ' style={{
+                        className="flex-1 border-none text-md  focus:outline-none outline-none  " />
+                        <div className='flex p-1 p-x-3 gap-2 '  >
+                         {/* <div className='flex p-2 justify-center text-accent ' style={{
                           transform: 'scale(1.5)',
                          }} >
                         <ArrowBigLeftIcon onClick={()=>{firstMessage()}}  className='w-5 h-5 rotate-90 border border-accent  cursor-pointer  rounded  ' size={100}  />
-                      </div>
+                      </div> */}
+                       <motion.button 
+                      initial={{
+                        opacity: 0,
+                        x: -200
+                      }}
+                      animate={{
+                        opacity: 1,
+                        x: 0
+                      }}
+                      transition={{
+                        delay: 1.5,
+                      }}
+                      onClick={() => {
+                        setAiClicked(true);
+                      }}
+                       >
+                         <Image width={40} height={40} alt={'ai icon'} src='/ass/ai.png' / >
+                      </motion.button>
                       <Button
                         type="submit"
                         size="icon"
