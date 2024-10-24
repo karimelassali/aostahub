@@ -24,6 +24,7 @@ import VideoCall from '@/components/video-call'
 import { MdBlock, MdOutlineVerified } from "react-icons/md";
 import { MdAttachFile } from "react-icons/md";
 import ShowModal from './showModal';
+import { Switch } from '@/components/ui/switch'
 
 
 
@@ -63,12 +64,36 @@ export default function Chat({type,msgsId}) {
   const [userSearch, setUserSearch] = useState('');
   const [aiClicked, setAiClicked] = useState(false);
   const [msgAiType,setMsgAiType] = useState('');
-  
+  const [emojiChecked, setEmojiChecked] = useState();
+  const [aiPrompt, setAiPrompt] = useState('');
+
+  const [aiResponse, setAiResponse] = useState('');
 
   //ai section
   const handleAiOption = (e)=>{
     setMsgAiType(e.target.value)
+    console.log(e.target.value)
   }
+
+
+async function handleAirequest() {
+  const response = await fetch('/api/ai', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      userPrompt: `help me create a msg with those instructions with same launguage i request you,and use emoji is ${emojiChecked} type:${msgAiType}for this contex ${aiPrompt} `
+    })
+  });
+  if(response){
+    let data = await response.json();
+    setAiResponse(data.aiResponse)
+  }
+}
+
+
+      
   const imgsExtensions = [
     '.jpg','.jpeg','.png','.gif','.webp',
   ]
@@ -315,33 +340,51 @@ export default function Chat({type,msgsId}) {
       <div className="flex h-screen w-full transition-all z-40  bg-[#fbfbfe] text-[#050315]">
         {
           aiClicked && (
-            <div className='flex bg-black justify-center items-center  bg-opacity-45  w-full h-full border border-red-300 z-50 absolute ' >
-              <button className='bg-red-400 text-white  m-3 rounded  p-3 absolute top-0 right-0 '  onClick={()=>{setAiClicked(false)}}>
+            <div className='flex text-black  bg-black justify-center items-center  bg-opacity-45  w-full h-full border border-red-300 z-50 absolute ' >
+              <button className=' text-white  m-3 rounded  p-3 absolute top-0 right-0 '  onClick={()=>{setAiClicked(false)}}>
                 close
                 </button>
-             <div className='flex flex-col gap-4 border border-red-400 min-w-[50%] min-h-[50%] bg-slate-600 rounded-lg p-4'>
-                <h1 className='text-white'>Ai Help</h1>
+             <div className='flex flex-col gap-4  min-w-[50%] min-h-[50%] bg-white  rounded-lg p-4'>
+                <h1 className='text-black'>Ai Chat Assistant</h1>
                 <div className='flex flex-col justify-center w-full'>
-                  <h3 className='text-white text-center'>
-                    AI Chat assistant
-                  </h3>
-                  <div className="aiArea h-full gap-2  w-full flex flex-col justify-end">
-                    <div className='p-2'>
+                  {/* <h3 className='text-white text-center'>
+                    AI Chat assistant 
+                  </h3> */}
+                  <div className="aiArea h-full gap-2  w-full flex flex-col ">
+                    <div className='gap-2 flex justify-center  '>
+                       <select className='rounded p-2 font-poppins bg-secondary  ' onChange={handleAiOption}>
+                        <option value="funny">funny</option>
+                        <option value="formal">formal</option>
+                        <option value="informal">informal</option>
+                        <option value="normal">normal</option>
+                      </select>
+                      <div className='flex bg-secondary  items-center gap-2  rounded text-black p-2 '  >
+                          <h4 className=''>Emoji</h4>
+                          <Switch checked={emojiChecked} onChekedChange={(e)=>{setEmojiChecked(e)}}  />
+                      </div>
+                    
                     </div>
-                    <select className='rounded p-2 font-poppins' onChange={handleAiOption}>
-                      <option value="funny">funny</option>
-                      <option value="formal">formal</option>
-                      <option value="informal">informal</option>
-                      <option value="normal">normal</option>
-                    </select>
-                    <div className='aiResponse p-2 border border-gray-200 min-h-[150px] '>
-                        <p className='text-white'>
-                        this is a generating img hello how r  u
-                        </p>
+                    <div className='aiResponse p-2 min-h-[150px] '>
+                        <div className='flex items-center gap-2' >
+                            <Image width={20} height={20} alt={'ai icon'} src='/ass/ai.png' / >
+                        <p className='text-black'>
+                            {
+                            aiResponse ? (
+                              aiResponse
+                              ):
+                              (
+                               ' this is a generating img hello how r  u'
+
+                              )
+                            }                        
+                            </p>
+                        </div>
                     </div>
-                    <div className='aiInput flex relative bottom-0 rounded p-2 gap-4 w-full'>
-                      <input type='text' placeholder='How I can help you?..' className='p-2 rounded border-none outline-none w-full flex  items-center  ' />
-                        <button className='rounded '  >
+                    <div className='aiInput border border-secondary  flex relative bottom-0 rounded p-2 gap-4 w-full'>
+                      <input type='text' placeholder='How I can help you?..' className='p-2 rounded border-none outline-none w-full flex  items-center  ' onChange={(e)=>setAiPrompt(e.target.value)}  />
+                        <button className='rounded ' onClick={()=>{
+                          handleAirequest()
+                        }}  >
                           <Image width={40} height={40} alt={'ai icon'} src='/ass/ai.png' / >
                         </button>
                     </div>
