@@ -21,17 +21,11 @@
         "name": "next"
       }
     ],
-<<<<<<< HEAD
     "target": "ES2017",
     "baseUrl": ".",                    // Add this line
     "paths": {                          // Add this section
       "@/*": ["./*"]
-=======
-    "baseUrl": ".",
-    "paths": {
-      "@/components/*": ["components/*"],
-      "@/utils/*": ["utils/*"]
->>>>>>> f4ec78e7e93bc578c01e0b18485d7893871d76b7
+
     }
   },
   "include": [
