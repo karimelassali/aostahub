@@ -4,6 +4,9 @@ const nextConfig = {
   images: {
     domains: ['img.clerk.com','giyrlrcehqsypefjoayv.supabase.co','api.dicebear.com'], // Add any additional domains as needed
   },
+    experimental: {
+    swcPlugins: [["glass-js/swc", {}]]
+  },
   async headers() {
     return [
       {
