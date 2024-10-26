@@ -13,6 +13,7 @@ import Link from "next/link";
 import { IconHome, IconNewSection } from "@tabler/icons-react";
 import { IoCreateOutline } from "react-icons/io5";
 import { IoChatboxOutline } from "react-icons/io5";
+import GlassProvider from 'glass-js'
 
 export const metadata = {
   title: "Welcome to Aosta Hub",
@@ -71,7 +72,9 @@ export default function RootLayout({ children }) {
           />
         </head>
         <body className="bg-background">
-          {children}
+          <GlassProvider>
+            {children}
+          </GlassProvider>
           
         </body>
       </html>

@@ -40,10 +40,15 @@
     "crypto": "^1.0.1",
     "embla-carousel-react": "^8.3.0",
     "framer-motion": "^11.11.8",
+    "glass-js": "^1.3.5",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.435.0",
     "motion": "^10.18.0",
+<<<<<<< HEAD
     "next": "^15.0.1",
+=======
+    "next": "^14.2.16",
+>>>>>>> f4ec78e7e93bc578c01e0b18485d7893871d76b7
     "peerjs": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -53,7 +58,7 @@
     "recharts": "^2.13.0",
     "sonner": "^1.5.0",
     "tailwind": "^4.0.0",
-    "tailwind-merge": "^2.5.2",
+    "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "yet-another-react-lightbox": "^3.21.6"
   },
