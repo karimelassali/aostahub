@@ -2,10 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['img.clerk.com','giyrlrcehqsypefjoayv.supabase.co','api.dicebear.com'], // Add any additional domains as needed
+    domains: ['img.clerk.com', 'giyrlrcehqsypefjoayv.supabase.co', 'api.dicebear.com'], // Add any additional domains as needed
   },
-    experimental: {
-    swcPlugins: [["glass-js/swc", {}]]
+  experimental: {
+    swcPlugins: [/*["glass-js/swc", {}]*/], // Commented out for troubleshooting
+    turboMode: false, // Disable Turbopack for testing
   },
   async headers() {
     return [
@@ -22,11 +23,7 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
-
-
 // Injected content via Sentry wizard below
-
 const { withSentryConfig } = require("@sentry/nextjs");
 
 module.exports = withSentryConfig(
@@ -72,3 +69,5 @@ module.exports = withSentryConfig(
     automaticVercelMonitors: true,
   }
 );
+
+module.exports = nextConfig;
