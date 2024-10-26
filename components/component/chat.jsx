@@ -25,13 +25,13 @@ import { MdBlock, MdOutlineVerified } from "react-icons/md";
 import { MdAttachFile } from "react-icons/md";
 import ShowModal from './showModal';
 import { Switch } from '@/components/ui/switch'
+import TypingAnimation from '@/components/ui/typing-animation'
 
 
 
 
 
-
-export default function Chat({type,msgsId}) {
+export default  function Chat({type,msgsId}) {
   
   const [lopen,setLopen] = useState(false);
   const [file,setFile] = useState('');
@@ -64,7 +64,7 @@ export default function Chat({type,msgsId}) {
   const [userSearch, setUserSearch] = useState('');
   const [aiClicked, setAiClicked] = useState(false);
   const [msgAiType,setMsgAiType] = useState('');
-  const [emojiChecked, setEmojiChecked] = useState();
+  const [emojiChecked, setEmojiChecked] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
 
   const [aiResponse, setAiResponse] = useState('');
@@ -83,7 +83,7 @@ async function handleAirequest() {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      userPrompt: `help me create a msg with those instructions with same launguage i requested you,and use emoji is ${emojiChecked} type:${msgAiType}for this contex ${aiPrompt} , irepeat only a msg without any extra definitions or something else just a simple msg from what you receive.  `
+      userPrompt: `This is my input: "${aiPrompt}". Please create a message suitable for a real user. Use emojis if ${emojiChecked ? 'true' : 'false'} and set the message type as: ${msgAiType ? msgAiType : 'normal'}. Your response should be a simple yet creative message based on the input provided. Please respond in the same language as the request and avoid any extra definitions or explanations.`
     })
   });
   if(response){
@@ -344,7 +344,7 @@ async function handleAirequest() {
               <button className=' text-white  m-3 rounded  p-3 absolute top-0 right-0 '  onClick={()=>{setAiClicked(false)}}>
                 close
                 </button>
-             <div className='flex flex-col gap-4  min-w-[50%] min-h-[50%] bg-white  rounded-lg p-4'>
+             <div className='flex flex-col gap-4  min-w-[50%] max-w-[65%]  min-h-[50%] bg-white  rounded-lg p-4'>
                 <h1 className='text-black'>Ai Chat Assistant</h1>
                 <div className='flex flex-col justify-center w-full'>
                   {/* <h3 className='text-white text-center'>
@@ -370,10 +370,11 @@ async function handleAirequest() {
                         <p className='text-black'>
                             {
                             aiResponse ? (
-                              aiResponse
+                              <TypingAnimation className="text-md " duration={90}  text={aiResponse}  />
+                              
                               ):
                               (
-                               ' this is a generating img hello how r  u'
+                               'Hello , Im your ai message assistance how i can help you ? '
 
                               )
                             }                        

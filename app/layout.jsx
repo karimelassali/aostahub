@@ -6,7 +6,8 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import "./globals.css";
-import { Button } from "@/components/ui/button";
+// import { Button } from "./components/ui/button";
+
 import Image from "next/image";
 import Link from "next/link";
 import { IconHome, IconNewSection } from "@tabler/icons-react";

@@ -20,7 +20,12 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "target": "ES2017",
+    "baseUrl": ".",                    // Add this line
+    "paths": {                          // Add this section
+      "@/*": ["./*"]
+    }
   },
   "include": [
     "next-env.d.ts",
