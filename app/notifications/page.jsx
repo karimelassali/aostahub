@@ -5,7 +5,7 @@ function Page() {
       <div className='w-full h-full flex flex-col items-center justify-center' >
           <h1>Notifications </h1>
           <div className='w-full h-full flex justify-center items-center  '>
-              <NotificationChart />
+              {/* <NotificationChart /> */}
           </div>
      </div>
   )
