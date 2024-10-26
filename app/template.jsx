@@ -15,7 +15,7 @@ import {
   import { FaUserFriends } from "react-icons/fa";
   import { IoChatbox } from "react-icons/io5";
 import { Bell } from 'lucide-react';
-import NotificationModal from '@/components/ui/notificationmodal';
+// import NotificationModal from '@/components/ui/notificationmodal';
 import { createClient } from "../utils/supabase/client";
 import { useUser } from '@clerk/nextjs';
 import NotificationModalInfo from '../components/notification-modal';
@@ -123,9 +123,9 @@ export default function Template({ children }) {
                 )
                       }
                       <div className='fixed top-0 right-0 flex flex-col items-center justify-center'  >
-                         {
+                         {/* {
                               isNotificationOpen && <NotificationModal  onClose={() => setIsNotificationOpen(false)} />
-                            }
+                            } */}
                       </div>
                       
               </div>
