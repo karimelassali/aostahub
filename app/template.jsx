@@ -15,7 +15,7 @@ import {
   import { FaUserFriends } from "react-icons/fa";
   import { IoChatbox } from "react-icons/io5";
 import { Bell } from 'lucide-react';
-// import NotificationModal from '@/components/ui/notificationmodal';
+import NotificationModal from '@/components/ui/notificationmodal';
 import { createClient } from "../utils/supabase/client";
 import { useUser } from '@clerk/nextjs';
 import NotificationModalInfo from '../components/notification-modal';
