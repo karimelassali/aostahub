@@ -35,3 +35,6 @@
     scrollbar-color: blue #f1f1f1; /* Scrollbar color and track color */
   }
   
+  .spline-watermark{
+    display: none;
+  }

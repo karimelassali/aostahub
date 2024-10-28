@@ -72,9 +72,9 @@ export default function RootLayout({ children }) {
           />
         </head>
         <body className="bg-background">
-          <GlassProvider>
+          {/* <GlassProvider> */}
             {children}
-          </GlassProvider>
+          {/* </GlassProvider> */}
           
         </body>
       </html>

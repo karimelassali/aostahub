@@ -26,7 +26,7 @@ import { MdAttachFile } from "react-icons/md";
 import ShowModal from './showModal';
 import { Switch } from '@/components/ui/switch'
 import TypingAnimation from '@/components/ui/typing-animation'
-
+import MediaThemeYt from 'player.style/yt/react';
 
 
 
@@ -617,13 +617,17 @@ async function handleAirequest() {
                                  )
                               }
                               {
-                               message.chatFile != null &&  message.chatFile.endsWith('.mp4') && (
-                                     <video
+                              message.chatFile != null && message.chatFile.endsWith('.mp4') && (
+                                  <MediaThemeYt>
+                                  <video
+                                     playsInline
+                                     slot="media"
+                                      crossOrigin
                                       onClick={()=>{setLopen(true);setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`);setModalType('video')}}
                                        className='object-cover w-full h-24  max-h-[250px] min-h-[200px]  rounded-md'
-                                       controls
                                        src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}
-                                     />  
+                                  />  
+                                  </MediaThemeYt>
                                )
                               }
                             <p>
