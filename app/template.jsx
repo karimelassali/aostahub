@@ -64,7 +64,7 @@ export default function Template({ children }) {
     return (
       <ClerkLoaded>
         <>
-         <nav className="bg-primary font-poppins fixed top-0 left-0  z-50  w-full">
+         <nav className="bg-primary font-poppins fixed top-0 left-0    w-full" style={{zIndex:'999'}}  >
       <div className=" p-2 gap-2 ">
         <div className="relative flex h-16 items-center justify-center ">
           {

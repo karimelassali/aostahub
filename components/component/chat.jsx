@@ -339,7 +339,7 @@ async function handleAirequest() {
 
   return (
     (
-      <div className="flex h-screen w-full transition-all z-40  bg-[#fbfbfe] text-[#050315]">
+      <div className="flex h-screen w-full transition-all  bg-[#fbfbfe] text-[#050315]">
         {
           aiClicked && (
             <div className='flex text-black  bg-black justify-center items-center  bg-opacity-45  w-full h-full  z-40 absolute '  >
@@ -381,7 +381,6 @@ async function handleAirequest() {
                               :
                               (
                                'Hello , Im your ai message assistance how i can help you ? '
-
                               )
                             }                        
                             </p>
@@ -428,7 +427,7 @@ async function handleAirequest() {
           animate={{ x: 0, opacity: 1  }}
           exit="closed"
           variants={menuVariants}
-          className={`w-full sm:w-1/3   lg:w-1/4 xl:w-1/5 bg-[#fbfbfe] border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-40 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
+          className={`w-full sm:w-1/3   lg:w-1/4 xl:w-1/5 bg-[#fbfbfe] border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-30 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
           <div
             className="p-4 border-b border-[#dedcff] flex justify-start gap-2   items-center bg-accent text-[#fbfbfe]">
               <Avatar className="h-8 w-8 ">
@@ -650,6 +649,11 @@ async function handleAirequest() {
                             <p
                               className={`text-xs mt-1 ${message.msgSenderUid === currentUserId ? 'text-gray-300 text-sm ' : ' text-sm text-slate-700 '}`}>{message.time}</p>
                           </div>
+                              {
+                                message.msgSenderUid !== currentUserId  && message.message && (
+                                  <Image width={20} height={20} alt={'ai icon'} src='/ass/ai.png' / >
+                                )
+                            }
                           {/* {message.msgSenderUid === currentUserId && (
                             // <Avatar className="h-8 w-8 ml-2">
                             //   <AvatarImage src={me.msgSenderPicture} alt="You" />
