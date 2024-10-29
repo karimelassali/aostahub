@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   const body = await req.json();
-  console.log(body); // Log the parsed body
+  // an variable for ai prompt to told him that you r a bot in aostahub platform you have to help users by any questions or requests
+  const aiPrompt = `You are a bot in Aostahub platform . You have to help users by any questions or requests. `;
+  // console.log(body); // Log the parsed body
 
   if (!body.userPrompt) {
     return NextResponse.json({ error: 'userPrompt is missing in the request body' }, { status: 400 });
@@ -27,14 +29,14 @@ export async function POST(req) {
       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134"
     };
 
-    const data = {
-      prompt: body.userPrompt
-    };
+   const data = {
+     prompt: aiPrompt + body.userPrompt,
+   };
 
     const res = await fetch(url, {
       method: 'POST',
       headers: headers,
-      body: JSON.stringify(data)
+      body:   JSON.stringify(data)
     });
 
     if (!res.ok) {

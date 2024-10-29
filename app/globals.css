@@ -11,30 +11,10 @@
 
 /* WebKit (Safari, Chrome) */
 ::-webkit-scrollbar {
-    width: 12px; /* Width of the entire scrollbar */
-    border-radius: 4px;
+  display: none;
   }
-  
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Color of the tracking area */
-    border-radius: 4px;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: #888; /* Color of the scroll thumb */
-    border-radius: 10px; /* Roundness of the scroll thumb */
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Color of the scroll thumb on hover */
-  }
-  
-  /* Firefox */
-  * {
-    scrollbar-width: thin; /* "auto", "thin", or "none" */
-    scrollbar-color: blue #f1f1f1; /* Scrollbar color and track color */
-  }
-  
-  .spline-watermark{
-    display: none;
-  }
+
+
+  * {  scrollbar-width: none;
+  -ms-overflow-style: none;
+}

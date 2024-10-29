@@ -27,6 +27,8 @@ import ShowModal from './showModal';
 import { Switch } from '@/components/ui/switch'
 import TypingAnimation from '@/components/ui/typing-animation'
 import MediaThemeYt from 'player.style/yt/react';
+import { IoClose } from 'react-icons/io5'
+import { SiIrobot } from "react-icons/si";
 
 
 
@@ -83,7 +85,7 @@ async function handleAirequest() {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      userPrompt: `This is my input: "${aiPrompt}". Please create a message suitable for a real user. Use emojis if ${emojiChecked ? 'true' : 'false'} and set the message type as: ${msgAiType ? msgAiType : 'normal'}. Your response should be a simple yet creative message based on the input provided. Please respond in the same language as the request and avoid any extra definitions or explanations.`
+      userPrompt: `Hello im ${currentUser} and i want to create a message for my friend ${currentFriend.fname} This is my input: "${aiPrompt}". Please create a message suitable for a real user. Use emojis : ${emojiChecked ? 'yes' : 'no'} and set the message type as: ${msgAiType ? msgAiType : 'funny'}. Your response should be a simple yet creative message based on the input provided. Please respond in the same language as the request and avoid any extra definitions or explanations.`
     })
   });
   if(response){
@@ -122,10 +124,10 @@ async function handleAirequest() {
   useEffect(() => {
     const timer = setTimeout(() => {
       scrollToBottom()
-    }, 100)
+    }, 1000)
 
     return () => clearTimeout(timer);
-  }, [scrollToBottom])
+  }, [scrollToBottom,messages])
 
 
   const toggleMobileMenu = () => {
@@ -340,12 +342,12 @@ async function handleAirequest() {
       <div className="flex h-screen w-full transition-all z-40  bg-[#fbfbfe] text-[#050315]">
         {
           aiClicked && (
-            <div className='flex text-black  bg-black justify-center items-center  bg-opacity-45  w-full h-full border border-red-300 z-50 absolute ' >
-              <button className=' text-white  m-3 rounded  p-3 absolute top-0 right-0 '  onClick={()=>{setAiClicked(false)}}>
-                close
+            <div className='flex text-black  bg-black justify-center items-center  bg-opacity-45  w-full h-full  z-40 absolute '  >
+              <button className=' text-red-500  m-3 rounded  p-3 absolute top-0 right-0 '  onClick={()=>{setAiClicked(false)}}>
+                  <IoClose className='h-10 w-10   hover:rotate-180 transition-all duration-300'  />
                 </button>
-             <div className='flex flex-col gap-4  min-w-[50%] max-w-[65%]  min-h-[50%] bg-white  rounded-lg p-4'>
-                <h1 className='text-black'>Ai Chat Assistant</h1>
+             <div className='flex flex-col gap-4  min-w-[90%]   min-h-[50%] bg-white  rounded-lg p-4'>
+                <h1 className='text-black flex '><SiIrobot className='w-5 h-5 '  /> </h1>
                 <div className='flex flex-col justify-center w-full'>
                   {/* <h3 className='text-white text-center'>
                     AI Chat assistant 
@@ -360,29 +362,41 @@ async function handleAirequest() {
                       </select>
                       <div className='flex bg-secondary  items-center gap-2  rounded text-black p-2 '  >
                           <h4 className=''>Emoji</h4>
-                          <Switch checked={emojiChecked} onChekedChange={(e)=>{setEmojiChecked(e)}}  />
+                          <Switch checked={emojiChecked}   onCheckedChange={(e)=>{setEmojiChecked(e);console.log(e)}}  />
                       </div>
                     
                     </div>
                     <div className='aiResponse p-2 min-h-[150px] '>
-                        <div className='flex items-center gap-2' >
+                        <div className='flex items-start gap-2 min-h-[150px] overflow-y-scroll scrolllbar-hide  ' >
                             <Image width={20} height={20} alt={'ai icon'} src='/ass/ai.png' / >
-                        <p className='text-black'>
+                        <p className='text-black max-h-[100px] overflow-scroll '>
                             {
                             aiResponse ? (
-                              <TypingAnimation className="text-md " duration={90}  text={aiResponse}  />
+                              // <TypingAnimation className="text-md whitespace-pre-wrap " duration={40}  text={aiResponse}  />
+                              <span>
+                                {aiResponse}
+                              </span>
                               
-                              ):
+                            )
+                              :
                               (
                                'Hello , Im your ai message assistance how i can help you ? '
 
                               )
                             }                        
                             </p>
-                        </div>
-                    </div>
+                      </div>
+                      {
+                        aiResponse && (
+                              <div className='flex justify-between  gap-2 w-full '  >
+                                <button onClick={()=>{setMessage(aiResponse),setAiClicked(false)}}  className='bg-green-500 w-[50%] p-2 rounded font-poppins text-white hover:bg-green-300 '  >Insert 👍</button>
+                                <button onClick={() => { handleAirequest()}}  className='bg-red-500 w-[50%] p-2 rounded font-poppins text-white hover:bg-red-300 '  >Regenerate 👎</button>
+                            </div>
+                        )
+                      }
+                    </div>  
                     <div className='aiInput border border-secondary  flex relative bottom-0 rounded p-2 gap-4 w-full'>
-                      <input type='text' placeholder='How I can help you?..' className='p-2 rounded border-none outline-none w-full flex  items-center  ' onChange={(e)=>setAiPrompt(e.target.value)}  />
+                      <input type='text' placeholder={`How i can help you today ${currentUser} ?`} className='p-2 rounded border-none outline-none w-full flex  items-center  ' onChange={(e)=>setAiPrompt(e.target.value)}  />
                         <button className='rounded ' onClick={()=>{
                           handleAirequest()
                         }}  >
