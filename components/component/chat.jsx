@@ -79,19 +79,19 @@ export default  function Chat({type,msgsId}) {
 
 
 async function handleAirequest() {
-  const response = await fetch('/api/ai', {
+  const response = await fetch('/api/gemini', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      userPrompt: `Hello im ${currentUser} and i want to create a message for my friend ${currentFriend.fname} This is my input: "${aiPrompt}". Please create a message suitable for a real user. Use emojis : ${emojiChecked ? 'yes' : 'no'} and set the message type as: ${msgAiType ? msgAiType : 'funny'}. Your response should be a simple yet creative message based on the input provided. Please respond in the same language as the request and avoid any extra definitions or explanations.`
+      prompt: `Hello im ${currentUser} and i want to create a message for my friend ${currentFriend.fname} This is my input: "${aiPrompt}". Please create a message suitable for a real user. Use emojis : ${emojiChecked ? 'yes' : 'no'} and set the message type as: ${msgAiType ? msgAiType : 'funny'}. Your response should be a simple yet creative message based on the input provided. Please respond in the same language as the request and avoid any extra definitions or explanations.`
     })
   });
   if(response){
     let data = await response.json();
-    setAiResponse(data.aiResponse)
-  }
+    // setAiResponse(data.response)
+    document.getElementById('aiResponse').innerHTML = data.response;  }
 }
 
 
@@ -342,7 +342,7 @@ async function handleAirequest() {
       <div className="flex h-screen w-full transition-all  bg-[#fbfbfe] text-[#050315]">
         {
           aiClicked && (
-            <div className='flex text-black  bg-black justify-center items-center  bg-opacity-45  w-full h-full  z-40 absolute '  >
+            <div className='flex text-black p-3  bg-black justify-center items-center  bg-opacity-45  w-full h-full  z-40 absolute '  >
               <button className=' text-red-500  m-3 rounded  p-3 absolute top-0 right-0 '  onClick={()=>{setAiClicked(false)}}>
                   <IoClose className='h-10 w-10   hover:rotate-180 transition-all duration-300'  />
                 </button>
@@ -369,20 +369,16 @@ async function handleAirequest() {
                     <div className='aiResponse p-2 min-h-[150px] '>
                         <div className='flex items-start gap-2 min-h-[150px] overflow-y-scroll scrolllbar-hide  ' >
                             <Image width={20} height={20} alt={'ai icon'} src='/ass/ai.png' / >
-                        <p className='text-black max-h-[100px] overflow-scroll '>
-                            {
-                            aiResponse ? (
-                              // <TypingAnimation className="text-md whitespace-pre-wrap " duration={40}  text={aiResponse}  />
-                              <span>
-                                {aiResponse}
-                              </span>
-                              
-                            )
-                              :
-                              (
-                               'Hello , Im your ai message assistance how i can help you ? '
-                              )
-                            }                        
+                            <p id="aiResponse" className="text-black max-h-[200px] overflow-scroll">
+                              {aiResponse ? (
+                                aiResponse.response !== '' ? (
+                                  <span>{aiResponse.response}</span>
+                                ) : (
+                                  <Image width={40} height={40} alt="AI icon" src="/ass/ai.gif" />
+                                )
+                              ) : (
+                                'Hello, I’m your AI message assistant. How can I help you?'
+                              )}
                             </p>
                       </div>
                       {
