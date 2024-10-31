@@ -68,8 +68,10 @@ export default  function Chat({type,msgsId}) {
   const [msgAiType,setMsgAiType] = useState('');
   const [emojiChecked, setEmojiChecked] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
-
-  const [aiResponse, setAiResponse] = useState('');
+  const [aiTimer,setAiTimer] = useState(0);
+  const [aiResponse, setAiResponse] = useState(false);
+  const [aiOutpout, setAiOutpout] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
 
   //ai section
   const handleAiOption = (e)=>{
@@ -77,21 +79,46 @@ export default  function Chat({type,msgsId}) {
     console.log(e.target.value)
   }
 
+ const timer = () => {
+  if (aiResponse) {
+    setAiTimer(5);
+    const interval = setInterval(() => {
+      setAiTimer(prev => {
+        if (prev > 0) return prev - 1;
+        clearInterval(interval);
+        setAiResponse(false);
+        return 0;
+      });
+    }, 1000);
+  }
+};
 
-async function handleAirequest() {
+useEffect(() => {
+  timer();
+}, [aiResponse]);
+
+
+
+  async function handleAirequest() {
+  setAiLoading(true)
   const response = await fetch('/api/gemini', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      prompt: `Hello im ${currentUser} and i want to create a message for my friend ${currentFriend.fname} This is my input: "${aiPrompt}". Please create a message suitable for a real user. Use emojis : ${emojiChecked ? 'yes' : 'no'} and set the message type as: ${msgAiType ? msgAiType : 'funny'}. Your response should be a simple yet creative message based on the input provided. Please respond in the same language as the request and avoid any extra definitions or explanations.`
+      prompt: ` "${aiPrompt}". Use emojis: ${emojiChecked ? 'yes' : 'no'}, and make the message type: ${msgAiType || 'normal'}.`
     })
   });
-  if(response){
+  if (response) {
     let data = await response.json();
-    // setAiResponse(data.response)
-    document.getElementById('aiResponse').innerHTML = data.response;  }
+    setAiPrompt('');
+    setAiLoading(false)
+    setAiResponse(true)
+    // document.getElementById('aiResponse').innerHTML = data.response;
+    setAiOutpout(data.response);
+
+  }
 }
 
 
@@ -343,11 +370,13 @@ async function handleAirequest() {
         {
           aiClicked && (
             <div className='flex text-black p-3  bg-black justify-center items-center  bg-opacity-45  w-full h-full  z-40 absolute '  >
-              <button className=' text-red-500  m-3 rounded  p-3 absolute top-0 right-0 '  onClick={()=>{setAiClicked(false)}}>
+              <button className=' text-red-500  m-3 rounded  p-3 absolute top-0 right-0 ' onClick={() => { setAiClicked(false) }}>
+                <span className='flex p-2 w-full text-text'  >
                   <IoClose className='h-10 w-10   hover:rotate-180 transition-all duration-300'  />
+                </span>
                 </button>
              <div className='flex flex-col gap-4  min-w-[90%]   min-h-[50%] bg-white  rounded-lg p-4'>
-                <h1 className='text-black flex '><SiIrobot className='w-5 h-5 '  /> </h1>
+                <h1 className='text-black flex w-full font-extrabold '><SiIrobot className='w-5 h-5 '  />OSTA </h1>
                 <div className='flex flex-col justify-center w-full'>
                   {/* <h3 className='text-white text-center'>
                     AI Chat assistant 
@@ -369,33 +398,47 @@ async function handleAirequest() {
                     <div className='aiResponse p-2 min-h-[150px] '>
                         <div className='flex items-start gap-2 min-h-[150px] overflow-y-scroll scrolllbar-hide  ' >
                             <Image width={20} height={20} alt={'ai icon'} src='/ass/ai.png' / >
-                            <p id="aiResponse" className="text-black max-h-[200px] overflow-scroll">
-                              {aiResponse ? (
-                                aiResponse.response !== '' ? (
-                                  <span>{aiResponse.response}</span>
-                                ) : (
-                                  <Image width={40} height={40} alt="AI icon" src="/ass/ai.gif" />
-                                )
-                              ) : (
+                            <p  className="text-black max-h-[200px] overflow-scroll">
+                              {aiOutpout ? (
+                                aiOutpout !== '' && !aiLoading &&(
+                              <span className='whitespace-pre-wrap'  id="aiResponse" >{ aiOutpout}</span  >
+                                ) 
+                          ) : (
+                              !aiLoading && (
                                 'Hello, I’m your AI message assistant. How can I help you?'
-                              )}
-                            </p>
+                            ) 
+                              
+                          )}
+                          {
+                            aiLoading && (
+                              <img width={40} height={40} alt="AI icon" src="/ass/ai.gif" />
+
+                            )
+                          }
+                        </p>
+                        
                       </div>
                       {
-                        aiResponse && (
-                              <div className='flex justify-between  gap-2 w-full '  >
-                                <button onClick={()=>{setMessage(aiResponse),setAiClicked(false)}}  className='bg-green-500 w-[50%] p-2 rounded font-poppins text-white hover:bg-green-300 '  >Insert 👍</button>
-                                <button onClick={() => { handleAirequest()}}  className='bg-red-500 w-[50%] p-2 rounded font-poppins text-white hover:bg-red-300 '  >Regenerate 👎</button>
+                        aiOutpout && (
+                              <div className='flex justify-between  gap-2 max-sm:w-full max-lg:w-[50%] '  >
+                            <button onClick={() => {setMessage(aiOutpout),setAiClicked(false)}}  className='bg-green-500 w-[50%] p-2 rounded font-poppins text-white hover:bg-green-300 '  >Insert 👍</button>
+                                <button onClick={() => { handleAirequest(); setAiResponse(false)}}  className='bg-red-500 w-[50%] p-2 rounded font-poppins text-white hover:bg-red-300 '  >Regenerate 👎</button>
                             </div>
                         )
                       }
                     </div>  
                     <div className='aiInput border border-secondary  flex relative bottom-0 rounded p-2 gap-4 w-full'>
-                      <input type='text' placeholder={`How i can help you today ${currentUser} ?`} className='p-2 rounded border-none outline-none w-full flex  items-center  ' onChange={(e)=>setAiPrompt(e.target.value)}  />
+                      <input type='text' value={aiPrompt} placeholder={`How i can help you today ${currentUser} ?`} className='p-2 rounded border-none outline-none w-full flex  items-center  ' onChange={(e)=>setAiPrompt(e.target.value)}  />
                         <button className='rounded ' onClick={()=>{
                           handleAirequest()
-                        }}  >
-                          <Image width={40} height={40} alt={'ai icon'} src='/ass/ai.png' / >
+                      }}  >
+                        {
+                          aiResponse ? (
+                            <span className='p-1 rounded bg-secondary text-white w-[15%]  font-poppins '  >{aiTimer}</span>
+                          ) : (
+                            <Image width={40} height={40} alt={'ai icon'} src='/ass/ai.png' / >
+                          )
+                        }
                         </button>
                     </div>
                   </div>
@@ -639,7 +682,7 @@ async function handleAirequest() {
                                   </MediaThemeYt>
                                )
                               }
-                            <p>
+                            <p className='whitespace-pre-wrap max-w-full'>
                             {message.message}
                             </p>
                             <p
@@ -647,7 +690,9 @@ async function handleAirequest() {
                           </div>
                               {
                                 message.msgSenderUid !== currentUserId  && message.message && (
-                                  <Image width={20} height={20} alt={'ai icon'} src='/ass/ai.png' / >
+                                  <Image width={20} height={20} alt={'ai icon'} className='relative bottom-10 cursor-pointer '  src='/ass/ai.png' onClick={()=>{
+                                setAiClicked(true); setAiPrompt(`help me to write a reply for this message: ${message.message}` );
+                                  }}  / >
                                 )
                             }
                           {/* {message.msgSenderUid === currentUserId && (
