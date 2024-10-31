@@ -72,7 +72,7 @@ export default  function Chat({type,msgsId}) {
   const [aiResponse, setAiResponse] = useState(false);
   const [aiOutpout, setAiOutpout] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
-
+  const [aiMemory, setAiMemory] = useState('');
   //ai section
   const handleAiOption = (e)=>{
     setMsgAiType(e.target.value)
@@ -107,16 +107,17 @@ useEffect(() => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      prompt: ` "${aiPrompt}". Use emojis: ${emojiChecked ? 'yes' : 'no'}, and make the message type: ${msgAiType || 'normal'}.`
+      prompt: `put this in your memory:${aiMemory} "${aiPrompt}". Use emojis: ${emojiChecked ? 'yes' : 'no'}, and make the message type: ${msgAiType || 'normal'}.`
     })
   });
   if (response) {
     let data = await response.json();
-    setAiPrompt('');
     setAiLoading(false)
     setAiResponse(true)
     // document.getElementById('aiResponse').innerHTML = data.response;
     setAiOutpout(data.response);
+    setAiPrompt('');
+    setAiMemory(aiPrompt + aiOutpout);
 
   }
 }
@@ -428,7 +429,12 @@ useEffect(() => {
                       }
                     </div>  
                     <div className='aiInput border border-secondary  flex relative bottom-0 rounded p-2 gap-4 w-full'>
-                      <input type='text' value={aiPrompt} placeholder={`How i can help you today ${currentUser} ?`} className='p-2 rounded border-none outline-none w-full flex  items-center  ' onChange={(e)=>setAiPrompt(e.target.value)}  />
+                      <input onKeyDown={(e)=>{
+                        if(e.key === 'Enter'){
+                            handleAirequest()
+                        }
+                      }}
+                        type='text' value={aiPrompt} placeholder={`How i can help you today ${currentUser} ?`} className='p-2 rounded border-none outline-none w-full flex  items-center  ' onChange={(e) => setAiPrompt(e.target.value)} />
                         <button className='rounded ' onClick={()=>{
                           handleAirequest()
                       }}  >
