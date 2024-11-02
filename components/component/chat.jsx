@@ -107,7 +107,7 @@ useEffect(() => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      prompt: `put this in your memory:${aiMemory} "${aiPrompt}". Use emojis: ${emojiChecked ? 'yes' : 'no'}, and make the message type: ${msgAiType || 'normal'}.`
+      prompt: ` "${aiPrompt}". Use emojis: ${emojiChecked ? 'yes' : 'no'}, and make the message type: ${msgAiType || 'normal'}.`
     })
   });
   if (response) {
