@@ -117,7 +117,7 @@ useEffect(() => {
     // document.getElementById('aiResponse').innerHTML = data.response;
     setAiOutpout(data.response);
     setAiPrompt('');
-    setAiMemory(aiPrompt + aiOutpout);
+    // setAiMemory(aiPrompt + aiOutpout);
 
   }
 }
