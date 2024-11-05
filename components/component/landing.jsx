@@ -179,8 +179,6 @@ export default function Landing() {
   },[])
   return (
     <>
-            <iframe src='https://my.spline.design/macbookprocopy-b26fc9f880c270fdbafd2f5865bfa721/' frameborder='0' width='100%' height='100%'></iframe>
-
       <div className={`flex flex-col overflow-hidden font-poppins `}></div>
       {
         cookieStatu == 'notYet' && (

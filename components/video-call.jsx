@@ -20,6 +20,7 @@ export default function VideoCall({ onCloseCall }) {
   useEffect(() => {
     const newPeer = new Peer();
 
+    
     newPeer.on('open', (id) => {
       console.log('My peer ID:', id);
     });

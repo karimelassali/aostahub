@@ -159,7 +159,21 @@ const Profiles = () => {
   const { user } = useUser()
   const currentUserId = user?.id
   const router = useRouter();
+  const [time, setTime] = useState(0);
 
+         useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTime((prevTime) => prevTime + 1);
+      if (profiles.length > 0) {
+        clearInterval(intervalId);  // Stop the timer when profiles has data
+      }
+    }, 100);
+
+    // Cleanup on component unmount
+    return () => clearInterval(intervalId);
+  }, [profiles]);
+
+    
 
   async function like(liker , receiver) {
     if (liker === receiver) {
@@ -236,7 +250,8 @@ const Profiles = () => {
  
  return (
     profiles && profiles.length > 0 && (
-      <div className="flex items-center justify-center  p-4">
+     <div className="flex items-center justify-center  p-4">
+       {time}
         <motion.div
           className="w-full lg:max-w-[70%] bg-white rounded-xl shadow-xl overflow-hidden flex flex-col"
         >

@@ -6,7 +6,7 @@ const nextConfig = {
   },
   experimental: {
     swcPlugins: [/*["glass-js/swc", {}]*/], // Commented out for troubleshooting
-    turboMode: false, // Disable Turbopack for testing
+    turboMode: true, // Disable Turbopack for testing
   },
   async headers() {
     return [
