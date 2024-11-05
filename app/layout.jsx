@@ -6,6 +6,8 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import "./globals.css";
+import { Neobrutalism } from '@clerk/themes'
+
 // import { Button } from "./components/ui/button";
 
 import Image from "next/image";
@@ -59,7 +61,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider appearance={{
+      baseTheme: Neobrutalism,
+    }} >
       <html lang="en">
         <head>
           <meta

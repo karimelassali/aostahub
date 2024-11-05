@@ -72,13 +72,12 @@ export default  function Chat({type,msgsId}) {
   const [aiResponse, setAiResponse] = useState(false);
   const [aiOutpout, setAiOutpout] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
-  const [aiMemory, setAiMemory] = useState('');
+  const [lastPrompt, setLastPrompt] = useState('');
   //ai section
   const handleAiOption = (e)=>{
     setMsgAiType(e.target.value)
     console.log(e.target.value)
   }
-
  const timer = () => {
   if (aiResponse) {
     setAiTimer(5);
@@ -100,6 +99,7 @@ useEffect(() => {
 
 
   async function handleAirequest() {
+    setLastPrompt(aiPrompt);
   setAiLoading(true)
   const response = await fetch('/api/gemini', {
     method: 'POST',
@@ -107,8 +107,9 @@ useEffect(() => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      prompt: ` "${aiPrompt}". Use emojis: ${emojiChecked ? 'yes' : 'no'}, and make the message type: ${msgAiType || 'normal'}.`
+      prompt: ` "${aiPrompt}". Use emojis: ${emojiChecked ? 'yes' : 'no'}, and make the message type: ${msgAiType || 'A man have 50 years old full of life experiences'}.`
     })
+
   });
   if (response) {
     let data = await response.json();
@@ -397,27 +398,35 @@ useEffect(() => {
                     
                     </div>
                     <div className='aiResponse p-2 min-h-[150px] '>
-                        <div className='flex items-start gap-2 min-h-[150px] overflow-y-scroll scrolllbar-hide  ' >
-                            <Image width={20} height={20} alt={'ai icon'} src='/ass/ai.png' / >
-                            <p  className="text-black max-h-[200px] overflow-scroll">
-                              {aiOutpout ? (
-                                aiOutpout !== '' && !aiLoading &&(
-                              <span className='whitespace-pre-wrap'  id="aiResponse" >{ aiOutpout}</span  >
+                            {
+                              lastPrompt && (
+                                <div className='flex items-start gap-2 justify-end p-1  w-full' >
+                                    <p className='bg-secondary p-2 rounded font-poppins text-black' >{lastPrompt}</p>
+                                  </div>
+                              )
+                            }
+                        <div className='flex flex-col items-start gap-2 min-h-[150px] overflow-y-scroll scrolllbar-hide  ' >
+                            <div className='flex items-start gap-2 ' >
+                              <Image width={20} height={20} alt={'ai icon'} src='/ass/ai.png' / >
+                                <p  className="text-black max-h-[200px] overflow-scroll">
+                                  {aiOutpout ? (
+                                    aiOutpout !== '' && !aiLoading &&(
+                                  <span className='whitespace-pre-wrap'  id="aiResponse" >{ aiOutpout}</span  >
+                                    ) 
+                              ) : (
+                                  !aiLoading && (
+                                    'Hello, I’m your AI message assistant. How can I help you?'
                                 ) 
-                          ) : (
-                              !aiLoading && (
-                                'Hello, I’m your AI message assistant. How can I help you?'
-                            ) 
-                              
-                          )}
-                          {
-                            aiLoading && (
-                              <img width={40} height={40} alt="AI icon" src="/ass/ai.gif" />
+                                  
+                              )}
+                              {
+                                aiLoading && (
+                                  <img width={40} height={40} alt="AI icon" src="/ass/ai.gif" />
 
-                            )
-                          }
-                        </p>
-                        
+                                )
+                              }
+                                </p>
+                            </div>
                       </div>
                       {
                         aiOutpout && (
