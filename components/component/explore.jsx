@@ -34,13 +34,15 @@ export default function Explore() {
 
   //Send welcoming email
 
-  const welcomingEmailStatus = localStorage.getItem('Email');
-  if(welcomingEmailStatus == 'true'){
-    return;
-  }else{
-    localStorage.setItem('Email', 'true');
-    sendWelcomingEmail();
-  }
+  useEffect(() => {
+    const welcomingEmailStatus = localStorage.getItem('Email');
+      if(welcomingEmailStatus == 'true'){
+        return;
+      }else{
+        localStorage.setItem('Email', 'true');
+        sendWelcomingEmail();
+      } 
+  },[])
 
   //load email api request 
   const sendWelcomingEmail = async () => {
