@@ -4,7 +4,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 
 const resend = new Resend('re_KNzDDTwx_8gKv5LreysS8qmpvXThaSmkn');
 
-export async function GET() {
+export async function POST() {
   try {
     const current = await currentUser()
     if(current.fullName){
