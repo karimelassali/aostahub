@@ -6,6 +6,9 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import "./globals.css";
+import "@radix-ui/themes/styles.css";
+import { Theme, ThemePanel } from "@radix-ui/themes";
+
 import { Neobrutalism } from '@clerk/themes'
 
 // import { Button } from "./components/ui/button";
@@ -15,7 +18,6 @@ import Link from "next/link";
 import { IconHome, IconNewSection } from "@tabler/icons-react";
 import { IoCreateOutline } from "react-icons/io5";
 import { IoChatboxOutline } from "react-icons/io5";
-import GlassProvider from 'glass-js'
 
 export const metadata = {
   title: "Welcome to Aosta Hub",
@@ -64,7 +66,7 @@ export default function RootLayout({ children }) {
     <ClerkProvider appearance={{
       baseTheme: Neobrutalism,
     }} >
-      <html lang="en">
+        <html lang="en">
         <head>
           <meta
             name="msvalidate.01"
@@ -76,12 +78,14 @@ export default function RootLayout({ children }) {
           />
         </head>
         <body className="bg-background">
-          {/* <GlassProvider> */}
+          <Theme>
+            <ThemePanel />
             {children}
-          {/* </GlassProvider> */}
-          
+            </Theme>
+            
         </body>
       </html>
+      
     </ClerkProvider>
   );
 }

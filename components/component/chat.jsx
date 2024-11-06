@@ -107,7 +107,7 @@ useEffect(() => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      prompt: ` "${aiPrompt}". Use emojis: ${emojiChecked ? 'yes' : 'no'}, and make the message type: ${msgAiType || 'A man have 50 years old full of life experiences'}.`
+      prompt: ` "${aiPrompt}". Use emojis: ${emojiChecked ? 'yes' : 'no'}, and make the message type: ${msgAiType || 'A man have 50 years old full of life experiences'}.and im currently chat with my friend ${currentFriend.fname}`
     })
 
   });

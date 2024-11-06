@@ -5,8 +5,8 @@ const nextConfig = {
     domains: ['img.clerk.com', 'giyrlrcehqsypefjoayv.supabase.co', 'api.dicebear.com'], // Add any additional domains as needed
   },
   experimental: {
-    swcPlugins: [/*["glass-js/swc", {}]*/], // Commented out for troubleshooting
-    turboMode: true, // Disable Turbopack for testing
+    // swcPlugins: [/*["glass-js/swc", {}]*/], // Commented out for troubleshooting
+    // turboMode: true, // Disable Turbopack for testing
   },
   async headers() {
     return [
