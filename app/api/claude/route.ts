@@ -24,9 +24,11 @@ export  async function GET() {
         },
       ],
     });
-if (text) {
-  return NextResponse.json({ 'response': text });
-}
+    if (text) {
+      return NextResponse.json({ 'response': text });
+    }else{
+      return NextResponse.json({'text':'error response due to high demand'})
+    }
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: 'Error generating text' });
