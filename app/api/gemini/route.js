@@ -12,28 +12,25 @@ async function updateChatHistory(role, content) {
 }
 
 export async function POST(req) {
-    const p = await req.json();
-    const file = p.imgPrompt;
+    const { prompt, imgPrompt } = await req.json();
 
     try {
-        const prompt = `
-        You are Rosta, a bot on Aosta Hub by Karim El Assali. Reply concisely and make the whole anwser in the same in the user's language.
-
-        History: ${JSON.stringify(chatHistory)}
-        Request: ${p.prompt}
-        `;
-
         const content = [
             {
                 type: 'text',
-                text: prompt,
+                text: `
+                    You are Rosta, a bot on Aosta Hub by Karim El Assali. Reply concisely and make the whole answer in the same language as the user's request.
+
+                    History: ${JSON.stringify(chatHistory)}
+                    Request: ${prompt}
+                `,
             },
         ];
 
-        if (p.imgPrompt !== '') {
+        if (imgPrompt) {
             content.push({
                 type: 'file',
-                data: `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/aiFiles/${file}`,
+                data: `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/aiFiles/${imgPrompt}`,
                 mimeType: 'image/*',
             });
         }
@@ -43,14 +40,14 @@ export async function POST(req) {
             messages: [
                 {
                     role: 'user',
-                    content: content,
+                    content,
                 },
             ],
         });
 
         if (response) {
             // Update chat history with the user and assistant messages
-            await updateChatHistory('user', p.prompt);
+            await updateChatHistory('user', prompt);
             await updateChatHistory('assistant', response.text);
         }
 
