@@ -27,7 +27,7 @@ export async function POST(req) {
             },
         ];
 
-        if (imgPrompt) {
+        if (imgPrompt !== '') {
             content.push({
                 type: 'file',
                 data: `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/aiFiles/${imgPrompt}`,
