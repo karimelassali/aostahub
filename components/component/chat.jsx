@@ -64,6 +64,7 @@ export default  function Chat({type,msgsId}) {
   const [msgStatu,setMsgStatu] = useState(false);
   const [modalType,setModalType] = useState('');
   const [userSearch, setUserSearch] = useState('');
+  //ai states
   const [aiClicked, setAiClicked] = useState(false);
   const [msgAiType,setMsgAiType] = useState('');
   const [emojiChecked, setEmojiChecked] = useState(false);
@@ -73,7 +74,14 @@ export default  function Chat({type,msgsId}) {
   const [aiOutpout, setAiOutpout] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [lastPrompt, setLastPrompt] = useState('');
+  //img input for ai
+  const [imgPrompt, setImgPrompt] = useState('');
+  const [imgPromptSrc,setImgPromptSrc] = useState('');
+  //ai chat array
+  // const [aiChatDb,setAiChatDb] = useState([]);
+
   //ai section
+
   const handleAiOption = (e)=>{
     setMsgAiType(e.target.value)
     console.log(e.target.value)
@@ -101,13 +109,15 @@ useEffect(() => {
   async function handleAirequest() {
     setLastPrompt(aiPrompt);
   setAiLoading(true)
+
   const response = await fetch('/api/gemini', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      prompt: ` "${aiPrompt}". Use emojis: ${emojiChecked ? 'yes' : 'no'}, and make the message type: ${msgAiType || 'A man have 50 years old full of life experiences'}.and im currently chat with my friend ${currentFriend.fname}`
+      prompt: ` "${aiPrompt ? aiPrompt : lastPrompt}". Use emojis: ${emojiChecked ? 'yes' : 'no'}, and make the message type: ${msgAiType || 'A man have 50 years old full of life experiences'}.and im currently chat with my friend ${currentFriend.fname}`,
+      imgPrompt: imgPromptSrc
     })
 
   });
@@ -115,12 +125,17 @@ useEffect(() => {
     let data = await response.json();
     setAiLoading(false)
     setAiResponse(true)
+    
     // document.getElementById('aiResponse').innerHTML = data.response;
     setAiOutpout(data.response);
     setAiPrompt('');
+
+    setImgPrompt('');
+    setImgPromptSrc('');
     // setAiMemory(aiPrompt + aiOutpout);
 
   }
+ 
 }
 
 
@@ -377,7 +392,7 @@ useEffect(() => {
                   <IoClose className='h-10 w-10   hover:rotate-180 transition-all duration-300'  />
                 </span>
                 </button>
-             <div className='flex flex-col gap-4  min-w-[90%]   min-h-[50%] bg-white  rounded-lg p-4'>
+             <div className='flex flex-col gap-4  max-sm:min-w-[90%] max-lg:min-w-[50% lg:max-w-[50%]  min-h-[50%] bg-white  rounded-lg p-4'>
                 <h1 className='text-black flex w-full font-extrabold '><SiIrobot className='w-5 h-5 '  />OSTA </h1>
                 <div className='flex flex-col justify-center w-full'>
                   {/* <h3 className='text-white text-center'>
@@ -398,24 +413,22 @@ useEffect(() => {
                     
                     </div>
                     <div className='aiResponse p-2 min-h-[150px] '>
-                            {
-                              lastPrompt && (
-                                <div className='flex items-start gap-2 justify-end p-1  w-full' >
-                                    <p className='bg-secondary p-2 rounded font-poppins text-black' >{lastPrompt}</p>
-                                  </div>
-                              )
-                            }
+                           
                         <div className='flex flex-col items-start gap-2 min-h-[150px] overflow-y-scroll scrolllbar-hide  ' >
                             <div className='flex items-start gap-2 ' >
                               <Image width={20} height={20} alt={'ai icon'} src='/ass/ai.png' / >
                                 <p  className="text-black max-h-[200px] overflow-scroll">
                                   {aiOutpout ? (
                                     aiOutpout !== '' && !aiLoading &&(
-                                  <span className='whitespace-pre-wrap'  id="aiResponse" >{ aiOutpout}</span  >
+                                  <span className='whitespace-pre-wrap font-poppins '  id="aiResponse" >{ aiOutpout}</span  >
                                     ) 
                               ) : (
                                   !aiLoading && (
-                                    'Hello, I’m your AI message assistant. How can I help you?'
+                                    //p tag with font poppins
+                                    <p className='font-poppins'>
+                                      Hello {currentUser}, I’m your AI message assistant. How can I help you?
+                                    </p>
+
                                 ) 
                                   
                               )}
@@ -437,13 +450,39 @@ useEffect(() => {
                         )
                       }
                     </div>  
-                    <div className='aiInput border border-secondary  flex relative bottom-0 rounded p-2 gap-4 w-full'>
-                      <input onKeyDown={(e)=>{
+                    <div className='aiInput border border-secondary  flex flex-col relative bottom-0 rounded p-2 gap-4 w-full'>
+                            <input hidden id='aiFileInput' type="file" onChange={(e) => {
+                              const imgUrlPrompt = URL.createObjectURL(e.target.files[0]);
+                              if(imgUrlPrompt){}
+                              imgUrlPrompt ? setImgPrompt(imgUrlPrompt) : setImgPrompt('');
+                              imgUrlPrompt ? setImgPromptSrc(e.target.files[0].name + Date.now()) : setImgPromptSrc('');
+                              const {data} = supabase.storage.from('aiFiles').upload(`/${e.target.files[0].name + Date.now()}`,e.target.files[0]);
+                              // data && setFileInput(true)
+                            }} />
+                      {
+                        imgPrompt && (
+                           <div className='flex items-center gap-2 w-full max-h-[30%] '>
+                              <Image width={40} height={40} alt="AI icon" src={imgPrompt} />
+                            </div>
+                        )
+                      }
+                     
+                        <div className='aiInput border  flex  relative bottom-0 rounded p-2 gap-4 w-full'>
+                          <input onKeyDown={(e)=>{
                         if(e.key === 'Enter'){
                             handleAirequest()
                         }
                       }}
                         type='text' value={aiPrompt} placeholder={`How i can help you today ${currentUser} ?`} className='p-2 rounded border-none outline-none w-full flex  items-center  ' onChange={(e) => setAiPrompt(e.target.value)} />
+                        <button className='rounded ' onClick={()=>{
+                          // setFileInput(true)
+                        }}  >
+                          <div onClick={()=>{
+                            document.getElementById('aiFileInput').click()
+                          }} className='flex gap-2  p-2 '>
+                            <MdAttachFile className="h-5 w-5 text-purple-600 " />
+                          </div>
+                        </button>
                         <button className='rounded ' onClick={()=>{
                           handleAirequest()
                       }}  >
@@ -451,10 +490,16 @@ useEffect(() => {
                           aiResponse ? (
                             <span className='p-1 rounded bg-secondary text-white w-[15%]  font-poppins '  >{aiTimer}</span>
                           ) : (
-                            <Image width={40} height={40} alt={'ai icon'} src='/ass/ai.png' / >
+                            <div className='flex gap-2  '>
+                                 <Image width={40} height={40} alt={'ai icon'}  src='/ass/ai.png' / >
+                            </div>
+                            
                           )
                         }
                         </button>
+                        </div>
+                      
+                        
                     </div>
                   </div>
                 </div>

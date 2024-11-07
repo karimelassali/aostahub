@@ -79,7 +79,7 @@ export default function RootLayout({ children }) {
         </head>
         <body className="bg-background">
           <Theme>
-            <ThemePanel />
+            {/* <ThemePanel /> */}
             {children}
             </Theme>
             
