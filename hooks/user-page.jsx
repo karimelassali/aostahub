@@ -119,7 +119,7 @@ export default function FriendsPage() {
   // }, [searchQuery, friends])
 
   return (
-    (<div className="min-h-screen font-poppins bg-[#fbfbfe] text-[#050315]">
+    (<div className="min-h-screen font-poppins dark:bg-gray-900 dark:text-white text-[#050315]">
         <Toaster richColors />
       <div className="px-4 py-8">
         <motion.header
@@ -131,12 +131,12 @@ export default function FriendsPage() {
           <p className="text-lg text-[#050315]/70">Manage your friends and connections</p>
         </motion.header>
 
-        <div className="grid grid-cols-2 max-sm:grid-cols-1 xl:grid-cols-4 gap-8 max-w-[1920px] mx-auto max-sm:max-w-[100%] max-sm:text-sm ">
+        <div className="grid grid-cols-2  max-sm:grid-cols-1 xl:grid-cols-4 gap-8 max-w-[1920px] mx-auto max-sm:max-w-[100%] max-sm:text-sm ">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="xl:col-span-3 bg-white rounded-lg shadow-lg p-6 max-sm:p-1  ">
+            className="xl:col-span-3 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 max-sm:p-1  ">
             <div className="grid grid-cols-2  justify-between items-center mb-6 max-sm:grid-col-1">
               <h2 className="text-md max-sm:text-sm font-semibold flex items-center">
                 <UserPlus className="mr-2 text-[#2f27ce]" />
@@ -158,8 +158,8 @@ export default function FriendsPage() {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 20 }}
                       transition={{ duration: 0.3 }}
-                      className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex items-center mb-3">
+                      className="dark:bg-gray-800  min-w-[50%] p-4 rounded-lg">
+                      <div className="flex min-w-[50%]   items-center mb-3">
                         <Avatar className="w-12 h-12 mr-4">
                           <AvatarImage src={user.userProfile} />
                         </Avatar>
@@ -192,7 +192,7 @@ export default function FriendsPage() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white rounded-lg shadow-lg p-3 max-sm:p-1 ">
+            className="dark:bg-gray-900 rounded-lg shadow-lg p-3 max-sm:p-1 ">
             <div className="flex justify-between items-center mb-6 max-sm:flex-col">
               <h2 className="text-2xl font-semibold flex items-center">
                 <Users className="mr-2 text-[#2f27ce]" />
@@ -228,7 +228,7 @@ export default function FriendsPage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
-                    className="flex items-center justify-between mb-4 p-2 hover:bg-gray-100 rounded-lg">
+                    className="flex dark:bg-gray-900 items-center justify-between mb-4 p-2 hover:bg-gray-100 rounded-lg">
                     <Link href={`profile/${friend.receiverId}`} className="flex cursor-pointer items-center">
                       <Avatar className="w-10 h-10 mr-3">
                         <AvatarImage src={friend.friendProfile} />

@@ -1,23 +1,15 @@
 import {
   ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
 } from "@clerk/nextjs";
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
-import { Theme, ThemePanel } from "@radix-ui/themes";
+import { ThemeProvider } from "@/components/ui/theme-provider"
 
 import { Neobrutalism } from '@clerk/themes'
 
 // import { Button } from "./components/ui/button";
 
-import Image from "next/image";
-import Link from "next/link";
-import { IconHome, IconNewSection } from "@tabler/icons-react";
-import { IoCreateOutline } from "react-icons/io5";
-import { IoChatboxOutline } from "react-icons/io5";
+
 
 export const metadata = {
   title: "Welcome to Aosta Hub",
@@ -77,12 +69,15 @@ export default function RootLayout({ children }) {
             content="TFC9KKJST9sPJHv4r0wz0xnmUb09ZFJFC8crGzgUSnk"
           />
         </head>
-        <body className="bg-background">
-          <Theme>
-            {/* <ThemePanel /> */}
-            {children}
-            </Theme>
+        <body className="">
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
             
+          >
+            {children}
+          </ThemeProvider>
         </body>
       </html>
       

@@ -184,7 +184,7 @@ function Page({params}) {
   }
   return (
     <>
-      <div className="min-h-screen bg-[#fbfbfe] font-poppins text-[#050315]">
+      <div className="min-h-screen dark:bg-gray-900 dark:text-white font-poppins text-[#050315]">
         {
           lopen && (
             <ShowModal fileType={modalType} src={file} onClose={handleClose}  />
@@ -200,11 +200,11 @@ function Page({params}) {
           objectFit="cover"
           className="object-center" />
         <div
-          className="absolute inset-0 bg-gradient-to-t from-[#fbfbfe] to-transparent"></div>
+          className="absolute inset-0 bg-gradient-to-t frdark:bg-gray-900 dark:text-white to-transparent"></div>
       </div>
       {/* Profile Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-32 max-sm:px-1 ">
-        <div className="relative z-10 bg-[#fbfbfe] rounded-lg shadow-xl p-6 mb-6">
+        <div className="relative z-10 dark:bg-gray-900 dark:text-white bg-white rounded-lg shadow-xl p-6 mb-6">
           <div
             className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
             {/* Profile Picture */}
@@ -216,15 +216,15 @@ function Page({params}) {
               alt="Profile"
               width={200}
               height={200}
-              className="rounded-full border-4 border-[#fbfbfe] cursor-pointer w-40 h-40  shadow-lg" />
+              className="rounded-full border-4 borddark:bg-gray-900 dark:text-white cursor-pointer w-40 h-40  shadow-lg" />
             {/* userP Info */} 
             <div className="text-center md:text-left flex-grow">
               <div className="flex items-center max-sm:flex-col gap-2 max-sm:line-clamp-2" >
-                <h1 className="text-3xl max-sm:text-md flex items-center  font-bold max-sm:font-extralight text-[#050315] mb-2">{userP.fname + userP.lname} <span>{userP.verified == 1 && <MdOutlineVerified size={30} style={{ color: '#0284c7' }} />}</span>,  </h1>
+                <h1 className="text-3xl max-sm:text-md flex items-center  font-bold max-sm:font-extralight text-[#050315] dark:text-white mb-2">{userP.fname + userP.lname} <span>{userP.verified == 1 && <MdOutlineVerified size={30} style={{ color: '#0284c7' }} />}</span>,  </h1>
                 <span className="text-3xl max-sm:font-extralight" >{userP.age}</span>
               </div>
               <p
-                className="text-lg text-[#050315] flex items-center justify-center md:justify-start mb-4">
+                className="text-lg text-[#050315] dark:text-white flex items-center justify-center md:justify-start mb-4">
                 <MapPin className="h-5 w-5 mr-2 text-[#2f27ce]" />
                 {userP.location}
               </p>
@@ -235,7 +235,7 @@ function Page({params}) {
                     <Link
                       href={`/chat/${userP.uid}`}
                       variant="outline"
-                      className="border-[#2f27ce] text-[#2f27ce] flex rounded p-2  items-center hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
+                      className="border-[#2f27ce] text-[#2f27ce] flex rounded p-2  items-center hover:bg-[#2f27ce] hover:tedark:bg-gray-900 dark:text-white">
                       <MessageCircle className="h-4 w-4 mr-2" />
                       Message
                     </Link> 
@@ -259,14 +259,14 @@ function Page({params}) {
                 {
                   isFriend == 'pending' && (
                     <div className="grid grid-cols-2 gap-2" >
-                          <Button  disabled={isFriend == 'pending'} variant="outline" className="border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
+                          <Button  disabled={isFriend == 'pending'} variant="outline" className="border-[#2f27ce]  text-[#2f27ce] hover:bg-[#2f27ce] hover:bg-gray-900 ">
                             <IoTime className="h-4 w-4 mr-2" />
                               Request Pending
                           </Button>
                           <button onClick={()=>{stopRequest()}} className="p-2 bg-red-400 text-white rounded flex items-center max-sm:p-1  hover:bg-red-300 transition-all cursor-pointer" >
                             <OctagonPause  className="h-4 w-4 mr-2" />
                             Pause Request
-                          </button>
+                          </button>   
                     </div>
                   )
                 }
@@ -274,7 +274,7 @@ function Page({params}) {
                   isFriend == '0'  && (
                     <Button onClick={()=>{
                       handelFriendshipRequest(userP.uid);
-                    }}  variant="outline" className="border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
+                    }}  variant="outline" className="border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce]  hover:tedark:bg-gray-900 dark:text-white dark:bg-accent ">
                     <BsBriefcase className="h-4 w-4 mr-2" />
                       Add Friend
                     </Button> 
@@ -284,7 +284,7 @@ function Page({params}) {
                 
                 {/* <Button
                   variant="outline"
-                  className="border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
+                  className="border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:tedark:bg-gray-900 dark:text-white">
                   <MessageCircle className="h-4 w-4 mr-2" />
                   Message
                 </Button> */}
@@ -294,7 +294,7 @@ function Page({params}) {
             <div className="flex gap-6 text-center">
               <div>
                 <p className="text-2xl font-semibold text-[#2f27ce]"><NumberTicker value={userAsfriend.length} /></p>
-                <p className="text-[#050315]">Friend`s</p>
+                <p className="text-[#050315] dark:text-white ">Friend`s</p>
               </div>
             </div>
           </div>
@@ -305,22 +305,22 @@ function Page({params}) {
           {/* Left Column */}
           <div className="md:col-span-2 space-y-6">
             {/* About */}
-            <Card className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden">
+            <Card className="dark:bg-gray-900 dark:text-white border border-[#dedcff] overflow-hidden">
               <CardContent className="p-6">
-                <h2 className="text-2xl font-semibold mb-4 text-black flex items-center">
+                <h2 className="text-2xl font-semibold mb-4 text-black dark:text-white flex items-center">
                   <MdBoy style={{color:'#433bff'}} className="h-6 w-6 mr-2" />
                   About Me
                 </h2>
-                <p className="text-[#050315] first-letter:capitalize">
+                <p className="text-[#050315] dark:text-slate-400 first-letter:capitalize">
                   {userP.description} 
                 </p>
               </CardContent>
             </Card>
 
             {/* Interests */}
-            <Card className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden">
+            <Card className="dark:bg-gray-900 dark:text-white border border-[#dedcff] overflow-hidden">
               <CardContent className="p-6">
-                <h2 className="text-2xl font-semibold mb-4 text-black flex items-center">
+                <h2 className="text-2xl font-semibold dark:text-white mb-4 text-black flex items-center">
                   <BookmarkPlus style={{color:'#433bff'}}  className="h-6 w-6 mr-2" />
                   Interests
                 </h2>
@@ -362,10 +362,10 @@ function Page({params}) {
           {/* Right Column */}
           <div className="space-y-6">
             {/* Contact Info */}
-            <Card className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden">
+            <Card className="dark:bg-gray-900 dark:text-white border border-[#dedcff] overflow-hidden">
               <CardContent className="p-6 space-y-4">
-                <h2 className="text-2xl font-semibold mb-4 text-text flex items-center">
-                  <Phone  className="h-6 w-6 mr-2" />
+                <h2 className="text-2xl dark:text-white font-semibold mb-4 text-text flex items-center">
+                  <Phone  className="h-6 text-accent w-6 mr-2" />
                   Contact
                 </h2>
                 <div>
@@ -395,11 +395,11 @@ function Page({params}) {
             {/* Additional Info */}
             {
               userP.occupation || userP.personaleWebsite || userP.skill ? (
-                <Card className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden">
+                <Card className="dark:bg-gray-900 dark:text-white border border-[#dedcff] overflow-hidden">
                   <CardContent className="p-6 space-y-4">
                     {
                       userP.occupation && (
-                        <div className="flex items-center text-[#050315]">
+                        <div className="flex dark:text-white items-center text-[#050315]">
                           <BsBriefcase style={{color:'#433bff'}}  className="h-5 w-5 mr-3 text-[#2f27ce]" />
                           Occupation: {userP.occupation}
                         </div>
@@ -436,7 +436,7 @@ function Page({params}) {
               <Card
                 onClick={() => { router.push(`/profile/${user.id}`) }}
                 key={user.id}
-                className="bg-[#fbfbfe] border border-[#dedcff] overflow-hidden hover:shadow-lg transition-shadow"   >
+                className="dark:bg-gray-900 dark:text-white border border-[#dedcff] overflow-hidden hover:shadow-lg transition-shadow"   >
                 <CardContent className="p-6 flex flex-col items-center hover:cursor-pointer  text-center">
                   <Image
                    
@@ -445,9 +445,9 @@ function Page({params}) {
                     width={100}
                     height={100}
                     className="rounded-full h-20     w-20  mb-4" />
-                  <h3 className="font-semibold text-[#050315] mb-1">{user.fname} {user.lname}</h3>
-                  <p className="text-sm text-[#050315] mb-4">{user.age}</p>
-                  <p className="text-sm text-[#050315] mb-4">{user.location}</p>
+                  <h3 className="font-semibold dark:text-white text-[#050315] mb-1">{user.fname} {user.lname}</h3>
+                  <p className="text-sm dark:text-slate-400 text-[#050315] mb-4">{user.age}</p>
+                  <p className="text-sm   dark:text-slate-400 text-[#050315] mb-4">{user.location}</p>
                   {
                     request ? (
                        <Button
@@ -458,7 +458,7 @@ function Page({params}) {
                           }}
                         variant="outline"
                         size="sm"
-                        className="w-full border-red-400 bg-red-400 text-white hover:bg-red-300 hover:text-[#fbfbfe]">
+                        className="w-full border-red-400 bg-red-400 text-white hover:bg-red-300 hover:tedark:bg-gray-900 dark:text-white">
                         <Users className="h-4 w-4 mr-2" />
                         Stop Request
                       </Button>
@@ -472,7 +472,7 @@ function Page({params}) {
                           }}
                         variant="outline"
                         size="sm"
-                        className="w-full border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:text-[#fbfbfe]">
+                        className="w-full dark:bg-accent border-[#2f27ce] text-[#2f27ce] hover:bg-[#2f27ce] hover:tedark:bg-gray-900 dark:text-white">
                         <Users className="h-4 w-4 mr-2" />
                         Follow
                       </Button>

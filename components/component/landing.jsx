@@ -216,7 +216,7 @@ export default function Landing() {
         transition={{
           delay: 0.5
         }}
-        className="flex flex-col min-h-[100dvh] bg-[#f5f5f5] text-[#333]"
+        className="flex flex-col min-h-[100dvh]  text-[#333]"
       >
         {/* <header
         className="bg-[#3B82F6] text-white py-6 px-4 md:px-8 flex items-center justify-between">
@@ -244,7 +244,7 @@ export default function Landing() {
                   ease: "easeIn"
                 }}
               >
-                <h2 className="text-3xl  shrink-0 md:text-4xl font-poppins mb-4">
+                <h2 className="text-3xl  dark:text-white shrink-0 md:text-4xl font-poppins mb-4">
                   {language === "en"
                     ? "Connect and Share with "
                     : "Connetti e condividi con "}
@@ -268,7 +268,7 @@ export default function Landing() {
                     delay: 1.2,
                     ease: "easeIn"
                   }}
-                  className="text-xl text-text font-poppins "
+                  className="text-xl dark:text-white text-text font-poppins "
                 >
                   Discover a unique way to connect in Aosta, Italy! Aosta Hub
                   addresses the local trend of people sharing their social media
@@ -277,7 +277,7 @@ export default function Landing() {
                   meaningful connections securely.
                 </motion.p>
                 <br />
-                <p className="text-xl  mb-6 font-open">
+                <p className="text-xl dark:text-white  mb-6 font-open">
                   {language === "en"
                     ? "Securely connect and share your Instagram and other social profiles to make new friends."
                     : "Connetti in modo sicuro e condividi i tuoi profili Instagram e altri social per fare nuovi amici."}
@@ -356,7 +356,7 @@ export default function Landing() {
     </div> */}
         <div className="h-[10rem] pb-9 max-sm:pb-1 max-sm:border-t border-secondary max-sm:mt-[1rem] max-sm:mb-[1rem]  flex justify-center items-center px-4">
           <div
-            className="text-4xl mx-auto text-black max-sm:text-2xl  font-poppins dark:text-neutral-800"
+            className="text-4xl mx-auto text-black dark:text-white  max-sm:text-2xl  font-poppins dark:text-neutral-800"
             style={{ gap: "3rem" }}
           >
             Esplora
@@ -426,10 +426,10 @@ export default function Landing() {
         </div>
       </section> */}
         {/* -----------for pictures ------------ */}
-        <h1 className="text-center font-poppins font-bold mt-9 text-3xl ">
+        <h1 className="text-center font-poppins font-bold mt-9 text-3xl dark:text-white ">
           Perche <span className="text-accent">Aosta Hub</span> ?
         </h1>
-        <StickyScroll contentClassName={"font-poppins"} content={content} />
+        <StickyScroll contentClassName={"font-poppins dark:text-white "} content={content} />
         <br />
         <br />
         <br />
@@ -492,14 +492,14 @@ export default function Landing() {
         {/* ---------- */}
         <section className="py-12 md:py-20">
           <div className="container mx-auto px-4 md:px-8 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl dark:text-white font-bold mb-4">
               <div></div>
               {language === "en"
                 ? `Join AostaHub Today`
                 : "Unisciti ad AostaHub oggi"}
             </h2>
-            <p className="text-xl font-open text-center text-gray-500 mb-8">
-              {language === "en"
+            <p className="text-xl font-open text-center text-gray-500 dark:text-gray-400  mb-8">
+              {language === "en" 
                 ? "Discover new connections and friendships in a safe and welcoming space."
                 : "Scopri nuove connessioni e amicizie in uno spazio sicuro e accogliente."}
             </p>

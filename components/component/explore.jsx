@@ -109,8 +109,8 @@ useEffect(() => {
 
 </div>
         }>
-       <div className='flex  max-sm:flex-col h-1   lg:max-h-[400px] border border-red-100  justify-center max-md:p-1 max-md:justify-normal  w-full '  >
-        <div className="profiles  w-full  "> 
+       <div className='flex  max-sm:flex-col h-full   lg:max-h-[100%]  justify-center max-md:p-1 max-md:justify-normal  w-full '  >
+        <div className="profiles h-full w-full  "> 
           <Profiles />
          </div>    
         {/* <aside className='w-[30%] h-full  p-1 max-md:w-full max-md:h-[30%]  '  >

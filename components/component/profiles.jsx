@@ -250,64 +250,64 @@ const Profiles = () => {
  
  return (
     profiles && profiles.length > 0 && (
-     <div className="flex items-center justify-center  p-4">
-       {time}
-        <motion.div
-          className="w-full lg:max-w-[70%] bg-white rounded-xl shadow-xl overflow-hidden flex flex-col"
-        >
-          <div className="relative h-48 sm:h-56 md:h-64 lg:h-72 xl:h-56">
-            <img
-              src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentProfile.imgName}`} 
-              alt="profile image"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-50" />
-            { 
-              currentProfile.permission ? (
-                <Image width={100} height={100} src={currentProfile.profilePic} className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-white" alt="profilePic" />
-              ) : (
-                <Image width={100} height={100} src={'/ass/logo.png'} className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-white" alt="defaultProfilePic" />
-              )
-            }
-          </div>
-          <div className="flex-grow flex flex-col justify-between p-4 sm:p-6 pt-12 sm:pt-16">
-            <div>
-              <h2 id='bottom' className="text-xl flex justify-center items-center gap-x-1 sm:text-2xl font-bold text-center mb-2">
-                {currentProfile.fname} {currentProfile.lname}, {currentProfile.age}
-                {currentProfile.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
-              </h2>
-              <div className="navigate flex w-full justify-between max-h-[100px] overflow-hidden items-center gap-x-2">
-                <button onClick={prevProfile} className='p-2 rounded-full bg-secondary hover:scale-150 text-white'>
-                  <ArrowBigLeft className='w-5 h-5 text-accent' />
-                </button>
-                <button onClick={nextProfile} className='p-2 rounded-full bg-secondary hover:scale-150 text-white'>
-                  <ArrowBigRight className='w-5 h-5 text-accent' />
-                </button>
-              </div>
-              <p className="text-gray-600 text-center mb-2 sm:mb-4">{currentProfile.location}</p>
-              <p className="text-gray-800 text-center text-sm sm:text-base mb-4 sm:mb-6">{currentProfile.description}</p>
+      <div className="flex items-center  dark:bg-gray-900 justify-center p-4">
+      {time}
+      <motion.div
+        className="w-full lg:max-w-[80%]  border border-gray-800  h-full rounded-xl shadow-xl overflow-hidden flex flex-col"
+      >
+        <div className="relative border border-gray-800 h-48 sm:h-56 md:h-64 lg:h-72 xl:h-56">
+          <img
+            src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentProfile.imgName}`} 
+            alt="profile image"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-50" />
+          { 
+            currentProfile.permission ? (
+              <Image width={100} height={100} src={currentProfile.profilePic} className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-white" alt="profilePic" />
+            ) : (
+              <Image width={100} height={100} src={'/ass/logo.png'} className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-white" alt="defaultProfilePic" />
+            )
+          }
+        </div>
+        <div className="flex-grow flex flex-col justify-between p-4 sm:p-6 pt-12 sm:pt-16">
+          <div>
+            <h2 id='bottom' className="text-xl flex justify-center items-center gap-x-1 sm:text-2xl font-bold text-center mb-2">
+              {currentProfile.fname} {currentProfile.lname}, {currentProfile.age}
+              {currentProfile.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
+            </h2>
+            <div className="navigate flex w-full justify-between max-h-[100px] overflow-hidden items-center gap-x-2">
+              <button onClick={prevProfile} className='p-2 rounded-full bg-secondary hover:scale-150 text-white'>
+                <ArrowBigLeft className='w-5 h-5 text-accent' />
+              </button>
+              <button onClick={nextProfile} className='p-2 rounded-full bg-secondary hover:scale-150 text-white'>
+                <ArrowBigRight className='w-5 h-5 text-accent' />
+              </button>
             </div>
-            <div className="flex justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
-              <div className="flex justify-center space-x-4 mt-4">
-                {currentProfile.instagram && (
-                  <Link href={`https://www.instagram.com/${currentProfile.instagram}`} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
-                    <InstagramIcon className="w-5 h-5" style={{ color: '#c026d3' }} />
-                  </Link>
-                )}
-                {currentProfile.facebook && (
-                  <Link href={`https://www.facebook.com/${currentProfile.facebook}`} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
-                    <FacebookIcon className="w-5 h-5" style={{ color: '#06b6d4' }} />
-                  </Link>
-                )}
-                {currentProfile.number && (
-                  <Link href={`tel:${currentProfile.number}`} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
-                    <PhoneIcon className="w-5 h-5" style={{ color: '#4ade80' }} />
-                  </Link>
-                )}
-              </div>
+            <p className="text-gray-600 text-center mb-2 dark:text-white sm:mb-4">{currentProfile.location}</p>
+            <p className="text-gray-800 text-center text-sm dark:text-white sm:text-base mb-4 sm:mb-6">{currentProfile.description}</p>
+          </div>
+          <div className="flex justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
+            <div className="flex justify-center space-x-4 mt-4">
+              {currentProfile.instagram && (
+                <Link href={`https://www.instagram.com/${currentProfile.instagram}`} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
+                  <InstagramIcon className="w-5 h-5" style={{ color: '#c026d3' }} />
+                </Link>
+              )}
+              {currentProfile.facebook && (
+                <Link href={`https://www.facebook.com/${currentProfile.facebook}`} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
+                  <FacebookIcon className="w-5 h-5" style={{ color: '#06b6d4' }} />
+                </Link>
+              )}
+              {currentProfile.number && (
+                <Link href={`tel:${currentProfile.number}`} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
+                  <PhoneIcon className="w-5 h-5" style={{ color: '#4ade80' }} />
+                </Link>
+              )}
             </div>
           </div>
-          <div className="p-4 bg-secondary flex justify-around">
+        </div>
+          <div className="p-4 bg-secondary dark:bg-accent flex justify-around">
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}

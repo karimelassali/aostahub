@@ -399,17 +399,17 @@ useEffect(() => {
 
   return (
     (
-      <div className="flex h-screen w-full transition-all  bg-[#fbfbfe] text-[#050315]">
+      <div className="flex h-screen w-full transition-all  dark:bg-gray-900 dark:text-white text-[#050315]">
         {
           aiClicked && (
             <div className='flex text-black p-3  bg-black justify-center items-center  bg-opacity-45  w-full h-full  z-40 absolute '  >
               <button className=' text-red-500  m-3 rounded  p-3 absolute top-0 right-0 ' onClick={() => { setAiClicked(false) }}>
                 <span className='flex p-2 w-full text-text'  >
-                  <IoClose className='h-10 w-10   hover:rotate-180 transition-all duration-300'  />
+                  <IoClose className='h-10 w-10   hover:rotate-180 transition-all duration-300 dark:text-white '  />
                 </span>
                 </button>
-             <div className='flex flex-col gap-4  max-sm:min-w-[90%] max-lg:min-w-[50% lg:max-w-[50%]  min-h-[50%] bg-white  rounded-lg p-4'>
-                <h1 className='text-black flex w-full font-extrabold '><SiIrobot className='w-5 h-5 '  />OSTA </h1>
+             <div className='flex flex-col dark:bg-gray-900  gap-4  max-sm:min-w-[90%] max-lg:min-w-[50% lg:max-w-[50%]  min-h-[50%] bg-white  rounded-lg p-4'>
+                <h1 className='text-black flex w-full dark:text-white font-extrabold '><SiIrobot className='w-5 h-5 dark:text-white'  />OSTA </h1>
                 <div className='flex flex-col justify-center w-full'>
                   {/* <h3 className='text-white text-center'>
                     AI Chat assistant 
@@ -433,7 +433,7 @@ useEffect(() => {
                         <div className='flex flex-col items-start gap-2 min-h-[150px] overflow-y-scroll scrolllbar-hide  ' >
                             <div className='flex items-start gap-2 ' >
                               <Image width={20} height={20} alt={'ai icon'} src='/ass/ai.png' / >
-                                <p  className="text-black max-h-[200px] overflow-scroll">
+                                <p  className="text-black max-h-[200px] dark:text-white overflow-scroll">
                                   {aiOutpout ? (
                                     aiOutpout !== '' && !aiLoading &&(
                                   <span className='whitespace-pre-wrap font-poppins '  id="aiResponse" >{ aiOutpout}</span  >
@@ -489,7 +489,7 @@ useEffect(() => {
                             handleAirequest()
                         }
                       }}
-                        type='text' value={aiPrompt} placeholder={`How i can help you today ${currentUser} ?`} className='p-2 rounded border-none outline-none w-full flex  items-center  ' onChange={(e) => setAiPrompt(e.target.value)} />
+                        type='text' value={aiPrompt} placeholder={`How i can help you today ${currentUser} ?`} className='p-2 rounded border-none outline-none w-full flex dark:bg-gray-600 dark:text-white items-center  ' onChange={(e) => setAiPrompt(e.target.value)} />
                         <button className='rounded ' onClick={()=>{
                           // setFileInput(true)
                         }}  >
@@ -542,9 +542,9 @@ useEffect(() => {
           animate={{ x: 0, opacity: 1  }}
           exit="closed"
           variants={menuVariants}
-          className={`w-full sm:w-1/3   lg:w-1/4 xl:w-1/5 bg-[#fbfbfe] border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-30 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
+          className={`w-full sm:w-1/3   lg:w-1/4 xl:w-1/5 dark:bg-gray-900 dark:text-white border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-30 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
           <div
-            className="p-4 border-b border-[#dedcff] flex justify-start gap-2   items-center bg-accent text-[#fbfbfe]">
+            className="p-4 border-b border-[#dedcff] flex justify-start gap-2   items-center bg-accent tedark:bg-gray-900 dark:text-white">
               <Avatar className="h-8 w-8 ">
                     <AvatarImage src={userProfile} alt="You" />
                     <AvatarFallback>You</AvatarFallback>
@@ -554,7 +554,7 @@ useEffect(() => {
               variant="ghost"
               size="icon"
               onClick={toggleMobileMenu}
-              className="sm:hidden text-[#fbfbfe]">
+              className="sm:hidden tedark:bg-gray-900 dark:text-white">
               <XIcon className="h-6 w-6" />
             </Button>
           </div>
@@ -575,13 +575,13 @@ useEffect(() => {
               <TabsList className="grid w-full grid-cols-3 bg-[#dedcff]">
                 <TabsTrigger
                   value="all"
-                  className="data-[state=active]:bg-[#2f27ce] data-[state=active]:text-[#fbfbfe]">All</TabsTrigger>
+                  className="data-[state=active]:bg-[#2f27ce] data-[state=active]:tedark:bg-gray-900 dark:text-white">All</TabsTrigger>
                 <TabsTrigger
                   value="online"
-                  className="data-[state=active]:bg-[#2f27ce] data-[state=active]:text-[#fbfbfe]">Online</TabsTrigger>
+                  className="data-[state=active]:bg-[#2f27ce] data-[state=active]:tedark:bg-gray-900 dark:text-white">Online</TabsTrigger>
                 <TabsTrigger
                   value="favorites"
-                  className="data-[state=active]:bg-[#2f27ce] data-[state=active]:text-[#fbfbfe]">Favorites</TabsTrigger>
+                  className="data-[state=active]:bg-[#2f27ce] data-[state=active]:tedark:bg-gray-900 dark:text-white">Favorites</TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
@@ -614,7 +614,7 @@ useEffect(() => {
                       </div>
                       <Badge
                         variant={friend.status === 'online' ? 'default' : 'secondary'}
-                        className={friend.status === 'online' ? 'bg-[#433bff] text-[#fbfbfe]' : 'bg-[#dedcff] text-[#050315]'}>{friend.status}</Badge>
+                        className={friend.status === 'online' ? 'bg-[#433bff] tedark:bg-gray-900 dark:text-white' : 'bg-[#dedcff] text-[#050315]'}>{friend.status}</Badge>
                     </div>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {
@@ -656,7 +656,7 @@ useEffect(() => {
             <div className="flex-1 flex flex-col h-screen max-sm:w-full ">
                   {/* Chat Header */}
                   <div
-                    className="p-4 max-sm:p-1 border-b border-[#dedcff] bg-[#fbfbfe] flex justify-between items-center ">
+                    className="p-4 max-sm:p-1 border-b border-[#dedcff] dark:bg-gray-900 dark:text-white flex justify-between items-center ">
                     <div className="flex items-center">
                       <Button
                         variant="ghost"
@@ -692,7 +692,7 @@ useEffect(() => {
                                 onClick={()=>{blockFriend(currentFriend.uid,currentFriend.username)}}
                                 variant="outline"
                                 size="sm"
-                                className="border border-red-400 text-[#050315] text-sm line-clamp-1 w-full  flex hover:bg-red-400 hover:text-[#fbfbfe]">
+                                className="border border-red-400 text-[#050315] text-sm line-clamp-1 w-full  flex hover:bg-red-400 hover:tedark:bg-gray-900 dark:text-white">
                                 <MdBlock className="h-4 w-4 mr-2" />
                                 Block {currentFriend.username}
                               </Button>
@@ -703,7 +703,7 @@ useEffect(() => {
                       onClick={()=>{setIsVideoCall(true)}}
                         variant="outline"
                         size="sm"
-                        className="bg-[#dedcff] text-[#050315] hover:bg-[#433bff] hover:text-[#fbfbfe]">
+                        className="bg-[#dedcff] text-[#050315] hover:bg-[#433bff] hover:tedark:bg-gray-900 dark:text-white">
                           <VideoIcon className="h-4 w-4 mr-2" />
                           Video Call
                         </Button>
@@ -731,7 +731,7 @@ useEffect(() => {
                             </Avatar>
                           )}
                           <div
-                            className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${message.msgSenderUid === currentUserId ? 'bg-[#2f27ce] max-w-[80%]  text-[#fbfbfe] rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'  : 'bg-[#dedcff] max-w-[80%] text-text break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg '}`}>
+                            className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${message.msgSenderUid === currentUserId ? 'bg-[#2f27ce] max-w-[80%]  tedark:bg-gray-900 dark:text-white rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'  : 'bg-[#dedcff] max-w-[80%] text-text break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg '}`}>
                               {
                                  message.chatFile != null && imgsExtensions.some(ext =>  message.chatFile.endsWith(ext)) &&  (
                                      <Image
@@ -784,7 +784,7 @@ useEffect(() => {
                   {/* Message Input */}
                   <form
                     onSubmit={(e)=>{e.preventDefault();sendMessage()}} 
-                    className="p-4 bg-[#fbfbfe] border-t border-[#dedcff]">
+                    className="p-4 dark:bg-gray-900 dark:text-white border-t border-[#dedcff]">
                      
                       {
                         msgStatu && (
@@ -866,7 +866,7 @@ useEffect(() => {
                       <Button
                         type="submit"
                         size="icon"
-                        className=" bg-[#2f27ce] text-[#fbfbfe] hover:bg-[#433bff]">
+                        className=" bg-[#2f27ce] tedark:bg-gray-900 dark:text-white hover:bg-[#433bff]">
                         <SendIcon className="h-5 w-5" />
                         <span className="sr-only">Send message</span>
                       </Button>
@@ -901,7 +901,7 @@ useEffect(() => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.5 }}
-            className="fixed bottom-4 right-4 bg-[#fbfbfe] p-4 rounded-lg shadow-lg border border-[#dedcff]">
+            className="fixed bottom-4 right-4 dark:bg-gray-500 dark:text-white p-4 rounded-lg shadow-lg border border-[#dedcff]">
             <div className="flex justify-between items-start mb-2">
               <h4 className="font-semibold text-[#050315]">New Friend Suggestion</h4>
               <Button
@@ -930,7 +930,7 @@ useEffect(() => {
                 className="border-[#dedcff] text-[#050315] hover:bg-[#dedcff]">
                 Skip
               </Button>
-              <Button size="sm" className="bg-[#2f27ce] text-[#fbfbfe] hover:bg-[#433bff]">
+              <Button size="sm" className="bg-[#2f27ce] tedark:bg-gray-900 dark:text-white hover:bg-[#433bff]">
                 <HeartIcon className="h-4 w-4 mr-2" />
                 Connect
               </Button>
@@ -938,6 +938,7 @@ useEffect(() => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>)
+    </div>
+  )
   );
 }

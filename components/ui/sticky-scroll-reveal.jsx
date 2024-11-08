@@ -65,7 +65,7 @@ export const StickyScroll = ({
                 animate={{
                   opacity: activeCard === index ? 1 : 0.3,
                 }}
-                className="text-2xl font-bold text-black">
+                className="text-2xl dark:text-white font-bold text-black">
                 {item.title}
               </motion.h2>
               <motion.p
@@ -75,7 +75,7 @@ export const StickyScroll = ({
                 animate={{
                   opacity: activeCard === index ? 1 : 0.3,
                 }}
-                className="text-kg text-slate-800 max-w-sm mt-10">
+                className="text-kg text-slate-800 dark:text-slate-300 max-w-sm mt-10">
                 {item.description}
               </motion.p>
             </div>
@@ -86,7 +86,7 @@ export const StickyScroll = ({
       <div
         style={{ background: backgroundGradient }}
         className={cn(
-          "hidden lg:block h-60 w-80 rounded-md bg-white sticky top-10 overflow-hidden",
+          "hidden lg:block h-60 w-80 rounded-md bg-white dark:bg-zinc-800 sticky top-10 overflow-hidden",
           contentClassName
         )}>
         {content[activeCard].content ?? null}

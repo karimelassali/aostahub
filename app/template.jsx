@@ -15,10 +15,13 @@ import {
   import { FaUserFriends } from "react-icons/fa";
   import { IoChatbox } from "react-icons/io5";
 import { Bell } from 'lucide-react';
+import { ModeToggle } from "../components/component/theme-toggle";
 // import NotificationModal from '@/components/ui/notificationmodal';
 import { createClient } from "../utils/supabase/client";
 import { useUser } from '@clerk/nextjs';
 import NotificationModalInfo from '../components/notification-modal';
+import { ThemeProvider } from "@/components/ui/theme-provider"
+
 export default function Template({ children }) {
     const [isOpen, setIsOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -62,6 +65,7 @@ export default function Template({ children }) {
 
     
     return (
+     
       <ClerkLoaded>
         <>
          <nav className="bg-primary font-poppins fixed top-0 left-0    w-full" style={{zIndex:'999'}}  >
@@ -132,6 +136,7 @@ export default function Template({ children }) {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <ModeToggle style={{ backgroundColor: 'red' }} />
             <SignedOut>
               <Link
                 href="/explore"
@@ -166,9 +171,17 @@ export default function Template({ children }) {
           </nav>
           
           <div className='mt-20'  >
+             <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
             {
               children
             }
+             </ThemeProvider>
+
             {
               notificationss.length > 0  && notificationss[0] && (
                 <NotificationModalInfo notificationText={notificationss[0].type} receiver={currentUserUid} />
