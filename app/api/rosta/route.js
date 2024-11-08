@@ -46,51 +46,38 @@ async function updateChatHistory(role, content) {
  * @returns {Promise<NextApiResponse>}
  */
 export async function POST(req) {
-    try {
-        // Parse the request body as JSON
-        const { prompt, imgPrompt } = await req.json();
+    const { prompt, imgPrompt } = await req.json();
 
-        // Prepare the content to be sent to the AI model
-        const content = [
-            {
-                type: 'text',
-                text: `
-                    You are Rosta, a bot on Aosta Hub by Karim El Assali. Reply concisely and make the whole answer in the same language as the user's request.
-                    History: ${JSON.stringify(chatHistory)}
-                    Request: ${prompt}
-                `,
-            },
-        ];
+    const content = [
+        {
+            type: 'text',
+            text: `
+                You are Rosta, a bot on Aosta Hub by Karim El Assali. Reply concisely and make the whole answer in the same language as the user's request.
+                History: ${JSON.stringify(chatHistory)}
+                Request: ${prompt}
+            `,
+        },
+    ];
 
-        // If an image is provided, add it to the content array
-        if (imgPrompt) {
-            content.push({
-                type: 'file',
-                data: `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/aiFiles/${imgPrompt}`,
-                mimeType: 'image/*',
-            });
-        }
-
-        // Generate text using the AI model
-        const response = await generateText({
-            model: google('gemini-1.5-flash'),
-            messages: [{ role: 'user', content }],
+    if (imgPrompt) {
+        content.push({
+            type: 'file',
+            data: `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/aiFiles/${imgPrompt}`,
+            mimeType: 'image/*',
         });
-
-        // If the AI model generated text, update the chat history
-        if (response) {
-            await Promise.all([
-                updateChatHistory('user', prompt),
-                updateChatHistory('assistant', response.text)
-            ]);
-        }
-
-        // Return the generated text as a JSON response
-        return NextResponse.json({ response: response.text });
-    } catch (error) {
-        // If there was an error generating text, return it as a JSON response
-        // with a 500 status code
-        console.error(error);
-        return NextResponse.json({ error: 'Error generating text' }, { status: 500 });
     }
+
+    const response = await generateText({
+        model: google('gemini-1.5-flash'),
+        messages: [{ role: 'user', content }],
+    });
+
+    if (response) {w
+        await Promise.all([
+            updateChatHistory('user', prompt),
+            updateChatHistory('assistant', response.text)
+        ]);
+    }
+
+    return NextResponse.json({ response: response.text })
 }

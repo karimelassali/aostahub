@@ -471,8 +471,14 @@ useEffect(() => {
                               const imgUrlPrompt = URL.createObjectURL(e.target.files[0]);
                               if(imgUrlPrompt){}
                               imgUrlPrompt ? setImgPrompt(imgUrlPrompt) : setImgPrompt('');
-                              imgUrlPrompt ? setImgPromptSrc(e.target.files[0].name + Date.now()) : setImgPromptSrc('');
-                              const {data} = supabase.storage.from('aiFiles').upload(`/${e.target.files[0].name + Date.now()}`,e.target.files[0]);
+                              const uniqueName = `${e.target.files[0].name.split('.').slice(0, -1).join('.')}-${Date.now()}.${e.target.files[0].name.split('.').pop()}`;
+                              
+                              const {data,error} = supabase.storage.from('aiFiles').upload(uniqueName,e.target.files[0]);
+                              if(!error){
+                                setImgPromptSrc(uniqueName);
+                                imgPromptSrc && console.log(imgPromptSrc);
+                              console.log(uniqueName);
+                              }
                               // data && setFileInput(true)
                             }} />
                       {

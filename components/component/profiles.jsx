@@ -12,6 +12,8 @@ import { useRouter } from 'next/navigation'
 import confetti from "canvas-confetti";
 import { MdOutlineVerified } from "react-icons/md";
 import ShowModal from './showModal'
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 // const profiles = [
 //   {
@@ -45,6 +47,7 @@ import ShowModal from './showModal'
 //     interests: ['Music', 'Cats', 'Songwriting'],
 //   },
 // ]
+
 
   const handleopenConfetti = () => {
     const defaults = {
@@ -117,6 +120,30 @@ import ShowModal from './showModal'
   
 
 const Profiles = () => {
+
+//PageTour
+useEffect(() => {
+  const driverObj = driver({
+    steps: [
+      { element: '.imgProfile', popover: { title: 'Get to know them', description: 'Their profile cover is a great way to get a glimpse of their personality.', side: "bottom", align: 'start' }},
+      { element: '.profileCover', popover: { title: 'Discover their story', description: 'Their profile cover is a great way to learn more about them.', side: "bottom", align: 'start' }},
+      { element: '.imgProfile', popover: { title: 'Meet them', description: 'Their profile image is a great way to see who they are.', side: "bottom", align: 'start' }},
+      { element: '#next', popover: { title: 'Explore more', description: 'Click here to see more profiles.', side: "bottom", align: 'start' }},
+      { element: '#prev', popover: { title: 'Go back', description: 'Click here to go back to the previous profile.', side: "bottom", align: 'start' }},
+      { element: '.location', popover: { title: 'Where are they from?', description: 'Click here to see where they are from.', side: "left", align: 'start' }},
+      { element: '.desc', popover: { title: 'Get to know them better', description: 'Click here to read more about them.', side: "top", align: 'start' }},
+      { element: '.social', popover: { title: 'Connect with them', description: 'Click here to connect with them on social media.', side: "right", align: 'start' }},
+      { element: '.dislike', popover: { title: 'Not your cup of tea?', description: 'Click here to give this profile a dislike.', side: "right", align: 'start' }},
+      { element: '.like', popover: { title: 'You like them!', description: 'Click here to give this profile a like.', side: "right", align: 'start' }},
+      { element: '.visit', popover: { title: 'Visit their profile', description: 'Click here to visit their profile.', side: "right", align: 'start' }},
+      { popover: { title: 'Congratulations!', description: 'You have finished the tour! Enjoy AostaHub platform.' } },
+    ]
+})
+  driverObj.drive();
+},[])
+
+
+
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0)
     const [isLiked, setIsLiked] = useState(false)
 
@@ -246,7 +273,7 @@ const Profiles = () => {
         bottomDiv.scrollIntoView({ behavior: 'smooth' });
       }
     }
-    bottom();
+    // bottom();
  
  return (
     profiles && profiles.length > 0 && (
@@ -257,11 +284,12 @@ const Profiles = () => {
       >
         <div className="relative border border-gray-800 h-48 sm:h-56 md:h-64 lg:h-72 xl:h-56">
           <img
+          
             src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentProfile.imgName}`} 
             alt="profile image"
-            className="w-full h-full object-cover"
+            className="profileCover w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-black bg-opacity-50" />
+          <div  className="imgProfile absolute inset-0 bg-black bg-opacity-50" />
           { 
             currentProfile.permission ? (
               <Image width={100} height={100} src={currentProfile.profilePic} className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-white" alt="profilePic" />
@@ -277,18 +305,18 @@ const Profiles = () => {
               {currentProfile.verified == 1 && <MdOutlineVerified size={20} style={{ color: '#0284c7' }} />}
             </h2>
             <div className="navigate flex w-full justify-between max-h-[100px] overflow-hidden items-center gap-x-2">
-              <button onClick={prevProfile} className='p-2 rounded-full bg-secondary hover:scale-150 text-white'>
+              <button id='next' onClick={prevProfile} className='p-2 rounded-full bg-secondary hover:scale-150 text-white'>
                 <ArrowBigLeft className='w-5 h-5 text-accent' />
               </button>
-              <button onClick={nextProfile} className='p-2 rounded-full bg-secondary hover:scale-150 text-white'>
+              <button id='prev' onClick={nextProfile} className='p-2 rounded-full bg-secondary hover:scale-150 text-white'>
                 <ArrowBigRight className='w-5 h-5 text-accent' />
               </button>
             </div>
-            <p className="text-gray-600 text-center mb-2 dark:text-white sm:mb-4">{currentProfile.location}</p>
-            <p className="text-gray-800 text-center text-sm dark:text-white sm:text-base mb-4 sm:mb-6">{currentProfile.description}</p>
+            <p className="location text-gray-600 text-center mb-2 dark:text-white sm:mb-4">{currentProfile.location}</p>
+            <p className="desc text-gray-800 text-center text-sm dark:text-white sm:text-base mb-4 sm:mb-6">{currentProfile.description}</p>
           </div>
           <div className="flex justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
-            <div className="flex justify-center space-x-4 mt-4">
+            <div className="social flex justify-center space-x-4 mt-4">
               {currentProfile.instagram && (
                 <Link href={`https://www.instagram.com/${currentProfile.instagram}`} className="hover:scale-110 text-muted-foreground hover:text-primary" prefetch={false}>
                   <InstagramIcon className="w-5 h-5" style={{ color: '#c026d3' }} />
@@ -311,7 +339,7 @@ const Profiles = () => {
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center"
+              className="dislike w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center"
               onClick={() => { prevProfile(); handleOpenDislikeConfetti(); }}
             >
               <X className="text-accent" />
@@ -320,16 +348,16 @@ const Profiles = () => {
               onClick={() => like(currentUserId, currentProfile.uid)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className={`w-12 h-12 rounded-full shadow-md flex items-center justify-center ${
+              className={`like w-12 h-12 rounded-full shadow-md flex items-center justify-center ${
                 isLiked ? 'bg-accent' : 'bg-white'
               }`}
             >
-              <Heart className={isLiked ? 'text-white' : 'text-accent'} />
+              <Heart id='heart' className={isLiked ? 'text-white' : 'text-accent'} />
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center"
+              className="visit w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center"
               onClick={() => { router.push(`/profile/${currentProfile.id}`) }}
             >
               <Eye className="text-accent" />
