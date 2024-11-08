@@ -408,7 +408,7 @@ useEffect(() => {
                   <IoClose className='h-10 w-10   hover:rotate-180 transition-all duration-300 dark:text-white '  />
                 </span>
                 </button>
-             <div className='flex flex-col dark:bg-gray-900  gap-4  max-sm:min-w-[90%] max-lg:min-w-[50% lg:max-w-[50%]  min-h-[50%] bg-white  rounded-lg p-4'>
+             <div className='flex flex-col dark:bg-gray-900  gap-4  max-sm:min-w-[90%] max-lg:min-w-[70%] lg:max-w-[70%]  min-h-[50%] bg-white  rounded-lg p-4'>
                 <h1 className='text-black flex w-full dark:text-white font-extrabold '><SiIrobot className='w-5 h-5 dark:text-white'  />OSTA </h1>
                 <div className='flex flex-col justify-center w-full'>
                   {/* <h3 className='text-white text-center'>

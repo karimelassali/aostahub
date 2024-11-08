@@ -33,7 +33,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/page.jsx", "components/component/explore.jsx"  ],
+, "app/page.jsx", "components/component/explore.jsx", "app/api/rosta/route.js"  ],
   "exclude": [
     "node_modules"
   ]
