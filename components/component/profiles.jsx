@@ -125,18 +125,195 @@ const Profiles = () => {
 useEffect(() => {
   const driverObj = driver({
     steps: [
-      { element: '.imgProfile', popover: { title: 'Get to know them', description: 'Their profile cover is a great way to get a glimpse of their personality.', side: "bottom", align: 'start' }},
-      { element: '.profileCover', popover: { title: 'Discover their story', description: 'Their profile cover is a great way to learn more about them.', side: "bottom", align: 'start' }},
-      { element: '.imgProfile', popover: { title: 'Meet them', description: 'Their profile image is a great way to see who they are.', side: "bottom", align: 'start' }},
-      { element: '#next', popover: { title: 'Explore more', description: 'Click here to see more profiles.', side: "bottom", align: 'start' }},
-      { element: '#prev', popover: { title: 'Go back', description: 'Click here to go back to the previous profile.', side: "bottom", align: 'start' }},
-      { element: '.location', popover: { title: 'Where are they from?', description: 'Click here to see where they are from.', side: "left", align: 'start' }},
-      { element: '.desc', popover: { title: 'Get to know them better', description: 'Click here to read more about them.', side: "top", align: 'start' }},
-      { element: '.social', popover: { title: 'Connect with them', description: 'Click here to connect with them on social media.', side: "right", align: 'start' }},
-      { element: '.dislike', popover: { title: 'Not your cup of tea?', description: 'Click here to give this profile a dislike.', side: "right", align: 'start' }},
-      { element: '.like', popover: { title: 'You like them!', description: 'Click here to give this profile a like.', side: "right", align: 'start' }},
-      { element: '.visit', popover: { title: 'Visit their profile', description: 'Click here to visit their profile.', side: "right", align: 'start' }},
-      { popover: { title: 'Congratulations!', description: 'You have finished the tour! Enjoy AostaHub platform.' } },
+      {
+        element: '.imgProfile',
+        popover: {
+          title: 'Get to know them',
+          description: 'Their profile cover is a great way to get a glimpse of their personality.',
+          side: 'bottom',
+          align: 'start',
+          className: 'popper',
+          style: {
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+      {
+        element: '.profileCover',
+        popover: {
+          title: 'Discover their story',
+          description: 'Their profile cover is a great way to learn more about them.',
+          side: 'bottom',
+          align: 'start',
+          className: 'popper',
+          style: {
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+      {
+        element: '.imgProfile',
+        popover: {
+          title: 'Meet them',
+          description: 'Their profile image is a great way to see who they are.',
+          side: 'bottom',
+          align: 'start',
+          className: 'popper',
+          style: {
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+      {
+        element: '#next',
+        popover: {
+          title: 'Explore more',
+          description: 'Click here to see more profiles.',
+          side: 'bottom',
+          align: 'start',
+          className: 'popper',
+          style: {
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+      {
+        element: '#prev',
+        popover: {
+          title: 'Go back',
+          description: 'Click here to go back to the previous profile.',
+          side: 'bottom',
+          align: 'start',
+          className: 'popper',
+          style: {
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+      {
+        element: '.location',
+        popover: {
+          title: 'Where are they from?',
+          description: 'Click here to see where they are from.',
+          side: 'left',
+          align: 'start',
+          className: 'popper',
+          style: {
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+      {
+        element: '.desc',
+        popover: {
+          title: 'Get to know them better',
+          description: 'Click here to read more about them.',
+          side: 'top',
+          align: 'start',
+          className: 'popper',
+          style: {
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+      {
+        element: '.social',
+        popover: {
+          title: 'Connect with them',
+          description: 'Click here to connect with them on social media.',
+          side: 'right',
+          align: 'start',
+          className: 'popper',
+          style: {
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+      {
+        element: '.dislike',
+        popover: {
+          title: 'Not your cup of tea?',
+          description: 'Click here to give this profile a dislike.',
+          side: 'right',
+          align: 'start',
+          className: 'popper',
+          style: {
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+      {
+        element: '.like',
+        popover: {
+          title: 'You like them!',
+          description: 'Click here to give this profile a like.',
+          side: 'right',
+          align: 'start',
+          className: 'popper',
+          style: {
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+      {
+        element: '.visit',
+        popover: {
+          title: 'Visit their profile',
+          description: 'Click here to visit their profile.',
+          side: 'right',
+          align: 'start',
+          className: 'popper',
+          style: {
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+      {
+        popover: {
+          title: 'Congratulations!',
+          description: 'You have finished the tour! Enjoy AostaHub platform.',
+          className: 'popper',
+          style: {
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          },
+        },
+      },
     ]
 })
   driverObj.drive();

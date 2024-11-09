@@ -12,7 +12,7 @@ let chatHistory = [];
  */
 async function updateChatHistory(role, content) {
     chatHistory.push({ role, content });
-    if (chatHistory.length > 10) {
+    if (chatHistory.length > 20) {
         chatHistory = chatHistory.slice(chatHistory.length - 10); // Keep last 10 messages
     }
 }
