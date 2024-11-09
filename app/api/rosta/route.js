@@ -72,7 +72,7 @@ export async function POST(req) {
         messages: [{ role: 'user', content }],
     });
 
-    if (response) {w
+    if (response) {
         await Promise.all([
             updateChatHistory('user', prompt),
             updateChatHistory('assistant', response.text)
