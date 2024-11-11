@@ -226,7 +226,7 @@ export default function Landing() {
         </div>
         
       </header> */}
-        <main className="flex-1  z-50 py-12 max-sm:py-1 md:py-20">
+        <main className="flex-1  z-40 py-12 max-sm:py-1 md:py-20">
           <div className="container mx-auto px-4 md:px-8">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <motion.div

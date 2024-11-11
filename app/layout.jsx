@@ -7,6 +7,8 @@ import { ThemeProvider } from "@/components/ui/theme-provider"
 
 import { Neobrutalism } from '@clerk/themes'
 
+
+
 // import { Button } from "./components/ui/button";
 
 
@@ -70,13 +72,17 @@ export default function RootLayout({ children }) {
           />
         </head>
         <body className="">
+
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             
           >
+              
+
             {children}
+             
           </ThemeProvider>
         </body>
       </html>

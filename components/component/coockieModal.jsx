@@ -23,7 +23,7 @@ export default function CoockieModal() {
           transition={{ type: "spring", damping: 25, stiffness: 200 }}
           className="fixed inset-x-0 bottom-0 z-50 p-4 md:p-6">
           <div
-            className="bg-secondary text-primary-foreground rounded-lg shadow-lg max-w-3xl mx-auto overflow-hidden">
+            className="bg-accent relative z-50 text-white  rounded-lg shadow-lg max-w-3xl mx-auto overflow-hidden">
             <div className="p-6 flex items-start space-x-4">
               <div className="flex-shrink-0">
                 <Cookie className="h-8 w-8 md:h-10 md:w-10" />

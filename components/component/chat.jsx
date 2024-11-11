@@ -602,7 +602,7 @@ useEffect(() => {
                   transition={{ duration: 0.3 }}
                   className="p-4">
                   <Card
-                    className="p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer border-[#dedcff]">
+                    className="p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <Avatar className="h-12 w-12">
@@ -613,7 +613,7 @@ useEffect(() => {
                         </Avatar>
                         <div className="ml-4 gap-3 ">
                           <h3 className="font-semibold flex items-center gap-x-1 ">{friend.friendName}{ friend.friendVerification == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}, {friend.friendAge}</h3>
-                          <p className="text-sm text-[#050315] flex items-center">
+                          <p className="text-sm text-[#050315] dark:text-slate-4  00 flex items-center">
                             <MapPinIcon className="h-4 w-4 mr-1" /> {friend.friendLocation}
                           </p>
                         </div>

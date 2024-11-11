@@ -35,8 +35,8 @@ export default function FriendsPage() {
     const { data, error } = await supabase
       .from('friends')
       .select('*')
-      // .or(`requester.eq.${currentUserUid},receiver.eq.${currentUserUid}`)
-      .eq('requester', currentUserUid)
+      .or(`requester.eq.${currentUserUid},receiver.eq.${currentUserUid}`)
+      // .eq('requester', currentUserUid)
       .eq('status','accept')
       .order('id', { ascending: false });
     if (data) {

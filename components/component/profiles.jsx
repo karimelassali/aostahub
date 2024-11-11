@@ -172,6 +172,7 @@ useEffect(() => {
             boxShadow: '0 0 10px rgba(0,0,0,0.2)',
           },
         },
+        
       },
       {
         element: '#next',
@@ -455,9 +456,10 @@ useEffect(() => {
  return (
     profiles && profiles.length > 0 && (
       <div className="flex items-center  dark:bg-gray-900 justify-center p-4">
-      {time}
+        
+      {/* {time} */}
       <motion.div
-        className="w-full lg:max-w-[80%]  border border-gray-800  h-full rounded-xl shadow-xl overflow-hidden flex flex-col"
+        className="w-full lg:max-w-[80%]  black:border border-gray-800   h-full rounded-xl shadow-xl overflow-hidden flex flex-col"
       >
         <div className="relative border border-gray-800 h-48 sm:h-56 md:h-64 lg:h-72 xl:h-56">
           <img
