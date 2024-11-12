@@ -1,7 +1,7 @@
+![Logo](https://aostahub.vercel.app/ass/logo.png)
 
-Here’s an example of an attractive Title and Description for your README file:
 
-Aosta Hub
+
 Aosta Hub is an innovative social platform designed specifically for the Aosta city community, focusing on connecting people through AI-powered chat and fostering meaningful friendships. It provides a space where users can interact, share experiences, and communicate with others in their city. The platform leverages modern web technologies like Next.js, Supabase, and Tailwind CSS to create a smooth, user-friendly experience.
 
 With unique AI-assisted features, Aosta Hub aims to make every conversation seamless and engaging. Whether you're looking to chat with friends or meet new people, Aosta Hub is your go-to space for connecting in Aosta.
@@ -37,8 +37,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 For more details, visit the MIT License.
 
 
-
-![Logo](https://aostahub.vercel.app/ass/logo.png)
 
 ## Features
 
