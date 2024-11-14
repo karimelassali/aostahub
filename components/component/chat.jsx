@@ -353,6 +353,7 @@ useEffect(() => {
       setMessage("");
       setMsgStatu(false)
       if (data) {
+        setAiClicked(false);
         //send a msg into notifications table
         const { data: noti, error: notierror } = await supabase
           .from('notifications')
@@ -466,7 +467,7 @@ useEffect(() => {
                         )
                       }
                     </div>  
-                    <div className='aiInput border border-secondary  flex flex-col relative bottom-0 rounded p-2 gap-4 w-full'>
+                    <div className='aiInput  flex flex-col relative bottom-0 rounded p-2 gap-4 w-full'>
                             <input hidden id='aiFileInput' type="file" onChange={(e) => {
                               const imgUrlPrompt = URL.createObjectURL(e.target.files[0]);
                               if(imgUrlPrompt){}
@@ -550,12 +551,12 @@ useEffect(() => {
           variants={menuVariants}
           className={`w-full sm:w-1/3   lg:w-1/4 xl:w-1/5 dark:bg-gray-900 dark:text-white border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-30 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
           <div
-            className="p-4 border-b border-[#dedcff] flex justify-start gap-2   items-center bg-accent tedark:bg-gray-900 dark:text-white">
+            className="p-4  flex justify-start gap-2   items-center bg-accent tedark:bg-gray-900 dark:text-white">
               <Avatar className="h-8 w-8 ">
                     <AvatarImage src={userProfile} alt="You" />
                     <AvatarFallback>You</AvatarFallback>
               </Avatar>
-            <h2 className="lg:text-xl flex items-center font-poppins font-semibold">{currentUser}  <span>{me.verified == 1 && <MdOutlineVerified size={30} style={{ color: '#0284c7' }} />}</span></h2>
+            <h2 className="lg:text-xl flex items-center font-poppins font-semibold text-white">{currentUser}  <span>{me.verified == 1 && (<MdOutlineVerified size={30} style={{ color: '#0284c7' }} />)}</span></h2>
             <Button
               variant="ghost"
               size="icon"
@@ -565,18 +566,18 @@ useEffect(() => {
             </Button>
           </div>
           <div className="p-4 space-y-4">
-            <div className="relative">
+            {/* <div className="relative">
               <SearchIcon
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#050315]" />
-              <Input
+              {/* <Input
                 onChange={(e)=>{
                   setUserSearch(e.target.value);
                   search();
                 }}
                 type="text"
                 placeholder="Search friends..."
-                className="pl-10 border-[#dedcff] text-[#050315]" />
-            </div>
+                className="pl-10 border-[#dedcff] text-[#050315]" /> 
+             </div> */} 
             <Tabs defaultValue="all" onValueChange={setFriendFilter}>
               <TabsList className="grid w-full grid-cols-3 bg-[#dedcff]">
                 <TabsTrigger
@@ -591,7 +592,7 @@ useEffect(() => {
               </TabsList>
             </Tabs>
           </div>
-          <ScrollArea className="h-[calc(100vh-13rem)]">
+          <ScrollArea className="h-[calc(100vh-13rem)] border-none p-1">
             {
               filteredFriends.map((friend) => (
                 <Link
@@ -600,9 +601,9 @@ useEffect(() => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="p-4">
+                  className=" border-none">
                   <Card
-                    className="p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                    className="p-2 hover:shadow-lg  duration-300 cursor-pointer">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <Avatar className="h-12 w-12">
@@ -613,7 +614,7 @@ useEffect(() => {
                         </Avatar>
                         <div className="ml-4 gap-3 ">
                           <h3 className="font-semibold flex items-center gap-x-1 ">{friend.friendName}{ friend.friendVerification == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}, {friend.friendAge}</h3>
-                          <p className="text-sm text-[#050315] dark:text-slate-4  00 flex items-center">
+                          <p className="text-sm text-[#050315] dark:text-slate-400 flex items-center">
                             <MapPinIcon className="h-4 w-4 mr-1" /> {friend.friendLocation}
                           </p>
                         </div>
@@ -624,11 +625,11 @@ useEffect(() => {
                     </div>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {
-                        <Badge key={friend.id} variant="outline" className="bg-[#dedcff] gap-2 text-[#050315]">
+                        <Badge key={friend.id} variant="outline" className="bg-[#dedcff]  gap-2 text-[#050315]">
                          {
                           
                             friend.friendInterests.split(/[,.:&;\s]|and/).filter(Boolean).map((int, index) => (
-                              <Badge key={index} variant="outline" className="bg-[#dedcff] text-[#050315]">
+                              <Badge key={index} variant="outline" className="bg-[#dedcff]  text-[#050315]">
                                 {int}
                               </Badge>
                             ))
@@ -662,7 +663,7 @@ useEffect(() => {
             <div className="flex-1 flex flex-col h-screen max-sm:w-full ">
                   {/* Chat Header */}
                   <div
-                    className="p-4 max-sm:p-1 border-b border-[#dedcff] dark:bg-gray-900 dark:text-white flex justify-between items-center ">
+                    className="p-4 max-sm:p-1  dark:bg-gray-900 dark:text-white flex justify-between items-center ">
                     <div className="flex items-center">
                       <Button
                         variant="ghost"
@@ -683,36 +684,37 @@ useEffect(() => {
                           </Avatar>
                           <Link href={`/profile/${currentFriend.uid}`}  className="ml-4">
                             <h3 className="font-semibold flex items-center gap-x-2 ">{currentFriend.fname + ' ' +   currentFriend.lname}{ currentFriend.verified == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}</h3>
-                            <div className="status grid grid-cols-2 max-sm:grid-cols-1 gap-1">
-                              <p className="text-sm text-[#050315]  ">@{currentFriend.username}-</p>
-                              <p className="text-sm text-[#050315]">now</p>
+                            <div className="status grid grid-cols-2 max-sm:grid-cols-2 ">
+                              <p className="text-sm text-[#050315] dark:text-slate-400  ">@{currentFriend.username}-</p>
+                              <p className="text-sm text-[#050315] dark:text-slate-400">now</p>
                             </div>
                             </Link>
                         </div >
                       )}
                     </div>
-                    <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-1 items-center ">
+                    <div className="grid grid-cols-1 max-sm:grid-cols-1 gap-1 items-center ">
                           {
                             currentFriend && (
                               <Button
                                 onClick={()=>{blockFriend(currentFriend.uid,currentFriend.username)}}
                                 variant="outline"
                                 size="sm"
-                                className="border border-red-400 text-[#050315] text-sm line-clamp-1 w-full  flex hover:bg-red-400 hover:tedark:bg-gray-900 dark:text-white">
-                                <MdBlock className="h-4 w-4 mr-2" />
+                                className="border gap-1 border-red-400 text-[#050315] text-sm line-clamp-1 w-full  flex hover:bg-red-400 hover:tedark:bg-gray-900 dark:text-white dark:bg-red-400 dark:hover:bg-red-300">
                                 Block {currentFriend.username}
+                                <MdBlock className="h-4 w-4 mr-2" />
+
                               </Button>
                             )
                           }
                      
-                      <Button
+                      {/* <Button
                       onClick={()=>{setIsVideoCall(true)}}
                         variant="outline"
                         size="sm"
                         className="bg-[#dedcff] text-[#050315] hover:bg-[#433bff] hover:tedark:bg-gray-900 dark:text-white">
                           <VideoIcon className="h-4 w-4 mr-2" />
                           Video Call
-                        </Button>
+                        </Button> */}
                     </div>
                   </div>
 
@@ -764,7 +766,7 @@ useEffect(() => {
                                   </MediaThemeYt>
                                )
                               }
-                            <p className='whitespace-pre-wrap max-w-full'>
+                            <p className='whitespace-pre-wrap max-w-full text-white'>
                             {message.message}
                             </p>
                             <p
@@ -790,7 +792,7 @@ useEffect(() => {
                   {/* Message Input */}
                   <form
                     onSubmit={(e)=>{e.preventDefault();sendMessage()}} 
-                    className="p-4 dark:bg-gray-900 dark:text-white border-t border-[#dedcff]">
+                    className="p-4 dark:bg-gray-900 dark:text-white ">
                      
                       {
                         msgStatu && (
@@ -801,7 +803,6 @@ useEffect(() => {
                       }
                       {
                         chatFile && (
-                          
                           <div className='flex gap-2 p-3 items-center'>
                             <Image src={chatFile} width={40} height={40} alt='img' className='w-20 h-20 rounded'  />
                           </div>
@@ -834,7 +835,7 @@ useEffect(() => {
                         }}
                         type="button"
                         size="icon"
-                        className="ml-2  bg-white text-accent border border-accent hover:text-white ">
+                        className="ml-2  bg-white text-accent  hover:text-white ">
                         <MdAttachFile className="h-5 w-5" />
                         <span className="sr-only">Send image</span>
                       </Button>
@@ -844,7 +845,7 @@ useEffect(() => {
                         placeholder="Type a message..."
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        className="flex-1 border-none text-md  focus:outline-none outline-none  " />
+                        className="flex-1 border-none text-md dark:text-black focus:outline-none outline-none  " />
                         <div className='flex p-1 p-x-3 gap-2 '  >
                          {/* <div className='flex p-2 justify-center text-accent ' style={{
                           transform: 'scale(1.5)',
@@ -873,7 +874,7 @@ useEffect(() => {
                         type="submit"
                         size="icon"
                         className=" bg-[#2f27ce] tedark:bg-gray-900 dark:text-white hover:bg-[#433bff]">
-                        <SendIcon className="h-5 w-5" />
+                        <SendIcon className="h-5 w-5 text-white" />
                         <span className="sr-only">Send message</span>
                       </Button>
                       </div>
@@ -901,7 +902,7 @@ useEffect(() => {
       
       {/* Friend Suggestion Overlay */}
       <AnimatePresence>
-        {showSuggestion && (
+        {/* {showSuggestion && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -942,7 +943,7 @@ useEffect(() => {
               </Button>
             </div>
           </motion.div>
-        )}
+        )} */}
       </AnimatePresence>
     </div>
   )
