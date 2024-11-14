@@ -328,7 +328,9 @@ useEffect(() => {
       setchatFile(null)
       data ? toast.success('img uploaded succes') + setchatFile(null) : toast.error(error);
     }
+    setAiClicked(false);
     if (message.length > 0 && currentUserId && currentFriend || chatFile ) {
+     
       const { data, error } = await supabase.from("msgs").insert({
         msgSenderUid: currentUserId,
         message: message,
@@ -353,7 +355,6 @@ useEffect(() => {
       setMessage("");
       setMsgStatu(false)
       if (data) {
-        setAiClicked(false);
         //send a msg into notifications table
         const { data: noti, error: notierror } = await supabase
           .from('notifications')
@@ -549,7 +550,8 @@ useEffect(() => {
           animate={{ x: 0, opacity: 1  }}
           exit="closed"
           variants={menuVariants}
-          className={`w-full sm:w-1/3   lg:w-1/4 xl:w-1/5 dark:bg-gray-900 dark:text-white border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-30 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
+          onClick={toggleMobileMenu}
+          className={`w-full sm:w-1/3  bg-white   lg:w-1/4 xl:w-1/5 dark:bg-gray-900 dark:text-white border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-30 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
           <div
             className="p-4  flex justify-start gap-2   items-center bg-accent tedark:bg-gray-900 dark:text-white">
               <Avatar className="h-8 w-8 ">
@@ -561,7 +563,7 @@ useEffect(() => {
               variant="ghost"
               size="icon"
               onClick={toggleMobileMenu}
-              className="sm:hidden tedark:bg-gray-900 dark:text-white">
+              className="sm:hidden dark:bg-gray-900  text-accent dark:text-white">
               <XIcon className="h-6 w-6" />
             </Button>
           </div>
@@ -621,7 +623,7 @@ useEffect(() => {
                       </div>
                       <Badge
                         variant={friend.status === 'online' ? 'default' : 'secondary'}
-                        className={friend.status === 'online' ? 'bg-[#433bff] tedark:bg-gray-900 dark:text-white' : 'bg-[#dedcff] text-[#050315]'}>{friend.status}</Badge>
+                        className={friend.status === 'online' ? 'bg-[#433bff]  dark:bg-gray-900 dark:text-white' : 'bg-green-400 rounded-full w-2 h-2 text-[#050315]'}></Badge>
                     </div>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {
@@ -663,14 +665,14 @@ useEffect(() => {
             <div className="flex-1 flex flex-col h-screen max-sm:w-full ">
                   {/* Chat Header */}
                   <div
-                    className="p-4 max-sm:p-1  dark:bg-gray-900 dark:text-white flex justify-between items-center ">
+                    className="p-4 max-sm:p-1   dark:bg-gray-900 dark:text-white flex justify-between items-center ">
                     <div className="flex items-center">
                       <Button
                         variant="ghost"
                         size="icon"
                         onClick={toggleMobileMenu}
                         className="mr-2 sm:hidden text-[#050315]">
-                        <MenuIcon className="h-6 w-6" />
+                        <MenuIcon className="h-6 w-6 text-white" />
                       </Button>
                       {currentFriend && (
                         <div className={'flex items-center justify-center p-2  cursor-pointer '}   >
@@ -682,8 +684,12 @@ useEffect(() => {
                               alt={currentFriend.fname} />
                             <AvatarFallback>{currentFriend.fname.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                           </Avatar>
-                          <Link href={`/profile/${currentFriend.uid}`}  className="ml-4">
-                            <h3 className="font-semibold flex items-center gap-x-2 ">{currentFriend.fname + ' ' +   currentFriend.lname}{ currentFriend.verified == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}</h3>
+                          <Link href={`/profile/${currentFriend.uid}`}  className="ml-1">
+                          <div className="info flex justify-center items-center  p-1">
+                          <h3 className="font-semibold text-sm shrink-0 ">{currentFriend.fname + ' ' +   currentFriend.lname}</h3>
+                          { currentFriend.verified == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}
+
+                          </div>
                             <div className="status grid grid-cols-2 max-sm:grid-cols-2 ">
                               <p className="text-sm text-[#050315] dark:text-slate-400  ">@{currentFriend.username}-</p>
                               <p className="text-sm text-[#050315] dark:text-slate-400">now</p>
