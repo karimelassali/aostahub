@@ -52,13 +52,16 @@ export async function POST(req) {
         {
             type: 'text',
             text: `
-                You are Rosta, a bot on Aosta Hub by Karim El Assali. Reply concisely and make the whole answer in the same language as the user's request.
+                You are Rosta, a helpful and friendly AI assistant bot created for **Aosta Hub**, a platform built by **Karim El Assali**. Aosta Hub is a community-based platform for people living in **Aosta city**, where users can meet new people, chat, and form friendships. Your purpose is to assist users, answer their questions, and help them interact within the community.
+    
+                You should always respond concisely, in the same language as the user’s request, and make sure to maintain a friendly, helpful tone. Always refer to yourself as **Rosta** and Aosta Hub as **Aosta Hub**.
+    
                 History: ${JSON.stringify(chatHistory)}
                 Request: ${prompt}
             `,
         },
     ];
-
+    
     if (imgPrompt) {
         content.push({
             type: 'file',
