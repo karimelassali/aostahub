@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SendIcon, MenuIcon, MapPinIcon, UserPlusIcon, HeartIcon, XIcon, CoffeeIcon, MountainIcon, WineIcon, SearchIcon, Delete, BlocksIcon, ArrowBigDown, ArrowBigLeftIcon } from "lucide-react"
+import { SendIcon, MenuIcon, MapPinIcon, UserPlusIcon, HeartIcon, XIcon, CoffeeIcon, MountainIcon, WineIcon, SearchIcon, Delete, BlocksIcon, ArrowBigDown, ArrowBigLeftIcon, DeleteIcon } from "lucide-react"
 import  Image  from 'next/image'
 import { useUser } from "@clerk/nextjs";
 import { Toaster, toast } from "sonner";
@@ -29,6 +29,18 @@ import TypingAnimation from '@/components/ui/typing-animation'
 import MediaThemeYt from 'player.style/yt/react';
 import { IoClose } from 'react-icons/io5'
 import { SiIrobot } from "react-icons/si";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 
 
@@ -86,6 +98,7 @@ export default  function Chat({type,msgsId}) {
     setMsgAiType(e.target.value)
     console.log(e.target.value)
   }
+
  const timer = () => {
   if (aiResponse) {
     setAiTimer(5);
@@ -328,7 +341,7 @@ useEffect(() => {
       setchatFile(null)
       data ? toast.success('img uploaded succes') + setchatFile(null) : toast.error(error);
     }
-    setAiClicked(false);
+    // setAiClicked(false);
     if (message.length > 0 && currentUserId && currentFriend || chatFile ) {
      
       const { data, error } = await supabase.from("msgs").insert({
@@ -385,9 +398,10 @@ useEffect(() => {
     const {data,error} = await supabase
     .from('friends')
     .delete()
-    .eq('receiver',currentUserId)
-    .eq('requester',uid)
-    data ? toast.success(`${name} Is not your friend `) : toast.error(error)
+    .eq('requester',currentUserId)
+    .eq('receiver',uid)
+    !error ? toast.success(`You suucefully blocked ${name}`) : toast.error(error)
+    router.push('/chat');
   }
 
 
@@ -395,13 +409,25 @@ useEffect(() => {
     setLopen(false);
   }
   
-  const handleStopCall = ()=>{
-    setIsVideoCall(false);
-  }
+  // const handleStopCall = ()=>{
+  //   setIsVideoCall(false);
+  // }
+
+  const deleteMessage = async (id) => {
+    const { data, error } = await supabase
+      .from("msgs")
+      .delete()
+      .eq("id", id);
+    if (!error) {
+      toast.success("Message deleted");
+    }
+  };
 
   return (
     (
+      
       <div className="flex h-screen w-full transition-all  dark:bg-gray-900 dark:text-white text-[#050315]">
+         
         {
           aiClicked && (
             <div className='flex text-black p-3  bg-black justify-center items-center  bg-opacity-45  w-full h-full  z-40 absolute '  >
@@ -545,6 +571,7 @@ useEffect(() => {
        }
       {/* Potential Friends List */}
       <AnimatePresence>
+      <Toaster richColors />
         <motion.div
           initial={false}
           animate={{ x: 0, opacity: 1  }}
@@ -665,7 +692,7 @@ useEffect(() => {
             <div className="flex-1 flex flex-col h-screen max-sm:w-full ">
                   {/* Chat Header */}
                   <div
-                    className="p-4 max-sm:p-1   dark:bg-gray-900 dark:text-white flex justify-between items-center ">
+                    className="p-4 max-sm:p-1 border-b border-accent   dark:bg-gray-900 dark:text-white flex justify-between items-center ">
                     <div className="flex items-center">
                       <Button
                         variant="ghost"
@@ -675,7 +702,7 @@ useEffect(() => {
                         <MenuIcon className="h-6 w-6 text-white" />
                       </Button>
                       {currentFriend && (
-                        <div className={'flex items-center justify-center p-2  cursor-pointer '}   >
+                        <div className={'flex items-center justify-center  p-2  cursor-pointer '}   >
                           <Avatar className="h-10 w-10">
                             <AvatarImage
                             className={'cursor-pointer'}
@@ -701,15 +728,37 @@ useEffect(() => {
                     <div className="grid grid-cols-1 max-sm:grid-cols-1 gap-1 items-center ">
                           {
                             currentFriend && (
-                              <Button
-                                onClick={()=>{blockFriend(currentFriend.uid,currentFriend.username)}}
-                                variant="outline"
-                                size="sm"
-                                className="border gap-1 border-red-400 text-[#050315] text-sm line-clamp-1 w-full  flex hover:bg-red-400 hover:tedark:bg-gray-900 dark:text-white dark:bg-red-400 dark:hover:bg-red-300">
-                                Block {currentFriend.username}
-                                <MdBlock className="h-4 w-4 mr-2" />
-
-                              </Button>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button  className="border bg-red-400 gap-1 border-red-400 text-white text-sm line-clamp-1 w-full flex items-center justify-center hover:bg-red-500 hover:dark:bg-red-600 transition duration-150">
+                                    Block
+                                    <MdBlock className="h-4 w-4 mr-2" />
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="bg-white dark:bg-gray-800">
+                                  <AlertDialogHeader className="border-b border-gray-200 dark:border-gray-700">
+                                    <AlertDialogTitle className="text-lg font-semibold text-gray-900 dark:text-white">
+                                      Are You Sure You Want To Block This User?
+                                    </AlertDialogTitle>
+                                  </AlertDialogHeader>
+                                  <AlertDialogDescription className="text-sm text-gray-600 dark:text-gray-400">
+                                    Blocking this user will prevent them from sending you messages or seeing your online status. This action is permanent and cannot be undone.
+                                  </AlertDialogDescription>
+                                  <AlertDialogFooter className="flex items-center justify-end">
+                                    <AlertDialogCancel asChild>
+                                      <Button className="text-sm hover:bg-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition duration-150">
+                                        Close
+                                      </Button>
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction asChild>
+                                      <Button onClick={()=>{blockFriend(currentFriend.uid,currentFriend.username)}} className="text-sm text-white bg-red-500 hover:bg-red-600 transition duration-150">
+                                        Continue
+                                      </Button>
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog> 
+                              
                             )
                           }
                      
@@ -749,6 +798,7 @@ useEffect(() => {
                               {
                                  message.chatFile != null && imgsExtensions.some(ext =>  message.chatFile.endsWith(ext)) &&  (
                                      <Image
+                                     key={message.id}
                                         className='cursor-pointer  rounded max-h-[250px] min-h-[200px]  object-cover '
                                         width={200} 
                                         height={200}
@@ -762,6 +812,7 @@ useEffect(() => {
                               message.chatFile != null && message.chatFile.endsWith('.mp4') && (
                                   <MediaThemeYt>
                                   <video
+                                  key={message.id}
                                      playsInline
                                      slot="media"
                                       crossOrigin
@@ -774,9 +825,19 @@ useEffect(() => {
                               }
                             <p className='whitespace-pre-wrap max-w-full text-white'>
                             {message.message}
+                            
                             </p>
                             <p
                               className={`text-xs mt-1 ${message.msgSenderUid === currentUserId ? 'text-gray-300 text-sm ' : ' text-sm text-slate-700 '}`}>{message.time}</p>
+                              {
+                                message.msgSenderUid === currentUserId && (
+                                <button onClick={()=>{deleteMessage(message.id)}} className='text-white bg-red-400 rounded flex justify-center items-center mt-2  w-10 p-1 hover:bg-red-600' >
+                                <RiDeleteBinLine className='h-5 w-5' />
+                                
+                               </button>
+                              )
+                              }
+                              
                           </div>
                               {
                                 message.msgSenderUid !== currentUserId  && message.message && (
@@ -797,8 +858,9 @@ useEffect(() => {
                   </div>
                   {/* Message Input */}
                   <form
-                    onSubmit={(e)=>{e.preventDefault();sendMessage()}} 
-                    className="p-4 dark:bg-gray-900 dark:text-white ">
+                    onSubmit={(e)=>{e.preventDefault();sendMessage();setAiClicked(false)}} 
+                    className="p-4 sticky  bottom-0  z-50 dark:bg-gray-900 dark:text-white ">
+                     
                      
                       {
                         msgStatu && (
@@ -808,7 +870,7 @@ useEffect(() => {
                         )
                       }
                       {
-                        chatFile && (
+                        chatFile &&  (
                           <div className='flex gap-2 p-3 items-center'>
                             <Image src={chatFile} width={40} height={40} alt='img' className='w-20 h-20 rounded'  />
                           </div>
@@ -820,14 +882,16 @@ useEffect(() => {
                     <div className="flex gap-2 border-b border-accent p-1  rounded  items-center">
                     <input onChange={(e)=>{
                       const img = e.target.files[0];
-                      if(img){
-                        const imgUrl = URL.createObjectURL(img);
+                      const imgUrl = URL.createObjectURL(img);
+                      if(img && img.type.startsWith('image/')) {
                         setchatFileFile(img); 
                         setchatFileName(img.name);
                         setchatFile(imgUrl);
                       }
+                      else if(!img.type.startsWith('image/')) {
+                        toast({ statusCode: 500, error: 'Server Error', message: 'Something went wrong' });
+                      }
                     }} id='msgImg' type="file" hidden />
-
                     <div className='flex justify-between items-center '  >
                        <div className='flex justify-center  p-2 text-accent ' style={{
                         
@@ -873,6 +937,7 @@ useEffect(() => {
                       onClick={() => {
                         setAiClicked(true);
                       }}
+                      type='button'
                        >
                          <Image width={40} height={40} alt={'ai icon'} src='/ass/ai.png' / >
                       </motion.button>
