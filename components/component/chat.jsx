@@ -859,7 +859,7 @@ useEffect(() => {
                   {/* Message Input */}
                   <form
                     onSubmit={(e)=>{e.preventDefault();sendMessage();setAiClicked(false)}} 
-                    className="p-4 sticky  bottom-0  z-50 dark:bg-gray-900 dark:text-white ">
+                    className="p-4 sticky  bottom-0   dark:bg-gray-900 dark:text-white ">
                      
                      
                       {
