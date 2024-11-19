@@ -493,7 +493,11 @@ export default function Landing() {
         <section className="py-12 md:py-20">
           <div className="container mx-auto px-4 md:px-8 text-center">
             <h2 className="text-3xl md:text-4xl dark:text-white font-bold mb-4">
-              <div></div>
+            <div className="flex items-center justify-center h-full">
+                            <div className="flex flex-col items-center">
+                              <img src="/ullis/couple.svg" alt="Empty" className="w-64 h-64 mb-4" />
+                            </div>
+                          </div>
               {language === "en"
                 ? `Join AostaHub Today`
                 : "Unisciti ad AostaHub oggi"}
@@ -522,7 +526,7 @@ export default function Landing() {
             <div className="flex items-center gap-4">
               <AsteriskIcon className="h-6 w-6 text-background" />
               <span className="text-background">
-                &copy; 2024 AostaHub. All rights reserved.
+                &copy; {new Date().getFullYear()} AostaHub. All rights reserved.
               </span>
             </div>
             <nav className="flex items-center gap-4">

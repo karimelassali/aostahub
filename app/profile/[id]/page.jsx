@@ -1,7 +1,7 @@
 'use client'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Facebook, Instagram, MapPin, Phone, Users , MessageCircle, BookmarkPlus } from "lucide-react"
+import { Facebook, Instagram, MapPin, Phone, Users , MessageCircle, BookmarkPlus, Edit } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { MdBoy } from "react-icons/md";
@@ -228,7 +228,21 @@ function Page({params}) {
                 <MapPin className="h-5 w-5 mr-2 text-[#2f27ce]" />
                 {userP.location}
               </p>
-              <div className="flex flex-wrap justify-center md:justify-start gap-4 mb-4">
+              
+              {
+                //if userP === me.uid show (Read mode only)
+                userP.uid == me.uid ? (
+                  <div className="flex flex-wrap justify-center md:justify-start gap-4 mb-4">
+                    <Link
+                      href={`/myprofile/edit/${userP.uid}`}
+                      variant="outline"
+                      className="border-[#2f27ce] text-[#2f27ce] flex rounded p-2  items-center hover:bg-[#2f27ce] hover:tedark:bg-gray-900 dark:text-white">
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Profile
+                    </Link>
+                  </div>
+                ):(
+                  <div className="flex flex-wrap justify-center md:justify-start gap-4 mb-4">
                 {
                   isFriend == 'true' && (
                     <>
@@ -288,12 +302,14 @@ function Page({params}) {
                   <MessageCircle className="h-4 w-4 mr-2" />
                   Message
                 </Button> */}
-              </div>
+                  </div>
+                )
+              }
             </div>
             {/* Stats */}
             <div className="flex gap-6 text-center">
               <div>
-                <p className="text-2xl font-semibold text-[#2f27ce]"><NumberTicker value={userAsfriend.length} /></p>
+                <p className="text-2xl font-semibold text-[#2f27ce]"><NumberTicker value={userAsfriend ? userAsfriend.length : 0} /></p>
                 <p className="text-[#050315] dark:text-white ">Friend`s</p>
               </div>
             </div>
