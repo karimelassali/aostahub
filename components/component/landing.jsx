@@ -169,6 +169,8 @@ export default function Landing() {
   };
 
   useEffect(() => {
+    if(typeof window == 'undefined') return;
+    
     const cookiesModalSeen = localStorage.getItem("cookieStatu");
     if (cookiesModalSeen == 'seen' ) {
       return;

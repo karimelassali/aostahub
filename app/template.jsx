@@ -1,15 +1,16 @@
 'use client'
 import { useEffect, useState } from 'react';
 import {
-    ClerkProvider,
     SignInButton,
     SignedIn,
     SignedOut,
     UserButton,
     ClerkLoaded
   } from "@clerk/nextjs";
+  import { Neobrutalism } from '@clerk/themes'
+
   import Image from "next/image";
-  import Link from "next/link";
+  import Link from "next/link"; 
   import { IoMdHome } from "react-icons/io";
   import { IoIosCreate } from "react-icons/io";
   import { FaUserFriends } from "react-icons/fa";
@@ -65,7 +66,6 @@ export default function Template({ children }) {
 
     
     return (
-     
       <ClerkLoaded>
         <>
          <nav className="bg-primary font-poppins fixed top-0 left-0    w-full" style={{zIndex:'999'}}  >
@@ -192,6 +192,6 @@ export default function Template({ children }) {
 
         </>
         </ClerkLoaded>
-        
     );
 }
+  

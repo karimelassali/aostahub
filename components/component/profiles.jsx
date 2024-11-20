@@ -124,6 +124,7 @@ const Profiles = () => {
 //PageTour
 useEffect(() => {
   //check if user already visited the page
+  if(typeof window == 'undefined') return;
   const visited = localStorage.getItem('visited');
   if (!visited) {
     const driverObj = driver({
