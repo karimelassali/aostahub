@@ -1,6 +1,6 @@
 export default function CardSkeleton() {
     return (
-      <div class="flex w-full items-center  min-h-screen animate-pulse justify-center p-4">   
+      <div class="flex w-full lg:max-w-[80%] items-center  min-h-screen animate-pulse justify-center p-4">   
       <div class="w-full  h-full rounded-xl overflow-hidden flex flex-col">
           <div class="relative border border-gray-800 h-48 sm:h-56 md:h-64 lg:h-72 xl:h-56">
             <div class="w-full h-full bg-gray-200 "></div>
