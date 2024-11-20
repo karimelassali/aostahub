@@ -170,7 +170,6 @@ export default function Landing() {
 
   useEffect(() => {
     if(typeof window == 'undefined') return;
-    
     const cookiesModalSeen = localStorage.getItem("cookieStatu");
     if (cookiesModalSeen == 'seen' ) {
       return;
@@ -180,20 +179,7 @@ export default function Landing() {
       setCookieStatu('notYet');
     }
    // Request permission from the user to send notifications
-   Notification.requestPermission().then(permission => {
-     if (permission === 'granted') {
-       // Create a new notification
-       const notification = new Notification('Hello, world!', {
-         body: 'This is a notification',
-         icon: 'https://example.com/icon.png',
-       });
-   
-       // Add an event listener to the notification
-       notification.addEventListener('click', () => {
-         console.log('Notification clicked!');
-       });
-     }
-   });
+ 
 
   },[])
 
