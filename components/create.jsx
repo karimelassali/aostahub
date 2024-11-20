@@ -189,7 +189,7 @@ export function  CreateProfile() {
                   <button onClick={() => {router.push('/profile/'+ me.id)}} className='p-1 m-1 bg-accent rounded w-20 text-white max-sm:w-[30%]' >
                     Show
                     </button>
-                    <button className='p-1 m-1 bg-green-400 rounded w-20 text-white max-sm:w-[30%]' >
+                    <button onClick={()=>{router.push('/account/edit/')}} className='p-1 m-1 bg-green-400 rounded w-20 text-white max-sm:w-[30%]' >
                       Edit
                       </button>
                       <AlertDialog>
