@@ -7,11 +7,14 @@ import { Switch } from "@/components/ui/switch"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 
+
 import {
   UserButton,
   ClerkLoaded
 } from "@clerk/nextjs";
 import { MdOutlineVerified } from "react-icons/md";
+import NumberTicker from '@/components/ui/number-ticker'
+
 import { useRouter } from 'next/navigation'
 import Image from "next/image"
 import { useUser } from "@clerk/nextjs"
@@ -21,6 +24,13 @@ import { toast, Toaster } from 'sonner'
 export default function UserAccountPage() {
 
   const [userData,setUserData] = useState([]);
+  const [userLikes, setUserLikes] = useState(0);
+  const [sentLikes, setSentLikes] = useState(0);
+  const [friendRequests, setFriendRequests] = useState(0);
+  const [messages, setMessages] = useState(0);
+  const [notifications, setNotifications] = useState(0);
+  const [totalFriends, setTotalFriends] = useState(0);
+
 
   const supabase = createClient()
   const { user } = useUser()
@@ -73,10 +83,75 @@ export default function UserAccountPage() {
       if (error) {
         toast.error(error.message)
       } else {
-        return data.length;
+        setUserLikes(data.length);
+      }
+    }
+    const fetchFriendRequests = async () => {
+      const { data, error } = await supabase
+        .from('friend_requests')
+        .select('*')
+        .eq('receiver', user?.id)
+      if (error) {
+        toast.error(error.message)
+      } else {
+        setFriendRequests(data.length);
+      }
+    }
+    const fetchMessages = async () => {
+      const { data, error } = await supabase
+        .from('msgs')
+        .select('*')
+        .eq('msgReceiverUid', user?.id)
+      if (error) {
+        toast.error(error.message)
+      } else {
+        setMessages(data.length);
       }
     }
 
+
+    const fetchNotifications = async () => {
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('receiver', user?.id)
+      if (error) {
+        toast.error(error.message)
+      } else {
+        setNotifications(data.length);
+      }
+    }
+
+    const fetchTotalFriends = async () => {
+      const { data, error } = await supabase
+        .from('friends')
+        .select('*')
+        .eq('receiver', user?.id)
+      if (error) {
+        toast.error(error.message)
+      } else {
+        setTotalFriends(data.length);
+      }
+    }
+
+    const fetchSentLikes = async () => {
+      const { data, error } = await supabase
+        .from('likes')
+        .select('*')
+        .eq('sender', user?.id)
+      if (error) {
+        toast.error(error.message)      
+      } else {
+        setSentLikes(data.length);
+      }}
+
+
+    fetchSentLikes();
+    fetchFriendRequests();
+    fetchMessages();
+    fetchNotifications();
+    fetchTotalFriends();
+    fetchUserLikes(); 
 
   },[user])
 
@@ -99,15 +174,16 @@ export default function UserAccountPage() {
             <CardContent className="p-6">
               <div className="flex items-center space-x-4 mb-6">
                 <Avatar className="h-20 w-20">
-                  <AvatarImage src={user.imageUrl} alt={userData.username} />
-                  <AvatarFallback>{userData.username}</AvatarFallback>
+                <AvatarImage src={user?.imageUrl || '/ass/logo.png'} alt={userData?.username || 'User'} />
+                <AvatarFallback>{userData.username}</AvatarFallback>
                 </Avatar>
                 <div>
                   <h2 className="text-2xl flex items-center font-bold">{userData.fname + userData.lname} {userData.verified == 1 && (<MdOutlineVerified size={30}  style={{ color: '#0284c7' }} className="ml-2 h-4 w-4" />)} </h2>
                   <p className="text-gray-500 dark:text-gray-400">@{userData.username}</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     <Calendar className="inline mr-1 h-4 w-4" />
-                    Joined {user.createdAt.getDate()}/{user.createdAt.getMonth()}/{user.createdAt.getFullYear()}
+                    Joined {user?.createdAt ? new Date(user.createdAt).getDate() : 'N/A'
+                    }
                   </p>
                 </div>
               </div>
@@ -119,17 +195,17 @@ export default function UserAccountPage() {
                 <Button  size="sm" className="flex hover:bg-secondary hover:text-black  items-center">
                   <UserPlus className="mr-2 h-4 w-4" />
                   Friend Requests
-                  <Badge variant="destructive" className="ml-2">{user.pendingFriendRequests}</Badge>
+                  <Badge variant="destructive" className="ml-2">{friendRequests}</Badge>
                 </Button>
                 <Button  size="sm" className="flex hover:bg-secondary hover:text-black  items-center">
                   <Mail className="mr-2 h-4 w-4" />
                   Messages
-                  <Badge variant="destructive" className="ml-2">{user.unreadMessages}</Badge>
+                  <Badge variant="destructive" className="ml-2">{ messages}</Badge>
                 </Button>
                 <Button  size="sm" className="flex hover:bg-secondary hover:text-black  items-center">
                   <Bell className="mr-2 h-4 w-4" />
                   Notifications
-                  <Badge variant="destructive" className="ml-2">{user.notifications}</Badge>
+                  <Badge variant="destructive" className="ml-2">{ notifications}</Badge>
                 </Button>
               </div>
             </CardContent>
@@ -145,21 +221,21 @@ export default function UserAccountPage() {
                     <Heart className="h-5 w-5 text-red-500 mr-2" />
                     Likes Received
                   </span>
-                  <span className="font-bold">{fetchUserLikes()}</span>
+                  <span className="font-bold"><NumberTicker value={sentLikes || 0}/> </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="flex items-center">
                     <Heart className="h-5 w-5 text-blue-500 mr-2" />
                     Likes Sent
                   </span>
-                  <span className="font-bold">{user.likesSent}</span>
+                  <span className="font-bold">{sentLikes}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="flex items-center">
                     <User className="h-5 w-5 text-green-500 mr-2" />
                     Total Friends
                   </span>
-                  <span className="font-bold">{user.totalFriends}</span>
+                  <span className="font-bold"><NumberTicker value={totalFriends || 0}/></span>
                 </div>
               </div>
             </CardContent>
