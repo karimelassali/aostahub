@@ -15,7 +15,7 @@ import {
   import { IoIosCreate } from "react-icons/io";
   import { FaUserFriends } from "react-icons/fa";
   import { IoChatbox } from "react-icons/io5";
-import { Bell } from 'lucide-react';
+import { Bell, Settings2 } from 'lucide-react';
 import { ModeToggle } from "../components/component/theme-toggle";
 // import NotificationModal from '@/components/ui/notificationmodal';
 import { createClient } from "../utils/supabase/client";
@@ -122,7 +122,7 @@ export default function Template({ children }) {
               {notificationss.length > 0 && <span className="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">{notificationss.length}</span>}
 
                   </button>
-
+                  <Link href="/account" className="rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Account <Settings2 /></Link>
                   </>
                 )
                       }
@@ -162,6 +162,7 @@ export default function Template({ children }) {
               <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
               <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link> 
               <Link href="/friends" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Friends <FaUserFriends /></Link> 
+              <Link href="/account" className="rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Account <Settings2 /></Link>
 
             </>
           )

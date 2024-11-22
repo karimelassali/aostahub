@@ -21,6 +21,18 @@ import { useUser } from "@clerk/nextjs"
 import { createClient } from "@/utils/supabase/client"
 import { toast, Toaster } from 'sonner'
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 export default function UserAccountPage() {
 
   const [userData,setUserData] = useState([]);
@@ -55,6 +67,39 @@ export default function UserAccountPage() {
   if(typeof window == 'undefined') return;
   
  },[user])
+
+ const handleDelete = async (action) => {
+  if (action === 'account') {
+    const response = await fetch('/api/delete-user', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      //send user id in request
+      body: JSON.stringify({
+        uid: user?.id
+      })
+    })
+
+    if (response.ok) {
+      toast.success('Account deleted successfully')
+      router.push('/');
+    }
+  }
+  if(action ===  'profile'){
+    const { error } = await supabase
+      .from('users')
+      .delete()
+      .eq('uid', user?.id)
+    if (error) {
+      toast.error(error.message)
+    } else {
+      toast.success('Profile deleted successfully')
+      router.push('/');
+    }
+  }
+
+ }
 
   useEffect(() => {
     if(typeof window == 'undefined') return;
@@ -178,8 +223,8 @@ export default function UserAccountPage() {
                 <AvatarFallback>{userData.username}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <h2 className="text-2xl flex items-center font-bold">{userData.fname + userData.lname} {userData.verified == 1 && (<MdOutlineVerified size={30}  style={{ color: '#0284c7' }} className="ml-2 h-4 w-4" />)} </h2>
-                  <p className="text-gray-500 dark:text-gray-400">@{userData.username}</p>
+                  <h2 className="text-2xl flex items-center font-bold">{user.fullName || userData.fname + ' ' + userData.lname} {userData.verified == 1 && (<MdOutlineVerified size={30}  style={{ color: '#0284c7' }} className="ml-2 h-4 w-4" />)} </h2>
+                  <p className="text-gray-500 dark:text-gray-400">@{user.username || userData.username}</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     <Calendar className="inline mr-1 h-4 w-4" />
                     Joined {user?.createdAt ? new Date(user.createdAt).getDate() : 'N/A'
@@ -187,7 +232,7 @@ export default function UserAccountPage() {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 max-sm:grid max-sm:grid-cols-2 max-[320px]:grid-cols-1 ">
                 <Button  size="sm" className="flex items-center">
                   <UserButton className="mr-2 h-4 w-4" />
                   Edit Profile
@@ -195,17 +240,35 @@ export default function UserAccountPage() {
                 <Button  size="sm" className="flex hover:bg-secondary hover:text-black  items-center">
                   <UserPlus className="mr-2 h-4 w-4" />
                   Friend Requests
-                  <Badge variant="destructive" className="ml-2">{friendRequests}</Badge>
+                  {
+                    friendRequests > 0 ? (
+                      <Badge variant="destructive" className="ml-2"><NumberTicker value={friendRequests} /></Badge>
+                    ):(
+                      <Badge variant="destructive" className="ml-2">0</Badge>
+                    )
+                    }
                 </Button>
                 <Button  size="sm" className="flex hover:bg-secondary hover:text-black  items-center">
                   <Mail className="mr-2 h-4 w-4" />
                   Messages
-                  <Badge variant="destructive" className="ml-2">{ messages}</Badge>
+                  {
+                    messages > 0 ? (
+                      <Badge variant="destructive" className="ml-2"><NumberTicker value={messages} /></Badge>
+                    ):(
+                      <Badge variant="destructive" className="ml-2">0</Badge>
+                    )
+                  }
                 </Button>
                 <Button  size="sm" className="flex hover:bg-secondary hover:text-black  items-center">
                   <Bell className="mr-2 h-4 w-4" />
                   Notifications
-                  <Badge variant="destructive" className="ml-2">{ notifications}</Badge>
+                  {
+                    notifications > 0 ? (
+                      <Badge variant="destructive" className="ml-2"><NumberTicker value={notifications} /></Badge>
+                    ):(
+                      <Badge variant="destructive" className="ml-2">0</Badge>
+                    )
+                  }
                 </Button>
               </div>
             </CardContent>
@@ -221,21 +284,39 @@ export default function UserAccountPage() {
                     <Heart className="h-5 w-5 text-red-500 mr-2" />
                     Likes Received
                   </span>
-                  <span className="font-bold"><NumberTicker value={sentLikes || 0}/> </span>
+                  {
+                    userLikes > 0 ? (
+                      <span className="font-bold"><NumberTicker value={userLikes || 0}/></span>
+                    ) : (
+                      <span className="font-bold">0</span>
+                    )
+                  }
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="flex items-center">
                     <Heart className="h-5 w-5 text-blue-500 mr-2" />
                     Likes Sent
                   </span>
-                  <span className="font-bold">{sentLikes}</span>
+                  {
+                    sentLikes > 0 ? (
+                      <span className="font-bold"><NumberTicker value={sentLikes || 0}/></span>
+                    ) : (
+                      <span className="font-bold">0</span>
+                    )
+                  }
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="flex items-center">
                     <User className="h-5 w-5 text-green-500 mr-2" />
                     Total Friends
                   </span>
-                  <span className="font-bold"><NumberTicker value={totalFriends || 0}/></span>
+                  {
+                    totalFriends > 0 ? (
+                      <span className="font-bold"><NumberTicker value={totalFriends || 0}/></span>
+                    ) : (
+                      <span className="font-bold">0</span>
+                    )
+                  }
                 </div>
               </div>
             </CardContent>
@@ -243,18 +324,60 @@ export default function UserAccountPage() {
 
           {/* Danger Zone Card */}
           <Card
-            className="md:col-span-3 bg-white dark:bg-gray-800 shadow-lg border-red-200 dark:border-red-800">
+            className="md:col-span-3 bg-white dark:bg-gray-800 shadow-lg border-red-200 dark:border-red-800 transition duration-200">
             <CardContent className="p-6">
-              <h3 className="text-lg font-semibold mb-4 text-red-600">Danger Zone</h3>
+              <h3 className="text-lg font-semibold mb-4 text-red-600 dark:text-red-400">Danger Zone</h3>
               <div className="flex flex-wrap gap-4">
-                <Button variant="destructive" className="flex items-center">
-                  <AlertTriangle className="mr-2 h-4 w-4" />
-                  Delete Profile
-                </Button>
-                <Button variant="destructive" className="flex items-center">
-                  <AlertTriangle className="mr-2 h-4 w-4" />
-                  Delete Account
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="destructive"
+                      className="flex items-center bg-red-400 hover:bg-red-200 dark:hover:bg-red-700 transition duration-200"
+                    >
+                      <AlertTriangle className="mr-2 h-4 w-4" />
+                      Delete Profile
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your profile.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                    <AlertDialogCancel className="bg-secondary text-black hover:text-white transition duration-200" >Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={()=>{handleDelete('profile')}} className="hover:bg-red-200 bg-red-400  dark:hover:bg-red-700 transition duration-200">
+                        Confirm
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="destructive"
+                      className="flex bg-red-400 items-center hover:bg-red-200 dark:hover:bg-red-700 transition duration-200"
+                    >
+                      <AlertTriangle className="mr-2 h-4 w-4" />
+                      Delete Account
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your account.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className="bg-secondary text-black hover:text-white transition duration-200" >Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={()=>{handleDelete('account')}} className="hover:bg-red-200 bg-red-400  dark:hover:bg-red-700 transition duration-200">
+                        Confirm
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </CardContent>
           </Card>
