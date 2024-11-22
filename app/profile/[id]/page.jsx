@@ -1,7 +1,7 @@
 'use client'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Facebook, Instagram, MapPin, Phone, Users , MessageCircle, BookmarkPlus, Edit } from "lucide-react"
+import { Facebook, Instagram, MapPin, Phone, Users , MessageCircle, BookmarkPlus, Edit, Heart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { MdBoy } from "react-icons/md";
@@ -40,6 +40,7 @@ function Page({params}) {
   const [modalType, setModalType] = useState('');
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   const [request, setRequest] = useState(false);
+  const [matching,setMatching] = useState('');
   
   const { user } = useUser();
   const currentUserUid = user?.id;
@@ -182,6 +183,27 @@ function Page({params}) {
   const handleClose = ()=>{
     setLopen(false);
   }
+
+  useEffect(()=>{
+      //send userP.interests and me.interests to calculeMatching api route
+     const calculeMatching = async () => {
+      const response = await fetch('/api/calculeMatching', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userInterests: userP.interests, meInterests: me.interests }),
+      });
+      if(response){
+        setMatching(response.response);
+       }
+     }
+     
+
+     calculeMatching();
+  },[userP])
+
+
   return (
     <>
       <div className="min-h-screen dark:bg-gray-900 dark:text-white font-poppins text-[#050315]">
@@ -305,6 +327,12 @@ function Page({params}) {
                   </div>
                 )
               }
+              <div className="matching">
+                <p className="text-lg text-[#050315] dark:text-white flex items-center justify-center md:justify-start mb-4">
+                  <Heart className="h-5 w-5 mr-2 text-[#2f27ce]" />
+                  {matching}%
+                </p>
+              </div>
             </div>
             {/* Stats */}
             <div className="flex gap-6 text-center">

@@ -265,29 +265,43 @@ useEffect(() => {
     fetchMyFriends();
     //fetch msg receiver 
     async function fetchCurrentFrien() {
-      const {data:chckFriend,error:chckFriendError} = await supabase
-      .from('friends')
-      .select()
-      .or(`and(requester.eq.${msgsId},receiver.eq.${currentUserId}),and(requester.eq.${currentUserId},receiver.eq.${msgsId})`).eq('status','accept').order("id", { ascending: true });
-      if(chckFriend){
-        const { data, error } = await supabase
-        .from("users")
+      if (!currentUserId || !msgsId) {
+        // toast.error("Invalid user IDs");
+        return;
+      }
+    
+      // Check if friendship exists
+      const { data: chckFriend, error: chckFriendError } = await supabase
+        .from('friends')
         .select()
-        .eq("uid",msgsId)
-        .single();
-       if (data) {
-         setCurrentFriend(data);
-       }
-       else{
-        router.push('/chat');
-       }
+        .eq('requester', currentUserId)
+        .eq('receiver', msgsId)
+        .eq('status', 'accept');
+    
+      console.log("Friendship check:", chckFriend, "Error:", chckFriendError);
+    
+      if (chckFriend && chckFriend.length > 0) {
+        // toast.message('Friendship exists!');
+        
+        const { data, error } = await supabase
+          .from("users")
+          .select()
+          .eq("uid", msgsId)
+          .single();
+    
+        if (data) {
+          setCurrentFriend(data);
+          return; // Avoid unnecessary redirection
+        } else {
+          toast.error('User details not found!');
+        }
       }
-      else{
-        toast.error('plz select a firend');
-      }
-
-     
+    
+      // Redirect if no friendship exists
+      router.push('/chat');
     }
+    
+  
     //end of fetchCurrentFriend
     async function fetchMessages() {
       const { data, error } = await supabase
@@ -430,14 +444,17 @@ useEffect(() => {
          
         {
           aiClicked && (
-            <div className='flex text-black p-3  bg-black justify-center items-center  bg-opacity-45  w-full h-full  z-40 absolute '  >
-              <button className=' text-red-500  m-3 rounded  p-3 absolute top-0 right-0 ' onClick={() => { setAiClicked(false) }}>
-                <span className='flex p-2 w-full text-text'  >
-                  <IoClose className='h-10 w-10   hover:rotate-180 transition-all duration-300 dark:text-white '  />
-                </span>
-                </button>
+            <div className='flex backdrop-blur-lg  text-black p-3  bg-black justify-center items-center  bg-opacity-45  w-full h-full  z-40 absolute '  >
+              
              <div className='flex flex-col dark:bg-gray-900  gap-4  max-sm:min-w-[90%] max-lg:min-w-[70%] lg:max-w-[70%]  min-h-[50%] bg-white  rounded-lg p-4'>
-                <h1 className='text-black flex w-full dark:text-white font-extrabold '><SiIrobot className='w-5 h-5 dark:text-white'  />OSTA </h1>
+               <div className="flex p-2 justify-arround gap-1">
+               <h1 className='text-black flex w-full dark:text-white font-extrabold '><SiIrobot className='w-5 h-5 dark:text-white'  />OSTA </h1>
+                  <button className=' text-red-500   rounded relative top-0 ' onClick={() => { setAiClicked(false) }}>
+                  <span className='flex  w-full text-text'  >
+                    <IoClose className='h-6 w-6 hover:rotate-180 transition-all duration-300 dark:text-white '  />
+                  </span>
+                  </button>
+               </div>
                 <div className='flex flex-col justify-center w-full'>
                   {/* <h3 className='text-white text-center'>
                     AI Chat assistant 
@@ -523,7 +540,7 @@ useEffect(() => {
                             handleAirequest()
                         }
                       }}
-                        type='text' value={aiPrompt} placeholder={`How i can help you today ${currentUser} ?`} className='p-2 rounded border-none outline-none w-full flex dark:bg-gray-600 dark:text-white items-center  ' onChange={(e) => setAiPrompt(e.target.value)} />
+                        type='text' value={aiPrompt} placeholder={`How i can help you today ${currentUser} ?`} className='p-2 rounded border-none outline-none w-full flex dark:bg-gray-600 dark:text-white items-center font-poppins  ' onChange={(e) => setAiPrompt(e.target.value)} />
                         <button className='rounded ' onClick={()=>{
                           // setFileInput(true)
                         }}  >
@@ -608,33 +625,35 @@ useEffect(() => {
                 className="pl-10 border-[#dedcff] text-[#050315]" /> 
              </div> */} 
             <Tabs defaultValue="all" onValueChange={setFriendFilter}>
-              <TabsList className="grid w-full grid-cols-3 bg-[#dedcff]">
+              <TabsList className="grid w-full grid-cols-3 bg-primary text-white dark:bg-gray-800">
                 <TabsTrigger
                   value="all"
-                  className="data-[state=active]:bg-[#2f27ce] data-[state=active]:tedark:bg-gray-900 dark:text-white">All</TabsTrigger>
+                  className="data-[state=active]:bg-secondary data-[state=active]:text-black dark:data-[state=active]:bg-gray-700">All</TabsTrigger>
                 <TabsTrigger
                   value="online"
-                  className="data-[state=active]:bg-[#2f27ce] data-[state=active]:tedark:bg-gray-900 dark:text-white">Online</TabsTrigger>
+                  className="data-[state=active]:bg-secondary data-[state=active]:text-black dark:data-[state=active]:bg-gray-700">Online</TabsTrigger>
                 <TabsTrigger
                   value="favorites"
-                  className="data-[state=active]:bg-[#2f27ce] data-[state=active]:tedark:bg-gray-900 dark:text-white">Favorites</TabsTrigger>
+                  className="data-[state=active]:bg-secondary data-[state=active]:text-black dark:data-[state=active]:bg-gray-700">Favorites</TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
           <ScrollArea className="h-[calc(100vh-13rem)] border-none p-1">
             {
               filteredFriends.map((friend) => (
+                <>
+                   <hr />
                 <Link
                   href={`/chat/${friend.frienduid}`}
                   key={friend.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className=" border-none">
+                  className=" ">
                   <Card
-                    className="p-2 hover:shadow-lg  duration-300 cursor-pointer">
+                    className="p-2 mt-3 border-none hover:shadow-lg  duration-300 cursor-pointer">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center">
+                      <div className="flex  w-full py-2 rounded items-center">
                         <Avatar className="h-12 w-12">
                           <AvatarImage
                             src={friend.friendProfile}
@@ -648,27 +667,29 @@ useEffect(() => {
                           </p>
                         </div>
                       </div>
-                      <Badge
+                      <div
                         variant={friend.status === 'online' ? 'default' : 'secondary'}
-                        className={friend.status === 'online' ? 'bg-[#433bff]  dark:bg-gray-900 dark:text-white' : 'bg-green-400 rounded-full w-2 h-2 text-[#050315]'}></Badge>
+                        className={friend.status === 'online' ? 'bg-[#433bff]  dark:bg-gray-900 dark:text-white' : 'bg-green-400 rounded-full w-2 h-2 text-[#050315]'}></div>
                     </div>
-                    <div className="mt-2 flex flex-wrap gap-2">
+                    <div className="mt-2 grid gap-2">
                       {
-                        <Badge key={friend.id} variant="outline" className="bg-[#dedcff]  gap-2 text-[#050315]">
+                        <div key={friend.id}  className=" flex flex-wrap gap-2 w-full text-break text-[#050315]">
                          {
                           
                             friend.friendInterests.split(/[,.:&;\s]|and/).filter(Boolean).map((int, index) => (
-                              <Badge key={index} variant="outline" className="bg-[#dedcff]  text-[#050315]">
+                              <Badge key={index} variant="outline" className="bg-[#dedcff] border-r border-accent text-[#050315]">
                                 {int}
                               </Badge>
                             ))
                           }
                         
-                        </Badge>
+                        </div>
                       }
                     </div>
                   </Card>
                 </Link>
+                </>
+               
               )
             )}
           </ScrollArea>
@@ -678,7 +699,8 @@ useEffect(() => {
       {
         pType === 'mainPage'   ? (
           <div className='w-full h-full flex flex-col items-center justify-center  ' >
-            <div className='border flex font-poppins flex-col items-center  gap-y-5 justify-center p-2 rounded' >
+            <div className=' flex font-poppins flex-col items-center  gap-y-5 justify-center p-2 rounded' >
+              <Image src='/ullis/boring.svg' width={200} height={200} alt="Chat Icon" />
               <h1>Welcome to the Chat App!</h1>
               <p className='text-center' >Please select a friend from the left side to start a conversation.</p>
               <Button className='text-white' onClick={e=>{setIsMobileMenuOpen(true)}} >
@@ -698,7 +720,7 @@ useEffect(() => {
                         variant="ghost"
                         size="icon"
                         onClick={toggleMobileMenu}
-                        className="mr-2 sm:hidden text-[#050315]">
+                        className="mr-2 sm:hidden bg-accent  text-[#050315]">
                         <MenuIcon className="h-6 w-6 text-white" />
                       </Button>
                       {currentFriend && (
@@ -711,7 +733,7 @@ useEffect(() => {
                               alt={currentFriend.fname} />
                             <AvatarFallback>{currentFriend.fname.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                           </Avatar>
-                          <Link href={`/profile/${currentFriend.uid}`}  className="ml-1">
+                          <Link href={`/profile/${currentFriend.id}`}  className="ml-1">
                           <div className="info flex justify-center items-center  p-1">
                           <h3 className="font-semibold text-sm shrink-0 ">{currentFriend.fname + ' ' +   currentFriend.lname}</h3>
                           { currentFriend.verified == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}
@@ -805,11 +827,11 @@ useEffect(() => {
                             </Avatar>
                           )}
                           <div
-                            className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${message.msgSenderUid === currentUserId ? 'bg-[#2f27ce] max-w-[80%]  tedark:bg-gray-900 dark:text-white rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'  : 'bg-[#dedcff] max-w-[80%] text-text break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg '}`}>
+                            className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${message.msgSenderUid === currentUserId ? 'bg-[#2f27ce] max-w-[80%] text-white rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'  : 'bg-[#dedcff] max-w-[80%] text-text break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg '}`}>
                               {
                                  message.chatFile != null && imgsExtensions.some(ext =>  message.chatFile.endsWith(ext)) &&  (
                                      <Image
-                                     key={message.id}
+                                     key={message.id + 1}
                                         className='cursor-pointer  rounded max-h-[250px] min-h-[200px]  object-cover '
                                         width={200} 
                                         height={200}
@@ -834,15 +856,15 @@ useEffect(() => {
                                   </MediaThemeYt>
                                )
                               }
-                            <p className='whitespace-pre-wrap max-w-full text-white'>
+                            <p className={`whitespace-pre-wrap max-w-full  font-medium font-poopins`}>
                             {message.message}
                             
                             </p>
                             <p
-                              className={`text-xs mt-1 ${message.msgSenderUid === currentUserId ? 'text-gray-300 text-sm ' : ' text-sm text-slate-700 '}`}>{message.time}</p>
+                              className={`text-xs border-t mt-1 ${message.msgSenderUid === currentUserId ? 'text-gray-300 text-sm ' : ' text-sm text-slate-700 '}`}>{message.time}</p>
                               {
                                 message.msgSenderUid === currentUserId && (
-                                <button onClick={()=>{deleteMessage(message.id)}} className='text-white bg-red-400 rounded flex justify-center items-center mt-2  w-10 p-1 hover:bg-red-600' >
+                                <button onClick={()=>{deleteMessage(message.id)}} className=' float-right text-white bg-red-400 rounded flex justify-center items-center mt-2  w-7   p-1 hover:bg-red-600' >
                                 <RiDeleteBinLine className='h-5 w-5' />
                                 
                                </button>
@@ -853,7 +875,7 @@ useEffect(() => {
                               {
                                 message.msgSenderUid !== currentUserId  && message.message && (
                                   <Image width={20} height={20} alt={'ai icon'} className='relative bottom-10 cursor-pointer '  src='/ass/ai.png' onClick={()=>{
-                                setAiClicked(true); setAiPrompt(`help me to write a reply for this message: ${message.message}` );
+                                setAiClicked(true); setAiPrompt(`Help me to write a reply for this message: ${message.message}` );
                                   }}  / >
                                 )
                             }
