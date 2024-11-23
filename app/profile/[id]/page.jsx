@@ -20,7 +20,7 @@ import {OctagonPause} from 'lucide-react'
 import {useRouter} from "next/navigation"
 import NumberTicker from "@/components/ui/number-ticker"
 import ShowModal from "@/components/component/showModal"
-
+import AnimatedCircularProgressBar from '@/components/ui/animated-circular-progress-bar'
 
 
 
@@ -184,25 +184,27 @@ function Page({params}) {
     setLopen(false);
   }
 
-  useEffect(()=>{
-      //send userP.interests and me.interests to calculeMatching api route
-     const calculeMatching = async () => {
-      const response = await fetch('/api/calculeMatching', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userInterests: userP.interests, meInterests: me.interests }),
-      });
-      if(response){
-        setMatching(response.response);
-       }
-     }
-     
+    const calculeMatching = async () => {
+      if (matching === '' && userP.interests) {
+        const response = await fetch('/api/calculeMatching', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userInterests: userP.interests,userAge:userP.age,userDesc:userP.description, meInterests: me.interests ,meAge:me.age,meDesc:me.description }),
+        });
 
-     calculeMatching();
-  },[userP])
+        if (response.ok) {
+          const data = await response.json();
+          setMatching(data.response);
+        }
+      }
+    };
 
+
+    useEffect(()=>{
+      calculeMatching();
+    },[userP.interests,me.interests])
 
   return (
     <>
@@ -242,7 +244,7 @@ function Page({params}) {
             {/* userP Info */} 
             <div className="text-center md:text-left flex-grow">
               <div className="flex items-center max-sm:flex-col gap-2 max-sm:line-clamp-2" >
-                <h1 className="text-3xl max-sm:text-md flex items-center  font-bold max-sm:font-extralight text-[#050315] dark:text-white mb-2">{userP.fname + userP.lname} <span>{userP.verified == 1 && <MdOutlineVerified size={30} style={{ color: '#0284c7' }} />}</span>,  </h1>
+                <h1  className="text-3xl max-sm:text-md flex items-center  font-bold max-sm:font-extralight text-[#050315] dark:text-white mb-2">{userP.fname + userP.lname} <span>{userP.verified == 1 && <MdOutlineVerified size={30} style={{ color: '#0284c7' }} />}</span>,  </h1>
                 <span className="text-3xl max-sm:font-extralight" >{userP.age}</span>
               </div>
               <p
@@ -327,20 +329,45 @@ function Page({params}) {
                   </div>
                 )
               }
-              <div className="matching">
-                <p className="text-lg text-[#050315] dark:text-white flex items-center justify-center md:justify-start mb-4">
-                  <Heart className="h-5 w-5 mr-2 text-[#2f27ce]" />
-                  {matching}%
-                </p>
-              </div>
+             
             </div>
             {/* Stats */}
-            <div className="flex gap-6 text-center">
-              <div>
-                <p className="text-2xl font-semibold text-[#2f27ce]"><NumberTicker value={userAsfriend ? userAsfriend.length : 0} /></p>
-                <p className="text-[#050315] dark:text-white ">Friend`s</p>
-              </div>
-            </div>
+            <div className="flex flex-col gap-4 p-4 justify-center items-center text-center">
+  {/* Matching and Friends Section */}
+  <div className="flex flex-col items-center gap-6">
+    {/* Matching Section */}
+    {matching === '' ? (
+      <div className="flex gap-2 items-center">
+        <Image height={50} width={50} src="/ass/ai.gif" alt="Loading" />
+        <p className="text-sm text-[#050315] dark:text-white">
+          Calculating Your Matching With {userP.fname }
+        </p>
+      </div>
+    ) : (
+      <div className="flex flex-col items-center">
+          <AnimatedCircularProgressBar
+            className="w-16 h-16 text-md font-poppins font-semibold"
+            max={100}
+            min={0}
+            value={matching}
+            gaugePrimaryColor="rgb(79 70 229)"
+            gaugeSecondaryColor="rgba(0, 0, 0, 0.1)"
+          />
+        <p className="text-sm text-[#050315] dark:text-white mt-2">Matching</p>
+      </div>
+    )}
+
+    {/* Friends Section */}
+    <div className="flex flex-col items-center">
+      <p className="text-2xl font-semibold text-[#2f27ce]">
+        <NumberTicker value={userAsfriend ? userAsfriend.length : 0} />
+      </p>
+      <p className="text-sm text-[#050315] dark:text-white mt-2">Friends</p>
+    </div>
+  </div>
+</div>
+
+
           </div>
         </div>
 
