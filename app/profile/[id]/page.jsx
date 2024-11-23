@@ -340,11 +340,12 @@ function Page({params}) {
       <div className="flex gap-2 items-center">
         <Image height={50} width={50} src="/ass/ai.gif" alt="Loading" />
         <p className="text-sm text-[#050315] dark:text-white">
-          Calculating Your Matching With {userP.fname }
+          Calculating Your Matching
         </p>
       </div>
     ) : (
       <div className="flex flex-col items-center">
+        {matching && (
           <AnimatedCircularProgressBar
             className="w-16 h-16 text-md font-poppins font-semibold"
             max={100}
@@ -353,6 +354,7 @@ function Page({params}) {
             gaugePrimaryColor="rgb(79 70 229)"
             gaugeSecondaryColor="rgba(0, 0, 0, 0.1)"
           />
+        )}
         <p className="text-sm text-[#050315] dark:text-white mt-2">Matching</p>
       </div>
     )}
