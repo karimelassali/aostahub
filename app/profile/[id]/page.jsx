@@ -184,22 +184,63 @@ function Page({params}) {
     setLopen(false);
   }
 
-    const calculeMatching = async () => {
-      if (matching === '' && userP.interests) {
-        const response = await fetch('/api/calculeMatching', {
+  const calculeMatching = async () => {
+    if (matching === '' && userP.interests) {
+      // Define a timeout controller
+      let timeoutReached = false;
+  
+      // Create a timeout promise
+      const timeoutPromise = new Promise((resolve) => {
+        setTimeout(() => {
+          timeoutReached = true;
+          resolve();
+        }, 10000); // 10 seconds
+      });
+  
+      try {
+        // Start the fetch request
+        const fetchPromise = fetch('/api/calculeMatching', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ userInterests: userP.interests,userAge:userP.age,userDesc:userP.description, meInterests: me.interests ,meAge:me.age,meDesc:me.description }),
+          body: JSON.stringify({
+            userInterests: userP.interests,
+            userAge: userP.age,
+            userDesc: userP.description,
+            meInterests: me.interests,
+            meAge: me.age,
+            meDesc: me.description,
+          }),
         });
-
+  
+        // Wait for either the fetch or the timeout to finish
+        await Promise.race([fetchPromise, timeoutPromise]);
+  
+        // If the timeout was reached, set matching to 0
+        if (timeoutReached) {
+          console.warn('Request timed out after 10 seconds');
+          setMatching(0);
+          return;
+        }
+  
+        // If fetch completes before timeout, process the response
+        const response = await fetchPromise;
+  
         if (response.ok) {
           const data = await response.json();
           setMatching(data.response);
+        } else {
+          console.error('Server responded with an error:', response.status);
+          setMatching(0);
         }
+      } catch (error) {
+        console.error('An error occurred:', error);
+        setMatching(0);
       }
-    };
+    }
+  };
+  
 
 
     useEffect(()=>{
@@ -350,7 +391,7 @@ function Page({params}) {
             className="w-16 h-16 text-md font-poppins font-semibold"
             max={100}
             min={0}
-            value={matching}
+            value={matching || 0}
             gaugePrimaryColor="rgb(79 70 229)"
             gaugeSecondaryColor="rgba(0, 0, 0, 0.1)"
           />

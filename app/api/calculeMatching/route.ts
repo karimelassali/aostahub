@@ -5,7 +5,6 @@ import { NextResponse } from 'next/server';
 export async function POST(req: any) {
   const { myInterests, meAge, meDesc, userInterests, userAge, userDesc } = await req.json();
 
-
   try {
     const response = await generateText({
       model: google('gemini-1.5-flash'),
