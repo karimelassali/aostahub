@@ -194,7 +194,7 @@ function Page({params}) {
         setTimeout(() => {
           timeoutReached = true;
           resolve();
-        }, 10000); // 10 seconds
+        }, 20000); // 10 seconds
       });
   
       try {
