@@ -25,7 +25,7 @@ export async function POST(req: any) {
     const percentage = Number(response.text);
     
     // Check if it's a valid percentage number
-    if (percentage !== NaN && percentage >= 0 && percentage <= 100) {
+    if (!isNaN(percentage) && percentage >= 0 && percentage <= 100) {
       return NextResponse.json({ 'response': percentage });
     } else {
       return NextResponse.json({ 'response': 1 });
