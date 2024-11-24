@@ -437,6 +437,11 @@ useEffect(() => {
     }
   };
 
+  const handleMsgDrag = (e,info) =>{
+    // const draggedDivText = e.target.querySelector('#theMessage').innerText;
+
+    console.log(e.target);
+  }
   return (
     (
       
@@ -813,10 +818,13 @@ useEffect(() => {
                       }
                       {messages.map((message) => (
                         <motion.div
+                          drag={'x'}
+                          dragConstraints={{left:0, right: 5}}
                           key={message.id}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3 }}
+                          onDragEnd={handleMsgDrag}
                           className={`flex items-end mb-4  ${message.msgSenderUid === currentUserId ? 'justify-end' : 'justify-start'  }`}>
                           {message.msgSenderUid !== currentUserId && (
                             <Avatar className="h-8 w-8 mr-2">
@@ -826,7 +834,8 @@ useEffect(() => {
                               <AvatarFallback>{message.msgSender.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                             </Avatar>
                           )}
-                          <div
+                          <motion.div
+                          
                             className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${message.msgSenderUid === currentUserId ? 'bg-[#2f27ce] max-w-[80%] text-white rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'  : 'bg-[#dedcff] max-w-[80%] text-text break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg '}`}>
                               {
                                  message.chatFile != null && imgsExtensions.some(ext =>  message.chatFile.endsWith(ext)) &&  (
@@ -856,7 +865,7 @@ useEffect(() => {
                                   </MediaThemeYt>
                                )
                               }
-                            <p className={`whitespace-pre-wrap max-w-full  font-medium font-poopins`}>
+                            <p id='theMessage' className={` whitespace-pre-wrap max-w-full  font-medium font-poopins`}>
                             {message.message}
                             
                             </p>
@@ -871,7 +880,7 @@ useEffect(() => {
                               )
                               }
                               
-                          </div>
+                          </motion.div>
                               {
                                 message.msgSenderUid !== currentUserId  && message.message && (
                                   <Image width={20} height={20} alt={'ai icon'} className='relative bottom-10 cursor-pointer '  src='/ass/ai.png' onClick={()=>{

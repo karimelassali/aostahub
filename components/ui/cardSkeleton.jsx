@@ -1,6 +1,7 @@
 export default function CardSkeleton() {
     return (
-      <div class="flex w-full lg:max-w-[80%] items-center  min-h-screen animate-pulse justify-center p-4">   
+      <div class="flex w-full items-center justify-center min-h-screen animate-pulse" >
+ <div class="flex w-full lg:max-w-[80%] items-center  min-h-screen animate-pulse justify-center p-4">   
       <div class="w-full  h-full rounded-xl overflow-hidden flex flex-col">
           <div class="relative border border-gray-800 h-48 sm:h-56 md:h-64 lg:h-72 xl:h-56">
             <div class="w-full h-full bg-gray-200 "></div>
@@ -12,14 +13,14 @@ export default function CardSkeleton() {
               <div class="text-xl flex justify-center items-center gap-x-1 sm:text-2xl font-bold text-center mb-2">
                 <div class="h-4 bg-gray-200 rounded w-1/2"></div>
               </div>
-              <div class="navigate flex w-full justify-between max-h-[100px] overflow-hidden items-center gap-x-2">
+              {/* <div class="navigate flex w-full justify-between max-h-[100px] overflow-hidden items-center gap-x-2">
                 <button id='next' class='p-2 rounded-full bg-secondary hover:scale-150 text-white'>
                   <div class="h-4 w-4 bg-gray-200 rounded-full"></div>
                 </button>
                 <button id='prev' class='p-2 rounded-full bg-secondary hover:scale-150 text-white'>
                   <div class="h-4 w-4 bg-gray-200 rounded-full"></div>
                 </button>
-              </div>
+              </div> */}
               <p class="location text-gray-600 text-center mb-2 sm:mb-4">
                 <div class="h-4 bg-gray-200 rounded w-1/4"></div>
               </p>
@@ -52,6 +53,8 @@ export default function CardSkeleton() {
           </div>
       </div>
   </div>
+      </div>
+     
     );
   }
   
