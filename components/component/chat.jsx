@@ -720,7 +720,7 @@ useEffect(() => {
 
               {/* Last Message Section */}
               <div className="mt-3 flex items-center space-x-2 bg-gray-50 p-2 rounded-lg">
-                <MessageCircleIcon className="h-5 w-5 text-primary/70" />
+                {/* <MessageCircleIcon className="h-5 w-5 text-primary/70" /> */}
                 <div className="flex-grow">
                   <p className="text-sm text-gray-700 truncate max-w-[300px]">
                     {friend.lastMessage || "No messages yet"}
