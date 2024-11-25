@@ -67,6 +67,7 @@ export default  function Chat({type,msgsId}) {
   const supabase = createClient();
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [replyToMessage, setReplyToMessage] = useState('');
   const { user } = useUser();
   const currentUserId = user?.id;
   const userProfile = user?.imageUrl;
@@ -350,6 +351,7 @@ useEffect(() => {
       hour: "2-digit",
       minute: "2-digit",
     });
+
     if(chatFile){
       const {data,error} = await supabase.storage.from('images').upload(`chatFiles/${chatFileName}`,chatFileFile);
       setchatFile(null)
@@ -370,6 +372,7 @@ useEffect(() => {
         msgSenderVerification:'1',
         msgsId:msgsId,
         chatFile: chatFile ? chatFileName : null,
+        replyTo: replyToMessage ? replyToMessage : null,
         // msgReceiverUid: users[0].id,
         // msgReceiver: users[0].fullName,
         // read: false,
@@ -381,6 +384,7 @@ useEffect(() => {
       scrollToBottom();
       setMessage("");
       setMsgStatu(false)
+      setReplyToMessage('');
       if (data) {
         //send a msg into notifications table
         const { data: noti, error: notierror } = await supabase
@@ -437,11 +441,7 @@ useEffect(() => {
     }
   };
 
-  const handleMsgDrag = (e,info) =>{
-    // const draggedDivText = e.target.querySelector('#theMessage').innerText;
-
-    console.log(e.target);
-  }
+  
   return (
     (
       
@@ -643,61 +643,100 @@ useEffect(() => {
               </TabsList>
             </Tabs>
           </div>
-          <ScrollArea className="h-[calc(100vh-13rem)] border-none p-1">
-            {
-              filteredFriends.map((friend) => (
-                <>
-                   <hr />
-                <Link
-                  href={`/chat/${friend.frienduid}`}
-                  key={friend.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className=" ">
-                  <Card
-                    className="p-2 mt-3 border-none hover:shadow-lg  duration-300 cursor-pointer">
-                    <div className="flex items-center justify-between">
-                      <div className="flex  w-full py-2 rounded items-center">
-                        <Avatar className="h-12 w-12">
-                          <AvatarImage
-                            src={friend.friendProfile}
-                            alt={friend.friendName} />
-                          <AvatarFallback>{friend.friendName}</AvatarFallback>
-                        </Avatar>
-                        <div className="ml-4 gap-3 ">
-                          <h3 className="font-semibold flex items-center gap-x-1 ">{friend.friendName}{ friend.friendVerification == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}, {friend.friendAge}</h3>
-                          <p className="text-sm text-[#050315] dark:text-slate-400 flex items-center">
-                            <MapPinIcon className="h-4 w-4 mr-1" /> {friend.friendLocation}
-                          </p>
-                        </div>
-                      </div>
-                      <div
-                        variant={friend.status === 'online' ? 'default' : 'secondary'}
-                        className={friend.status === 'online' ? 'bg-[#433bff]  dark:bg-gray-900 dark:text-white' : 'bg-green-400 rounded-full w-2 h-2 text-[#050315]'}></div>
-                    </div>
-                    <div className="mt-2 grid gap-2">
-                      {
-                        <div key={friend.id}  className=" flex flex-wrap gap-2 w-full text-break text-[#050315]">
-                         {
-                          
-                            friend.friendInterests.split(/[,.:&;\s]|and/).filter(Boolean).map((int, index) => (
-                              <Badge key={index} variant="outline" className="bg-[#dedcff] border-r border-accent text-[#050315]">
-                                {int}
-                              </Badge>
-                            ))
-                          }
-                        
-                        </div>
-                      }
-                    </div>
-                  </Card>
-                </Link>
-                </>
-               
-              )
-            )}
-          </ScrollArea>
+          <ScrollArea className="h-[calc(100vh-13rem)] px-2">
+      {filteredFriends.map((friend,id) => (
+        <motion.div
+          key={friend.id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="mb-4"
+        >
+          <Link href={`/chat/${friend.frienduid}`} className="block">
+            <Card className="p-4 hover:shadow-lg transition-shadow group">
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <Avatar className="h-14 w-14 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
+                    <AvatarImage 
+                      src={friend.friendProfile} 
+                      alt={friend.friendName} 
+                      className="object-cover"
+                    />
+                    <AvatarFallback className="bg-primary/10">
+                      {friend.friendName.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div 
+                    className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+                      friend.status === 'online' 
+                        ? 'bg-green-500' 
+                        : 'bg-gray-300'
+                    }`} 
+                  />
+                </div>
+
+                <div className="flex-grow">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-lg font-bold flex items-center">
+                      {friend.friendName}
+                      {friend.friendVerification == 1 && (
+                        <MdOutlineVerified 
+                          size={16} 
+                          className="ml-1 text-blue-500" 
+                        />
+                      )}
+                    </h3>
+                    <span className="text-sm text-gray-500">{friend.friendAge}</span>
+                  </div>
+                  <p className="text-sm text-gray-500 flex items-center">
+                    <MapPinIcon className="h-4 w-4 mr-1 text-primary/70" /> 
+                    {friend.friendLocation}
+                  </p>
+                </div>
+              </div>
+
+              {/* Interests Section */}
+              <div className="mt-3 flex flex-wrap gap-2">
+                {friend.friendInterests
+                  .split(/[,.:&;\s]|and/)
+                  .filter(Boolean)
+                  .slice(0, 4)
+                  .map((interest, index) => (
+                    <Badge 
+                      key={index} 
+                      variant="outline" 
+                      className="bg-primary/5 text-primary hover:bg-primary/10 transition-colors"
+                    >
+                      {interest}
+                    </Badge>
+                  ))
+                }
+                {friend.friendInterests.split(/[,.:&;\s]|and/).filter(Boolean).length > 4 && (
+                  <Badge variant="secondary">
+                    +{friend.friendInterests.split(/[,.:&;\s]|and/).filter(Boolean).length - 4}
+                  </Badge>
+                )}
+              </div>
+
+              {/* Last Message Section */}
+              <div className="mt-3 flex items-center space-x-2 bg-gray-50 p-2 rounded-lg">
+                <MessageCircleIcon className="h-5 w-5 text-primary/70" />
+                <div className="flex-grow">
+                  <p className="text-sm text-gray-700 truncate max-w-[300px]">
+                    {friend.lastMessage || "No messages yet"}
+                  </p>
+                </div>
+                {friend.unreadCount > 0 && (
+                  <span className="bg-primary text-white text-xs rounded-full px-2 py-0.5">
+                    {friend.unreadCount}
+                  </span>
+                )}
+              </div>
+            </Card>
+          </Link>
+        </motion.div>
+      ))}
+    </ScrollArea>
         </motion.div>
       </AnimatePresence>
       {/* Chat Window */}
@@ -809,7 +848,7 @@ useEffect(() => {
                         messages.length == 0 && (
                           <div className="flex items-center justify-center h-full">
                             <div className="flex flex-col items-center">
-                              <img src="/ullis/waiting.svg" alt="Empty" className="w-64 h-64 mb-4" />
+                              <Image width={100} height={100} src="/ullis/waiting.svg" alt="Empty" className="w-64 h-64 mb-4" />
                               <h2 className="text-2xl font-semibold mb-2">No Messages</h2>
                               <p className="text-gray-600 dark:text-gray-400">You have no messages yet.</p>
                             </div>
@@ -817,84 +856,131 @@ useEffect(() => {
                         )
                       }
                       {messages.map((message) => (
-                        <motion.div
-                          drag={'x'}
-                          dragConstraints={{left:0, right: 5}}
-                          key={message.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3 }}
-                          onDragEnd={handleMsgDrag}
-                          className={`flex items-end mb-4  ${message.msgSenderUid === currentUserId ? 'justify-end' : 'justify-start'  }`}>
-                          {message.msgSenderUid !== currentUserId && (
-                            <Avatar className="h-8 w-8 mr-2">
-                              <AvatarImage
-                              src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`}
-                              alt={message.msgSender} />
-                              <AvatarFallback>{message.msgSender.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                            </Avatar>
-                          )}
-                          <motion.div
-                          
-                            className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${message.msgSenderUid === currentUserId ? 'bg-[#2f27ce] max-w-[80%] text-white rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'  : 'bg-[#dedcff] max-w-[80%] text-text break-words  rounded-tl-lg rounded-br-lg rounded-tr-lg '}`}>
-                              {
-                                 message.chatFile != null && imgsExtensions.some(ext =>  message.chatFile.endsWith(ext)) &&  (
-                                     <Image
-                                     key={message.id + 1}
-                                        className='cursor-pointer  rounded max-h-[250px] min-h-[200px]  object-cover '
-                                        width={200} 
-                                        height={200}
-                                        src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}   // Thumbnail image URL
-                                        alt={`${message.mesage}`}
-                                        onClick={()=>{setLopen(true);setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`);setModalType('img')}}
-                                    />  
-                                 )
-                              }
-                              {
-                              message.chatFile != null && message.chatFile.endsWith('.mp4') && (
-                                  <MediaThemeYt>
-                                  <video
-                                  key={message.id}
-                                     playsInline
-                                     slot="media"
-                                      crossOrigin
-                                      onClick={()=>{setLopen(true);setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`);setModalType('video')}}
-                                       className='object-cover w-full h-24  max-h-[250px] min-h-[200px]  rounded-md'
-                                       src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}
-                                  />  
-                                  </MediaThemeYt>
-                               )
-                              }
-                            <p id='theMessage' className={` whitespace-pre-wrap max-w-full  font-medium font-poopins`}>
-                            {message.message}
-                            
-                            </p>
-                            <p
-                              className={`text-xs border-t mt-1 ${message.msgSenderUid === currentUserId ? 'text-gray-300 text-sm ' : ' text-sm text-slate-700 '}`}>{message.time}</p>
-                              {
-                                message.msgSenderUid === currentUserId && (
-                                <button onClick={()=>{deleteMessage(message.id)}} className=' float-right text-white bg-red-400 rounded flex justify-center items-center mt-2  w-7   p-1 hover:bg-red-600' >
-                                <RiDeleteBinLine className='h-5 w-5' />
-                                
-                               </button>
-                              )
-                              }
-                              
-                          </motion.div>
-                              {
-                                message.msgSenderUid !== currentUserId  && message.message && (
-                                  <Image width={20} height={20} alt={'ai icon'} className='relative bottom-10 cursor-pointer '  src='/ass/ai.png' onClick={()=>{
-                                setAiClicked(true); setAiPrompt(`Help me to write a reply for this message: ${message.message}` );
-                                  }}  / >
-                                )
-                            }
-                          {/* {message.msgSenderUid === currentUserId && (
-                            // <Avatar className="h-8 w-8 ml-2">
-                            //   <AvatarImage src={me.msgSenderPicture} alt="You" />
-                            //   <AvatarFallback>You</AvatarFallback>
-                            // </Avatar>
-                          )} */}
-                        </motion.div>
+                       <motion.div
+                       drag={'x'}
+                       dragConstraints={{ left: 0, right: 5 }}
+                       key={message.id}
+                       initial={{ opacity: 0, y: 20 }}
+                       animate={{ opacity: 1, y: 0 }}
+                       transition={{ duration: 0.3 }}
+                       onDragEnd={(e) => {
+                         // Find the closest motion div with the correct class
+                         const messageDiv = e.target.closest('.motion-div-class'); // Use the class assigned to this motion.div
+                         const messageToReply = messageDiv?.querySelector('#theMessage')?.innerText;
+                     
+                         console.log(messageToReply); // Logs the correct message text
+                         setReplyToMessage(messageToReply); // Set the state with the dragged message's text
+                       }}
+                       className={`motion-div-class flex items-end mb-4 ${
+                         message.msgSenderUid === currentUserId ? 'justify-end' : 'justify-start'
+                       }`}
+                     >
+                       {message.msgSenderUid !== currentUserId && (
+                         <Avatar className="h-8 w-8 mr-2">
+                           <AvatarImage
+                             src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`}
+                             alt={message.msgSender}
+                           />
+                           <AvatarFallback>
+                             {message.msgSender.split(' ').map((n) => n[0]).join('')}
+                           </AvatarFallback>
+                         </Avatar>
+                       )}
+                       <motion.div
+                         className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${
+                           message.msgSenderUid === currentUserId
+                             ? 'bg-[#2f27ce] text-white rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'
+                             : 'bg-[#dedcff] text-text rounded-tl-lg rounded-br-lg rounded-tr-lg break-words'
+                         }`}
+                       >
+                        {message.chatFile != null &&
+                          imgsExtensions.some((ext) => message.chatFile.endsWith(ext)) && (
+                            <Image
+                              key={`${message.chatFile}-${message.id}`}  // Combine chatFile and message.id for a unique key
+                              className="cursor-pointer pb-4 rounded max-h-[250px] min-h-[200px] object-cover"
+                              width={200}
+                              height={200}
+                              src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}
+                              alt={`${message.message}`}
+                              onClick={() => {
+                                setLopen(true);
+                                setFile(
+                                  `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`
+                                );
+                                setModalType('img');
+                              }}
+                            />
+                        )}
+
+                        {message.chatFile != null && message.chatFile.endsWith('.mp4') && (
+                          <MediaThemeYt>
+                            <video
+                              key={`${message.chatFile}-${message.id}`}  // Combine chatFile and message.id for a unique key
+                              playsInline
+                              slot="media"
+                              crossOrigin
+                              onClick={() => {
+                                setLopen(true);
+                                setFile(
+                                  `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`
+                                );
+                                setModalType('video');
+                              }}
+                              className="object-cover pb-4 w-full h-24 max-h-[250px] min-h-[200px] rounded-md"
+                              src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}
+                            />
+                          </MediaThemeYt>
+                        )}
+
+                         {
+                          message.replyTo != null && (
+                            <div className="flex flex-col justify-normal border border-secondary  p-2 rounded gap-2">
+                              <p className="text-xs text-gray-400">Replying to:</p>
+                              <p className="text-xs text-gray-400 font-poppins ">{message.replyTo}</p>
+                            </div>
+                          )
+                         }
+                         <p
+                           id="theMessage"
+                           className="whitespace-pre-wrap max-w-full pt-4 font-medium font-poopins"
+                         >
+                           {message.message}
+                         </p>
+                         <p
+                           className={`text-xs  mt-1 ${
+                             message.msgSenderUid === currentUserId
+                               ? 'text-gray-300 text-sm'
+                               : 'text-sm text-slate-700'
+                           }`}
+                         >
+                           {message.time}
+                         </p>
+                         {message.msgSenderUid === currentUserId && (
+                           <button
+                             onClick={() => {
+                               deleteMessage(message.id);
+                             }}
+                             className="float-right text-white bg-red-400 rounded flex justify-center items-center mt-2 w-7 p-1 hover:bg-red-600"
+                           >
+                             <RiDeleteBinLine className="h-5 w-5" />
+                           </button>
+                         )}
+                       </motion.div>
+                       {message.msgSenderUid !== currentUserId && message.message && (
+                         <Image
+                           width={20}
+                           height={20}
+                           alt="ai icon"
+                           className="relative bottom-10 cursor-pointer"
+                           src="/ass/ai.png"
+                           onClick={() => {
+                             setAiClicked(true);
+                             setAiPrompt(`Help me to write a reply for this message: ${message.message}`);
+                           }}
+                         />
+                       )}
+                     </motion.div>
+                     
                       ))}
                     <div ref={messagesEndRef} />
                   </div>
@@ -914,13 +1000,24 @@ useEffect(() => {
                       {
                         chatFile &&  (
                           <div className='flex gap-2 p-3 items-center'>
-                            <Image src={chatFile} width={40} height={40} alt='img' className='w-20 h-20 rounded'  />
+                            <Image key={chatFile} src={chatFile} width={40} height={40} alt='img' className='w-20 h-20 rounded'  />
                           </div>
                         )
                       }
                       {/* <div className='w-full border border-red-400 p-2' >
                         <Image src={'/ass/logo.png'} width={40} height={40} alt='tst'  />
                       </div> */}
+                      {
+                        replyToMessage && (
+                          <div className='flex flex-col gap-2 p-3 border-t justify-center'>
+                            <div className='flex justify-between items-center' >
+                            <p>Replying to:</p>
+                            <IoClose onClick={()=>{setReplyToMessage(null)}} className='h-6 w-6 hover:rotate-180 transition-all duration-300 dark:text-secondary hover:text-red-400 '  />
+                            </div>
+                            <p className='font-bold  p-1 line-clamp-1'>{replyToMessage}</p>
+                          </div>
+                        )
+                      }
                     <div className="flex gap-2 border-b border-accent p-1  rounded  items-center">
                     <input onChange={(e)=>{
                       const img = e.target.files[0];

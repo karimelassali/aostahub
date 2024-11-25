@@ -7,6 +7,7 @@ const  isProtectedRoute = createRouteMatcher([
   '/explore(.*)',
   '/create(.*)',
   '/chat(.*)',
+  '/chat/[chatUid]/(.*)',
   '/profile(.*)',
   '/dashboard(.*)',
   '/api(.*)',
