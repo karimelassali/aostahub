@@ -38,6 +38,7 @@
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.5.0",
     "@types/canvas-confetti": "^1.6.4",
+    "@vercel/analytics": "^1.4.1",
     "ai": "^3.4.33",
     "aos": "^2.3.4",
     "canvas-confetti": "^1.9.3",
