@@ -49,6 +49,8 @@ import "driver.js/dist/driver.css";
 // ]
 
 
+
+//           
   const handleopenConfetti = () => {
     const defaults = {
       spread: 360,
@@ -468,7 +470,7 @@ useEffect(() => {
     profiles && profiles.length > 0 && (
       <div className="flex items-center  dark:bg-gray-900 justify-center p-4">
         
-      {/* {time} */}
+      {time}
       <motion.div
         className="w-full lg:max-w-[80%]  black:border border-gray-800   h-full rounded-xl shadow-xl overflow-hidden flex flex-col"
       >

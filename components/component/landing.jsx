@@ -21,20 +21,10 @@ import CoockieModal from "@/components/component/coockieModal"
 import {useEffect} from 'react';
 
 
-import {
-  FaCompass,
-  FaChat,
-  FaUtensils,
-  FaLandmark,
-  FaTree,
-  FaCalendar
-} from "react-icons/fa";
 
 
-export const metadata = {
-  title: "Aosta Hub",
-  description: "AostaHub is Here !"
-};
+
+
 
 const content = [
   {

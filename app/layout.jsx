@@ -80,10 +80,7 @@ export default function RootLayout({ children }) {
             attribute="class"
             defaultTheme="system"
             enableSystem
-            
-          >
-              
-
+        >
             {children}
              
           </ThemeProvider>

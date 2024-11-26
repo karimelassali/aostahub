@@ -643,61 +643,101 @@ useEffect(() => {
               </TabsList>
             </Tabs>
           </div>
-          <ScrollArea className="h-[calc(100vh-13rem)] border-none p-1">
-            {
-              filteredFriends.map((friend) => (
-                <>
-                   <hr />
-                <Link
-                  href={`/chat/${friend.frienduid}`}
-                  key={friend.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className=" ">
-                  <Card
-                    className="p-2 mt-3 border-none hover:shadow-lg  duration-300 cursor-pointer">
-                    <div className="flex items-center justify-between">
-                      <div className="flex  w-full py-2 rounded items-center">
-                        <Avatar className="h-12 w-12">
-                          <AvatarImage
-                            src={friend.friendProfile}
-                            alt={friend.friendName} />
-                          <AvatarFallback>{friend.friendName}</AvatarFallback>
+            <ScrollArea className="h-[calc(100vh-13rem)] px-2">
+            {filteredFriends.map((friend) => (
+              <motion.div
+                key={friend.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="mb-4"
+              >
+                <Link href={`/chat/${friend.frienduid}`} className="block border-b border-gray-700 pt-3 pb-3">
+                  <Card className="p-1 border-none hover:shadow-lg transition-shadow group">
+                    <div className="flex items-center space-x-4">
+                      <div className="relative">
+                        <Avatar className="h-10 w-10 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
+                          <AvatarImage 
+                            src={friend.friendProfile} 
+                            alt={friend.friendName} 
+                            className="object-cover"
+                          />
+                          <AvatarFallback className="bg-primary/10">
+                            {friend.friendName.charAt(0)}
+                          </AvatarFallback>
                         </Avatar>
-                        <div className="ml-4 gap-3 ">
-                          <h3 className="font-semibold flex items-center gap-x-1 ">{friend.friendName}{ friend.friendVerification == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}, {friend.friendAge}</h3>
-                          <p className="text-sm text-[#050315] dark:text-slate-400 flex items-center">
-                            <MapPinIcon className="h-4 w-4 mr-1" /> {friend.friendLocation}
-                          </p>
+                        <div 
+                          className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+                            friend.status === 'online' 
+                              ? 'bg-green-500' 
+                              : 'bg-gray-300'
+                          }`} 
+                        />
+                      </div>
+
+                      <div className="flex-grow">
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-lg font-bold flex items-center">
+                            {friend.friendName}
+                            {friend.friendVerification == 1 && (
+                              <MdOutlineVerified 
+                                size={16} 
+                                className="ml-1 text-blue-500" 
+                              />
+                            )}
+                          </h3>
+                          {/* <span className="text-sm text-gray-500">{friend.friendAge}</span> */}
+                        </div>
+                        {/* <p className="text-sm text-gray-500 flex items-center">
+                          <MapPinIcon className="h-4 w-4 mr-1 text-primary/70" /> 
+                          {friend.friendLocation}
+                        </p> */}
+                        {/* Last Message Section */}
+                        <div className=" flex items-center  p-1 rounded-lg">
+                          {/* <MessageCircleIcon className="h-5 w-5 text-primary/70" /> */}
+                          <div className="flex-grow">
+                            <p className="text-sm text-gray-700 truncate max-w-[300px]">
+                              {friend.lastMessage || "No messages yet"}
+                            </p>
+                          </div>
+                          {friend.unreadCount > 0 && (
+                            <span className="bg-primary text-white text-xs rounded-full px-2 py-0.5">
+                              {friend.unreadCount}
+                            </span>
+                          )}
                         </div>
                       </div>
-                      <div
-                        variant={friend.status === 'online' ? 'default' : 'secondary'}
-                        className={friend.status === 'online' ? 'bg-[#433bff]  dark:bg-gray-900 dark:text-white' : 'bg-green-400 rounded-full w-2 h-2 text-[#050315]'}></div>
                     </div>
-                    <div className="mt-2 grid gap-2">
-                      {
-                        <div key={friend.id}  className=" flex flex-wrap gap-2 w-full text-break text-[#050315]">
-                         {
-                          
-                            friend.friendInterests.split(/[,.:&;\s]|and/).filter(Boolean).map((int, index) => (
-                              <Badge key={index} variant="outline" className="bg-[#dedcff] border-r border-accent text-[#050315]">
-                                {int}
-                              </Badge>
-                            ))
-                          }
-                        
-                        </div>
+
+                    {/* Interests Section */}
+                    {/* <div className="mt-3 flex flex-wrap gap-2">
+                      {friend.friendInterests
+                        .split(/[,.:&;\s]|and/)
+                        .filter(Boolean)
+                        .slice(0, 4)
+                        .map((interest, index) => (
+                          <Badge 
+                            key={index} 
+                            variant="outline" 
+                            className="bg-primary/5 text-primary hover:bg-primary/10 transition-colors"
+                          >
+                            {interest}
+                          </Badge>
+                        ))
                       }
-                    </div>
+                      {friend.friendInterests.split(/[,.:&;\s]|and/).filter(Boolean).length > 4 && (
+                        <Badge variant="secondary">
+                          +{friend.friendInterests.split(/[,.:&;\s]|and/).filter(Boolean).length - 4}
+                        </Badge>
+                      )}
+                    </div> */}
+
+                    
                   </Card>
                 </Link>
-                </>
-               
-              )
-            )}
-          </ScrollArea>
+              </motion.div>
+            ))}
+            </ScrollArea>
         </motion.div>
       </AnimatePresence>
       {/* Chat Window */}
