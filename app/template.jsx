@@ -62,7 +62,9 @@ export default function Template({ children }) {
         notifications();
         realtime();
       }
-    }, [currentUserUid,isLoaded]);
+
+    }, [currentUserUid,isLoaded  ]);
+
 
     
     return (

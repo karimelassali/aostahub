@@ -1,13 +1,7 @@
 'use client';
 import { Bell, UserPlus, MessageSquare, Heart, Star, Settings } from "lucide-react"
 
-const notifications = [
-  { id: 1, type: 'friend_request', content: 'John Doe sent you a friend request', time: '2 min ago' },
-  { id: 2, type: 'message', content: 'You have a new message from Jane Smith', time: '10 min ago' },
-  { id: 3, type: 'like', content: 'Alex liked your post', time: '1 hour ago' },
-  { id: 4, type: 'mention', content: 'You were mentioned in a comment', time: '2 hours ago' },
-  { id: 5, type: 'system', content: 'Your account was successfully upgraded', time: '1 day ago' },
-]
+
 
 const iconMap = {
   friend_request: UserPlus,

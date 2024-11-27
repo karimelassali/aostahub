@@ -470,22 +470,21 @@ useEffect(() => {
     profiles && profiles.length > 0 && (
       <div className="flex items-center  dark:bg-gray-900 justify-center p-4">
         
-      {time}
+      {/* {time} */}
       <motion.div
       drag='x'
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={(e)=>{
-        if(e.offsetX > 0){
-          prevProfile
-        }else if(e.offsetX < 0){
+        if (e.offsetX > 0) {
           nextProfile()
+        } else {
+          prevProfile()
         }
       }}
         className="w-full lg:max-w-[80%]  black:border border-gray-800   h-full rounded-xl shadow-xl overflow-hidden flex flex-col"
       >
         <div className="relative border border-gray-800 h-48 sm:h-56 md:h-64 lg:h-72 xl:h-56">
           <img
-          
             src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentProfile.imgName}`} 
             alt="profile image"
             className="profileCover w-full h-full object-cover"

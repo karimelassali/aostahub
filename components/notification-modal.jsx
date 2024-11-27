@@ -4,12 +4,14 @@ import { useState, useEffect } from 'react'
 import { Bell, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { createClient } from "@/utils/supabase/client";
+import { useRouter } from 'next/navigation'
 
 
 export default function NotificationModalInfo({notificationText,receiver}) {
   const [dimmis, setDimmis] = useState(false);
   const [isVisible, setIsVisible] = useState(false)
     const supabase = createClient();
+    const router = useRouter();
 
 
   async function cleanNotifications() {
@@ -21,6 +23,7 @@ export default function NotificationModalInfo({notificationText,receiver}) {
   useEffect(() => {
     // Simulate a new notification after 2 seconds
     setIsVisible(true);
+    
   }, [])
 
   return (
@@ -48,12 +51,19 @@ export default function NotificationModalInfo({notificationText,receiver}) {
               </p>
               <div className="mt-3 flex space-x-3">
                 <button
-                  onClick={() => setIsVisible(false)}
+                  onClick={() => {
+                    notificationText.includes('msg') && router.push('/chat');
+                    notificationText.includes('liked') && router.push('/profile/' + receiver);  
+                    notificationText.includes('friend') && router.push('/friends');
+                    cleanNotifications();
+                    setIsVisible(false);
+
+                  }}
                   className="bg-accent hover:bg-blue-600 text-white text-xs font-semibold py-2 px-4 rounded">
                   View
                 </button>
                 <button
-                  onClick={() => setIsVisible(false)}
+                  onClick={() => {setIsVisible(false);cleanNotifications(); }}
                   className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white text-xs font-semibold py-2 px-4 rounded">
                   Dismiss
                 </button>

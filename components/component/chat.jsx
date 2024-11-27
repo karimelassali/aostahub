@@ -10,7 +10,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SendIcon, MenuIcon, MapPinIcon, UserPlusIcon, HeartIcon, XIcon, CoffeeIcon, MountainIcon, WineIcon, SearchIcon, Delete, BlocksIcon, ArrowBigDown, ArrowBigLeftIcon, DeleteIcon } from "lucide-react"
+import { SendIcon, MenuIcon, MapPinIcon, UserPlusIcon, HeartIcon, XIcon, CoffeeIcon, MountainIcon, WineIcon, SearchIcon, Delete, BlocksIcon, ArrowBigDown, ArrowBigLeftIcon, DeleteIcon, ArrowBigLeft, UserX, Flag, EllipsisVertical } from "lucide-react"
+import { FaArrowLeft } from "react-icons/fa";
 import  Image  from 'next/image'
 import { useUser } from "@clerk/nextjs";
 import { Toaster, toast } from "sonner";
@@ -29,6 +30,7 @@ import TypingAnimation from '@/components/ui/typing-animation'
 import MediaThemeYt from 'player.style/yt/react';
 import { IoClose } from 'react-icons/io5'
 import { SiIrobot } from "react-icons/si";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -40,7 +42,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 import { RiDeleteBinLine } from "react-icons/ri";
+import { BsPersonBadge } from 'react-icons/bs'
+import { DropdownMenuItem } from '@radix-ui/react-dropdown-menu'
 
 
 
@@ -607,7 +620,7 @@ useEffect(() => {
                     <AvatarImage src={userProfile} alt="You" />
                     <AvatarFallback>You</AvatarFallback>
               </Avatar>
-            <h2 className="lg:text-xl flex items-center font-poppins font-semibold text-white">{currentUser}  <span>{me.verified == 1 && (<MdOutlineVerified size={30} style={{ color: '#0284c7' }} />)}</span></h2>
+            <h2 className="lg:text-xl flex items-center font-poppins font-semibold shrink-0 text-white">{currentUser}  </h2>
             <Button
               variant="ghost"
               size="icon"
@@ -758,85 +771,104 @@ useEffect(() => {
           currentFriend ? (
             <div className="flex-1 flex flex-col h-screen max-sm:w-full ">
                   {/* Chat Header */}
-                  <div
-                    className="p-4 max-sm:p-1 border-b border-accent   dark:bg-gray-900 dark:text-white flex justify-between items-center ">
-                    <div className="flex items-center">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={toggleMobileMenu}
-                        className="mr-2 sm:hidden bg-accent  text-[#050315]">
-                        <MenuIcon className="h-6 w-6 text-white" />
-                      </Button>
-                      {currentFriend && (
-                        <div className={'flex items-center justify-center  p-2  cursor-pointer '}   >
-                          <Avatar className="h-10 w-10">
-                            <AvatarImage
-                            className={'cursor-pointer'}
-                            onClick={()=>{setLopen(true);setModalType('img');setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`)}}
-                              src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`}
-                              alt={currentFriend.fname} />
-                            <AvatarFallback>{currentFriend.fname.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                          </Avatar>
-                          <Link href={`/profile/${currentFriend.id}`}  className="ml-1">
-                          <div className="info flex justify-center items-center  p-1">
-                          <h3 className="font-semibold text-sm shrink-0 ">{currentFriend.fname + ' ' +   currentFriend.lname}</h3>
-                          { currentFriend.verified == 1 && (<MdOutlineVerified size={15} style={{ color: '#0284c7' }} />)}
+                  <div className="p-4 max-sm:p-1 border-b border-accent  dark:bg-gray-900 dark:text-white flex justify-between items-center">
+                  <div className="flex items-center">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={toggleMobileMenu}
+                      className="sm:hidden text-[#050315] rounded-full p-2 bg-accent hover:bg-accent/80 dark:bg-transparent dark:hover:bg-accent/80 transition duration-200 focus:outline-none">
+                      <FaArrowLeft  className="h-6 w-6 text-white" />
+                    </Button>
+                  </div>
+                  {currentFriend && (
+                      <div className="flex items-center justify-center p-2 cursor-pointer space-x-3">
+                        <Avatar className="h-12 w-12 border-2 border-accent rounded-full hover:ring-2 hover:ring-accent/70 transition duration-200">
+                          <AvatarImage
+                            className="cursor-pointer"
+                            onClick={() => { setLopen(true); setModalType('img'); setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`); }}
+                            src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`}
+                            alt={currentFriend.fname}
+                          />
+                          <AvatarFallback>{currentFriend.fname.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                        </Avatar>
 
+                        <Link href={`/profile/${currentFriend.id}`} className="ml-1 space-y-1">
+                          <div className="info flex items-center space-x-2">
+                            <h3 className="font-semibold text-black  text-lg dark:text-white">{currentFriend.fname + ' ' + currentFriend.lname}</h3>
+                            {currentFriend.verified == 1 && <MdOutlineVerified size={18} className="text-blue-500" />}
                           </div>
-                            <div className="status grid grid-cols-2 max-sm:grid-cols-2 ">
-                              <p className="text-sm text-[#050315] dark:text-slate-400  ">@{currentFriend.username}-</p>
-                              <p className="text-sm text-[#050315] dark:text-slate-400">now</p>
-                            </div>
-                            </Link>
-                        </div >
-                      )}
-                    </div>
-                    <div className="grid grid-cols-1 max-sm:grid-cols-1 gap-1 items-center ">
-                          {
-                            currentFriend && (
-                              <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                  <Button  className="border bg-red-400 gap-1 border-red-400 text-white text-sm line-clamp-1 w-full flex items-center justify-center hover:bg-red-500 hover:dark:bg-red-600 transition duration-150">
-                                    Block
-                                    <MdBlock className="h-4 w-4 mr-2" />
-                                  </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent className="bg-white dark:bg-gray-800">
-                                  <AlertDialogHeader className="border-b border-gray-200 dark:border-gray-700">
-                                    <AlertDialogTitle className="text-lg font-semibold text-gray-900 dark:text-white">
-                                      Are You Sure You Want To Block This User?
-                                    </AlertDialogTitle>
-                                  </AlertDialogHeader>
-                                  <AlertDialogDescription className="text-sm text-gray-600 dark:text-gray-400">
-                                    Blocking this user will prevent them from sending you messages or seeing your online status. This action is permanent and cannot be undone.
-                                  </AlertDialogDescription>
-                                  <AlertDialogFooter className="flex items-center justify-end">
-                                    <AlertDialogCancel asChild>
-                                      <Button className="text-sm hover:bg-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition duration-150">
-                                        Close
-                                      </Button>
-                                    </AlertDialogCancel>
-                                    <AlertDialogAction asChild>
-                                      <Button onClick={()=>{blockFriend(currentFriend.uid,currentFriend.username)}} className="text-sm text-white bg-red-500 hover:bg-red-600 transition duration-150">
-                                        Continue
-                                      </Button>
-                                    </AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog> 
-                              
-                            )
-                          }
-                     
-                      {/* <Button
-                      onClick={()=>{setIsVideoCall(true)}}
-                        variant="outline"
-                        size="sm"
-                        className="bg-[#dedcff] text-[#050315] hover:bg-[#433bff] hover:tedark:bg-gray-900 dark:text-white">
-                          <VideoIcon className="h-4 w-4 mr-2" />
-                          Video Call
-                        </Button> */}
+                          <div className="status flex space-x-2">
+                            <p className="text-sm text-[#050315] dark:text-slate-400">@{currentFriend.username}</p>
+                            <p className="text-sm text-[#050315] dark:text-slate-400">now</p>
+                          </div>
+                        </Link>
+                      </div>
+                    )}
+                    <div className="flex items-center justify-between gap-3">
+                      
+                    {currentFriend && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="hover:rotate-90 text-accent dark:text-white transition-all">
+                        <EllipsisVertical />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-white font-poppins dark:bg-gray-800 text-gray-900 dark:text-gray-200 backdrop-blur-sm">
+                      <DropdownMenuItem className="flex p-2 justify-center items-center">
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <button className="hover:bg-transparent w-full text-gray-900 dark:text-gray-200 flex items-center justify-between bg-transparent transition duration-200">
+                              Block
+                              <RiDeleteBinLine size="15" />
+                            </button>
+                          </AlertDialogTrigger>
+
+                          <AlertDialogContent className="bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+                            <AlertDialogHeader className="border-b border-gray-200 dark:border-gray-700">
+                              <AlertDialogTitle className="text-lg font-semibold text-gray-900 dark:text-white">
+                                Are You Sure You Want To Block This User?
+                              </AlertDialogTitle>
+                            </AlertDialogHeader>
+
+                            <AlertDialogDescription className="text-sm text-gray-600 dark:text-gray-400">
+                              Blocking this user will prevent them from sending you messages or seeing your online status. This action is permanent and cannot be undone.
+                            </AlertDialogDescription>
+
+                            <AlertDialogFooter className="flex items-center justify-end">
+                              <AlertDialogCancel asChild>
+                                <Button className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition duration-150">
+                                  Close
+                                </Button>
+                              </AlertDialogCancel>
+
+                              <AlertDialogAction asChild>
+                                <Button
+                                  onClick={() => { blockFriend(currentFriend.uid, currentFriend.username); }}
+                                  className="text-sm text-white bg-red-600 hover:bg-red-700 transition duration-150 rounded-lg"
+                                >
+                                  Continue
+                                </Button>
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="flex p-2 justify-between items-center">
+                        <button className="hover:bg-transparent w-full text-gray-900 dark:text-gray-200 flex items-center justify-between bg-transparent transition duration-200">
+                          Report
+                          <Flag size="15" />
+                        </button>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="flex p-2 justify-between items-center">
+                        <button className="hover:bg-transparent w-full text-gray-900 dark:text-gray-200 flex items-center justify-between bg-transparent transition duration-200">
+                          Mute
+                        </button>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                    )}
+
                     </div>
                   </div>
 
@@ -890,8 +922,8 @@ useEffect(() => {
                        <motion.div
                          className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${
                            message.msgSenderUid === currentUserId
-                             ? 'bg-[#2f27ce] text-white rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'
-                             : 'bg-[#dedcff] text-text rounded-tl-lg rounded-br-lg rounded-tr-lg break-words'
+                             ? 'bg-[#2f27ce] text-white min-w-[40%] rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'
+                             : 'bg-[#dedcff] text-text min-w-[40%] rounded-tl-lg rounded-br-lg rounded-tr-lg break-words'
                          }`}
                        >
                         {message.chatFile != null &&
@@ -935,9 +967,9 @@ useEffect(() => {
 
                          {
                           message.replyTo != null && (
-                            <div className="flex flex-col justify-normal border border-secondary  p-2 rounded gap-2">
-                              <p className="text-xs text-gray-400">Replying to:</p>
-                              <p className="text-xs text-gray-400 font-poppins ">{message.replyTo}</p>
+                            <div className="flex flex-col justify-normal border-l  border-gray-300  p-3 rounded-sm gap-2 bg-gray-accent/80">
+                              <p className="text-xs text-gray-500 ">Replying to:</p>
+                              <p className="text-xs text-gray-300  font-poppins">{message.replyTo}</p>
                             </div>
                           )
                          }
