@@ -1,35 +1,36 @@
 'use client'
 import { useState } from 'react';
 
+
 export default function Page() {
   const [prompt, setPrompt] = useState('');
   const [response, setResponse] = useState('');
-  // Function to handle the API call
-  const generateContent = async () => {
-    const url = 'https://deep-translate1.p.rapidapi.com/language/translate/v2';
-    const options = {
-      method: 'POST',
-      headers: {
-        'x-rapidapi-key': '7929e5ae3bmsh79dc022a998f301p1b95d5jsne3a4d8401441',
-        'x-rapidapi-host': 'deep-translate1.p.rapidapi.com',
-        'Content-Type': 'application/json'
-      },
-      body: {
-        q: 'Hello, World!',
-        source: 'en',
-        target: 'ar'
-      }
-    };
+  // // Function to handle the API call
+  // const generateContent = async () => {
+  //   const url = 'https://deep-translate1.p.rapidapi.com/language/translate/v2';
+  //   const options = {
+  //     method: 'POST',
+  //     headers: {
+  //       'x-rapidapi-key': '7929e5ae3bmsh79dc022a998f301p1b95d5jsne3a4d8401441',
+  //       'x-rapidapi-host': 'deep-translate1.p.rapidapi.com',
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: {
+  //       q: 'Hello, World!',
+  //       source: 'en',
+  //       target: 'ar'
+  //     }
+  //   };
     
-    try {
-      const response = await fetch(url, options);
-      const result = await response.text();
-      console.log(result);
-      setResponse(result);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //   try {
+  //     const response = await fetch(url, options);
+  //     const result = await response.text();
+  //     console.log(result);
+  //     setResponse(result);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <div>

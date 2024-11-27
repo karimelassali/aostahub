@@ -472,6 +472,15 @@ useEffect(() => {
         
       {time}
       <motion.div
+      drag='x'
+      dragConstraints={{ left: 0, right: 0 }}
+      onDragEnd={(e)=>{
+        if(e.offsetX > 0){
+          nextProfile()
+        }else if(e.offsetX < 0){
+          prevProfile()
+        }
+      }}
         className="w-full lg:max-w-[80%]  black:border border-gray-800   h-full rounded-xl shadow-xl overflow-hidden flex flex-col"
       >
         <div className="relative border border-gray-800 h-48 sm:h-56 md:h-64 lg:h-72 xl:h-56">

@@ -6,8 +6,6 @@ import "@radix-ui/themes/styles.css";
 import { ThemeProvider } from "@/components/ui/theme-provider"
 
 import { Neobrutalism } from '@clerk/themes'
-import { Analytics } from "@vercel/analytics/react"
-
 
 
 
@@ -74,13 +72,15 @@ export default function RootLayout({ children }) {
           />
         </head>
         <body className="">
-        <Analytics/>
 
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
-        >
+            
+          >
+              
+
             {children}
              
           </ThemeProvider>
