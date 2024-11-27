@@ -476,9 +476,9 @@ useEffect(() => {
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={(e)=>{
         if(e.offsetX > 0){
-          nextProfile()
+          prevProfile
         }else if(e.offsetX < 0){
-          prevProfile()
+          nextProfile()
         }
       }}
         className="w-full lg:max-w-[80%]  black:border border-gray-800   h-full rounded-xl shadow-xl overflow-hidden flex flex-col"
