@@ -71,9 +71,9 @@ export default function Template({ children }) {
     return (
       <ClerkLoaded>
         <>
-         <nav className="bg-primary font-poppins fixed sm:top-0 sm:left-0 sm:w-full top-0 left-0 h-screen w-[250px] sm:h-auto transform transition-transform duration-300 ease-in-out" style={{zIndex:'999'}}  >
-      <div className="p-2 gap-2">
-        <div className="relative flex h-16 items-center justify-center">
+         <nav className="bg-primary font-poppins fixed top-0 left-0    w-full" style={{zIndex:'999'}}  >
+      <div className=" p-2 gap-2 ">
+        <div className="relative flex h-16 items-center justify-center ">
           {
             isClient && window.location.pathname != '/' && (
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -113,10 +113,10 @@ export default function Template({ children }) {
                   <Link href="/explore" className="rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
                   <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
                   <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link>
-                  <Link href="/rosta" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">
+                  {/* <Link href="/rosta" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">
                     <span className="relative">Rosta</span>
                     <Bot className="w-4 h-4" />
-                  </Link>
+                  </Link> */}
                   <Link href="/friends" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white  ">Friends  <FaUserFriends /></Link>
                             {
                               console.log(notificationss.length)
@@ -168,10 +168,10 @@ export default function Template({ children }) {
               <Link href="/explore" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
               <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
               <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link> 
-              <Link href="/rosta" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">
+              {/* <Link href="/rosta" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">
                 <span className="relative">Rosta</span>
                 <Bot className="w-4 h-4" />
-              </Link>
+              </Link> */}
               <Link href="/friends" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Friends <FaUserFriends /></Link> 
               <Link href="/account" className="rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Account <Settings2 /></Link>
 
