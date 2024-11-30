@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://aostahub.vercel.app/</loc>
-    <lastmod>2024-09-03</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2024-01-20</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aostahub.vercel.app/en"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://aostahub.vercel.app/fr"/>
   </url>
-  <!-- Add more URLs here -->
+  <url>
+    <loc>https://aostahub.vercel.app/about</loc>
+    <lastmod>2024-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aostahub.vercel.app/en/about"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://aostahub.vercel.app/fr/about"/>
+  </url>
+  <url>
+    <loc>https://aostahub.vercel.app/contact</loc>
+    <lastmod>2024-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aostahub.vercel.app/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://aostahub.vercel.app/fr/contact"/>
+  </url>
 </urlset>

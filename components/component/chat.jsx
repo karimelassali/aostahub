@@ -454,741 +454,127 @@ useEffect(() => {
     }
   };
 
-  
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingTimeout, setTypingTimeout] = useState(null);
+
+  const handleTyping = () => {
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+    
+    setIsTyping(true);
+    
+    const timeout = setTimeout(() => {
+      setIsTyping(false);
+    }, 1000); // Hide typing indicator after 1 second of no typing
+    
+    setTypingTimeout(timeout);
+  };
+
+  const handleMessageChange = (e) => {
+    setMessage(e.target.value);
+    handleTyping();
+  };
+
   return (
-    (
-      
-      <div className="flex h-screen w-full transition-all  dark:bg-gray-900 dark:text-white text-[#050315]">
-         
-        {
-          aiClicked && (
-            <div className='flex backdrop-blur-lg  text-black p-3  bg-black justify-center items-center  bg-opacity-45  w-full h-full  z-40 absolute '  >
-              
-             <div className='flex flex-col dark:bg-gray-900  gap-4  max-sm:min-w-[90%] max-lg:min-w-[70%] lg:max-w-[70%]  min-h-[50%] bg-white  rounded-lg p-4'>
-               <div className="flex p-2 justify-arround gap-1">
-               <h1 className='text-black flex w-full dark:text-white font-extrabold '><SiIrobot className='w-5 h-5 dark:text-white'  />OSTA </h1>
-                  <button className=' text-red-500   rounded relative top-0 ' onClick={() => { setAiClicked(false) }}>
-                  <span className='flex  w-full text-text'  >
-                    <IoClose className='h-6 w-6 hover:rotate-180 transition-all duration-300 dark:text-white '  />
-                  </span>
-                  </button>
-               </div>
-                <div className='flex flex-col justify-center w-full'>
-                  {/* <h3 className='text-white text-center'>
-                    AI Chat assistant 
-                  </h3> */}
-                  <div className="aiArea h-full gap-2  w-full flex flex-col ">
-                    <div className='gap-2 flex justify-center  '>
-                       <select className='rounded p-2 font-poppins bg-secondary  ' onChange={handleAiOption}>
-                        <option value="funny">funny</option>
-                        <option value="formal">formal</option>
-                        <option value="informal">informal</option>
-                        <option value="normal">normal</option>
-                      </select>
-                      <div className='flex bg-secondary  items-center gap-2  rounded text-black p-2 '  >
-                          <h4 className=''>Emoji</h4>
-                          <Switch checked={emojiChecked}   onCheckedChange={(e)=>{setEmojiChecked(e);console.log(e)}}  />
-                      </div>
-                    
-                    </div>
-                    <div className='aiResponse p-2 min-h-[150px] '>
-                           
-                        <div className='flex flex-col items-start gap-2 min-h-[150px] overflow-y-scroll scrolllbar-hide  ' >
-                            <div className='flex items-start gap-2 ' >
-                              <Image width={20} height={20} alt={'ai icon'} src='/ass/ai.png' / >
-                                <p  className="text-black max-h-[200px] dark:text-white overflow-scroll">
-                                  {aiOutpout ? (
-                                    aiOutpout !== '' && !aiLoading &&(
-                                  <span className='whitespace-pre-wrap font-poppins '  id="aiResponse" >{ aiOutpout}</span  >
-                                    ) 
-                              ) : (
-                                  !aiLoading && (
-                                    //p tag with font poppins
-                                    <p className='font-poppins'>
-                                      Hello {currentUser}, I’m your AI message assistant. How can I help you?
-                                    </p>
-
-                                ) 
-                                  
-                              )}
-                              {
-                                aiLoading && (
-                                  <img width={40} height={40} alt="AI icon" src="/ass/ai.gif" />
-
-                                )
-                              }
-                                </p>
-                            </div>
-                      </div>
-                      {
-                        aiOutpout && (
-                              <div className='flex justify-between  gap-2 max-sm:w-full max-lg:w-[50%] '  >
-                            <button onClick={() => {setMessage(aiOutpout),setAiClicked(false)}}  className='bg-green-500 w-[50%] p-2 rounded font-poppins text-white hover:bg-green-300 '  >Insert 👍</button>
-                                <button onClick={() => { handleAirequest(); setAiResponse(false)}}  className='bg-red-500 w-[50%] p-2 rounded font-poppins text-white hover:bg-red-300 '  >Regenerate 👎</button>
-                            </div>
-                        )
-                      }
-                    </div>  
-                    <div className='aiInput  flex flex-col relative bottom-0 rounded p-2 gap-4 w-full'>
-                            <input hidden id='aiFileInput' type="file" onChange={(e) => {
-                              const imgUrlPrompt = URL.createObjectURL(e.target.files[0]);
-                              if(imgUrlPrompt){}
-                              imgUrlPrompt ? setImgPrompt(imgUrlPrompt) : setImgPrompt('');
-                              const uniqueName = `${e.target.files[0].name.split('.').slice(0, -1).join('.')}-${Date.now()}.${e.target.files[0].name.split('.').pop()}`;
-                              
-                              const {data,error} = supabase.storage.from('aiFiles').upload(uniqueName,e.target.files[0]);
-                              if(!error){
-                                setImgPromptSrc(uniqueName);
-                                imgPromptSrc && console.log(imgPromptSrc);
-                              console.log(uniqueName);
-                              }
-                              // data && setFileInput(true)
-                            }} />
-                      {
-                        imgPrompt && (
-                           <div className='flex items-center gap-2 w-full max-h-[30%] '>
-                              <Image width={40} height={40} alt="AI icon" src={imgPrompt} />
-                            </div>
-                        )
-                      }
-                     
-                        <div className='aiInput border  flex  relative bottom-0 rounded p-2 gap-4 w-full'>
-                          <input onKeyDown={(e)=>{
-                        if(e.key === 'Enter'){
-                            handleAirequest()
-                        }
-                      }}
-                        type='text' value={aiPrompt} placeholder={`How i can help you today ${currentUser} ?`} className='p-2 rounded border-none outline-none w-full flex dark:bg-gray-600 dark:text-white items-center font-poppins  ' onChange={(e) => setAiPrompt(e.target.value)} />
-                        <button className='rounded ' onClick={()=>{
-                          // setFileInput(true)
-                        }}  >
-                          <div onClick={()=>{
-                            document.getElementById('aiFileInput').click()
-                          }} className='flex gap-2  p-2 '>
-                            <MdAttachFile className="h-5 w-5 text-purple-600 " />
-                          </div>
-                        </button>
-                        <button className='rounded ' onClick={()=>{
-                          handleAirequest()
-                      }}  >
-                        {
-                          aiResponse ? (
-                            <span className='p-1 rounded bg-secondary text-white w-[15%]  font-poppins '  >{aiTimer}</span>
-                          ) : (
-                            <div className='flex gap-2  '>
-                                 <Image width={40} height={40} alt={'ai icon'}  src='/ass/ai.png' / >
-                            </div>
-                            
-                          )
-                        }
-                        </button>
-                        </div>
-                      
-                        
-                    </div>
-                  </div>
+    <main aria-label="Chat Interface" className="flex flex-col h-screen bg-background">
+      <header className="border-b p-4" role="banner">
+        <nav className="flex items-center justify-between" aria-label="Chat navigation">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
+          >
+            <MenuIcon className="h-6 w-6" />
+          </Button>
+          <div className="flex items-center gap-2">
+            {currentFriend && (
+              <div className="flex items-center">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={currentFriend.avatar_url} alt={`${currentFriend.full_name}'s avatar`} />
+                  <AvatarFallback>{currentFriend.full_name?.[0]}</AvatarFallback>
+                </Avatar>
+                <div className="ml-2">
+                  <h1 className="text-sm font-semibold">{currentFriend.full_name}</h1>
+                  <p className="text-xs text-muted-foreground">{currentFriend.status}</p>
                 </div>
               </div>
-
-              </div>
-          )
-        }
-       
-       {
-        lopen && (
-          <ShowModal fileType={modalType} onClose={handleClose}  src={file}  />
-        )
-       }
-       {
-        isVideoCall && (
-          <VideoCall onCloseCall={handleStopCall}  />
-        )
-       }
-      {/* Potential Friends List */}
-      <AnimatePresence>
-      <Toaster richColors />
-        <motion.div
-          initial={false}
-          animate={{ x: 0, opacity: 1  }}
-          exit="closed"
-          variants={menuVariants}
-          onClick={toggleMobileMenu}
-          className={`w-full sm:w-1/3  bg-white   lg:w-1/4 xl:w-1/5 dark:bg-gray-900 dark:text-white border-r border-[#dedcff] fixed sm:relative inset-0 transition-all z-30 ${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
-          <div
-            className="p-4  flex justify-start gap-2   items-center bg-accent tedark:bg-gray-900 dark:text-white">
-              <Avatar className="h-8 w-8 ">
-                    <AvatarImage src={userProfile} alt="You" />
-                    <AvatarFallback>You</AvatarFallback>
-              </Avatar>
-            <h2 className="lg:text-xl flex items-center font-poppins font-semibold shrink-0 text-white">{currentUser}  </h2>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleMobileMenu}
-              className="sm:hidden dark:bg-gray-900  text-accent dark:text-white">
-              <XIcon className="h-6 w-6" />
-            </Button>
+            )}
           </div>
-          <div className="p-4 space-y-4">
-            {/* <div className="relative">
-              <SearchIcon
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#050315]" />
-              {/* <Input
-                onChange={(e)=>{
-                  setUserSearch(e.target.value);
-                  search();
-                }}
-                type="text"
-                placeholder="Search friends..."
-                className="pl-10 border-[#dedcff] text-[#050315]" /> 
-             </div> */} 
-            <Tabs defaultValue="all" onValueChange={setFriendFilter}>
-              <TabsList className="grid w-full grid-cols-3 bg-primary text-white dark:bg-gray-800">
-                <TabsTrigger
-                  value="all"
-                  className="data-[state=active]:bg-secondary data-[state=active]:text-black dark:data-[state=active]:bg-gray-700">All</TabsTrigger>
-                <TabsTrigger
-                  value="online"
-                  className="data-[state=active]:bg-secondary data-[state=active]:text-black dark:data-[state=active]:bg-gray-700">Online</TabsTrigger>
-                <TabsTrigger
-                  value="favorites"
-                  className="data-[state=active]:bg-secondary data-[state=active]:text-black dark:data-[state=active]:bg-gray-700">Favorites</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-            <ScrollArea className="h-[calc(100vh-13rem)] px-2">
-            {filteredFriends.map((friend) => (
-              <motion.div
-                key={friend.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="mb-4"
-              >
-                <Link href={`/chat/${friend.frienduid}`} className="block border-b border-gray-700 pt-3 pb-3">
-                  <Card className="p-1 border-none hover:shadow-lg transition-shadow group">
-                    <div className="flex items-center space-x-4">
-                      <div className="relative">
-                        <Avatar className="h-10 w-10 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
-                          <AvatarImage 
-                            src={friend.friendProfile} 
-                            alt={friend.friendName} 
-                            className="object-cover"
-                          />
-                          <AvatarFallback className="bg-primary/10">
-                            {friend.friendName.charAt(0)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div 
-                          className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
-                            friend.status === 'online' 
-                              ? 'bg-green-500' 
-                              : 'bg-gray-300'
-                          }`} 
-                        />
-                      </div>
+        </nav>
+      </header>
 
-                      <div className="flex-grow">
-                        <div className="flex items-center gap-2">
-                          <h3 className="text-lg font-bold flex items-center">
-                            {friend.friendName}
-                            {friend.friendVerification == 1 && (
-                              <MdOutlineVerified 
-                                size={16} 
-                                className="ml-1 text-blue-500" 
-                              />
-                            )}
-                          </h3>
-                          {/* <span className="text-sm text-gray-500">{friend.friendAge}</span> */}
-                        </div>
-                        {/* <p className="text-sm text-gray-500 flex items-center">
-                          <MapPinIcon className="h-4 w-4 mr-1 text-primary/70" /> 
-                          {friend.friendLocation}
-                        </p> */}
-                        {/* Last Message Section */}
-                        <div className=" flex items-center  p-1 rounded-lg">
-                          {/* <MessageCircleIcon className="h-5 w-5 text-primary/70" /> */}
-                          <div className="flex-grow">
-                            <p className="text-sm text-gray-700 truncate max-w-[300px]">
-                              {friend.lastMessage || "No messages yet"}
-                            </p>
-                          </div>
-                          {friend.unreadCount > 0 && (
-                            <span className="bg-primary text-white text-xs rounded-full px-2 py-0.5">
-                              {friend.unreadCount}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Interests Section */}
-                    {/* <div className="mt-3 flex flex-wrap gap-2">
-                      {friend.friendInterests
-                        .split(/[,.:&;\s]|and/)
-                        .filter(Boolean)
-                        .slice(0, 4)
-                        .map((interest, index) => (
-                          <Badge 
-                            key={index} 
-                            variant="outline" 
-                            className="bg-primary/5 text-primary hover:bg-primary/10 transition-colors"
-                          >
-                            {interest}
-                          </Badge>
-                        ))
-                      }
-                      {friend.friendInterests.split(/[,.:&;\s]|and/).filter(Boolean).length > 4 && (
-                        <Badge variant="secondary">
-                          +{friend.friendInterests.split(/[,.:&;\s]|and/).filter(Boolean).length - 4}
-                        </Badge>
-                      )}
-                    </div> */}
-
-                    
-                  </Card>
-                </Link>
-              </motion.div>
-            ))}
-            </ScrollArea>
-        </motion.div>
-      </AnimatePresence>
-      {/* Chat Window */}
-      {
-        pType === 'mainPage'   ? (
-          <div className='w-full h-full flex flex-col items-center justify-center  ' >
-            <div className=' flex font-poppins flex-col items-center  gap-y-5 justify-center p-2 rounded' >
-              <Image src='/ullis/boring.svg' width={200} height={200} alt="Chat Icon" />
-              <h1>Welcome to the Chat App!</h1>
-              <p className='text-center' >Please select a friend from the left side to start a conversation.</p>
-              <Button className='text-white' onClick={e=>{setIsMobileMenuOpen(true)}} >
-                Pick a friend !
-              </Button>
-            </div>
-          </div>
-        )  : null }
-        {
-          currentFriend ? (
-            <div className="flex-1 flex flex-col h-screen max-sm:w-full ">
-                  {/* Chat Header */}
-                  <div className="p-4 max-sm:p-1 border-b border-accent  dark:bg-gray-900 dark:text-white flex justify-between items-center">
-                  <div className="flex items-center">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={toggleMobileMenu}
-                      className="sm:hidden text-[#050315] rounded-full p-2 bg-accent hover:bg-accent/80 dark:bg-transparent dark:hover:bg-accent/80 transition duration-200 focus:outline-none">
-                      <FaArrowLeft  className="h-6 w-6 text-white" />
-                    </Button>
-                  </div>
-                  {currentFriend && (
-                      <div className="flex items-center justify-center p-2 cursor-pointer space-x-3">
-                        <Avatar className="h-12 w-12 border-2 border-accent rounded-full hover:ring-2 hover:ring-accent/70 transition duration-200">
-                          <AvatarImage
-                            className="cursor-pointer"
-                            onClick={() => { setLopen(true); setModalType('img'); setFile(`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`); }}
-                            src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`}
-                            alt={currentFriend.fname}
-                          />
-                          <AvatarFallback>{currentFriend.fname.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                        </Avatar>
-
-                        <Link href={`/profile/${currentFriend.id}`} className="ml-1 space-y-1">
-                          <div className="info flex items-center space-x-2">
-                            <h3 className="font-semibold text-black  text-lg dark:text-white">{currentFriend.fname + ' ' + currentFriend.lname}</h3>
-                            {currentFriend.verified == 1 && <MdOutlineVerified size={18} className="text-blue-500" />}
-                          </div>
-                          <div className="status flex space-x-2">
-                            <p className="text-sm text-[#050315] dark:text-slate-400">@{currentFriend.username}</p>
-                            <p className="text-sm text-[#050315] dark:text-slate-400">now</p>
-                          </div>
-                        </Link>
-                      </div>
-                    )}
-                    <div className="flex items-center justify-between gap-3">
-                      
-                    {currentFriend && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button className="hover:rotate-90 text-accent dark:text-white transition-all">
-                        <EllipsisVertical />
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-white font-poppins dark:bg-gray-800 text-gray-900 dark:text-gray-200 backdrop-blur-sm">
-                      <DropdownMenuItem className="flex p-2 justify-center items-center">
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <button className="hover:bg-transparent w-full text-gray-900 dark:text-gray-200 flex items-center justify-between bg-transparent transition duration-200">
-                              Block
-                              <RiDeleteBinLine size="15" />
-                            </button>
-                          </AlertDialogTrigger>
-
-                          <AlertDialogContent className="bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-                            <AlertDialogHeader className="border-b border-gray-200 dark:border-gray-700">
-                              <AlertDialogTitle className="text-lg font-semibold text-gray-900 dark:text-white">
-                                Are You Sure You Want To Block This User?
-                              </AlertDialogTitle>
-                            </AlertDialogHeader>
-
-                            <AlertDialogDescription className="text-sm text-gray-600 dark:text-gray-400">
-                              Blocking this user will prevent them from sending you messages or seeing your online status. This action is permanent and cannot be undone.
-                            </AlertDialogDescription>
-
-                            <AlertDialogFooter className="flex items-center justify-end">
-                              <AlertDialogCancel asChild>
-                                <Button className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition duration-150">
-                                  Close
-                                </Button>
-                              </AlertDialogCancel>
-
-                              <AlertDialogAction asChild>
-                                <Button
-                                  onClick={() => { blockFriend(currentFriend.uid, currentFriend.username); }}
-                                  className="text-sm text-white bg-red-600 hover:bg-red-700 transition duration-150 rounded-lg"
-                                >
-                                  Continue
-                                </Button>
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="flex p-2 justify-between items-center">
-                        <button className="hover:bg-transparent w-full text-gray-900 dark:text-gray-200 flex items-center justify-between bg-transparent transition duration-200">
-                          Report
-                          <Flag size="15" />
-                        </button>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="flex p-2 justify-between items-center">
-                        <button className="hover:bg-transparent w-full text-gray-900 dark:text-gray-200 flex items-center justify-between bg-transparent transition duration-200">
-                          Mute
-                        </button>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                    )}
-
-                    </div>
-                  </div>
-
-                  {/* Messages */}
+      <ScrollArea className="flex-1 p-4" ref={messagesEndRef}>
+        <section aria-label="Chat messages" className="space-y-4">
+          {messages.map((message, index) => (
+            <article
+              key={message.id}
+              className={`flex ${message.msgSenderUid === currentUserId ? 'justify-end' : 'justify-start'}`}
+            >
+              <div className="flex flex-col max-w-[70%]">
+                <div className={`flex items-start gap-2 ${message.msgSenderUid === currentUserId ? 'flex-row-reverse' : ''}`}>
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage 
+                      src={message.msgSenderUid === currentUserId ? me.avatar_url : currentFriend?.avatar_url} 
+                      alt={`${message.msgSenderUid === currentUserId ? 'Your' : currentFriend?.full_name + "'s"} avatar`}
+                    />
+                    <AvatarFallback>
+                      {message.msgSenderUid === currentUserId ? me.full_name?.[0] : currentFriend?.full_name?.[0]}
+                    </AvatarFallback>
+                  </Avatar>
                   <div
-                    ref={chatContainerRef}
-                    className="flex-1 overflow-y-auto p-4  ">
-                      <div id='firstMessageDiv'  ></div>
-                      {
-                        messages.length == 0 && (
-                          <div className="flex items-center justify-center h-full">
-                            <div className="flex flex-col items-center">
-                              <Image width={100} height={100} src="/ullis/waiting.svg" alt="Empty" className="w-64 h-64 mb-4" />
-                              <h2 className="text-2xl font-semibold mb-2">No Messages</h2>
-                              <p className="text-gray-600 dark:text-gray-400">You have no messages yet.</p>
-                            </div>
-                          </div>
-                        )
-                      }
-                      {messages.map((message) => (
-                       <motion.div
-                       drag={'x'}
-                       dragConstraints={{ left: 0, right: 5 }}
-                       key={message.id}
-                       initial={{ opacity: 0, y: 20 }}
-                       animate={{ opacity: 1, y: 0 }}
-                       transition={{ duration: 0.3 }}
-                       onDragEnd={(e) => {
-                         // Find the closest motion div with the correct class
-                         const messageDiv = e.target.closest('.motion-div-class'); // Use the class assigned to this motion.div
-                         const messageToReply = messageDiv?.querySelector('#theMessage')?.innerText;
-                     
-                         console.log(messageToReply); // Logs the correct message text
-                         setReplyToMessage(messageToReply); // Set the state with the dragged message's text
-                       }}
-                       className={`motion-div-class flex items-end mb-4 ${
-                         message.msgSenderUid === currentUserId ? 'justify-end' : 'justify-start'
-                       }`}
-                     >
-                       {message.msgSenderUid !== currentUserId && (
-                         <Avatar className="h-8 w-8 mr-2">
-                           <AvatarImage
-                             src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/imgs/${currentFriend.imgName}`}
-                             alt={message.msgSender}
-                           />
-                           <AvatarFallback>
-                             {message.msgSender.split(' ').map((n) => n[0]).join('')}
-                           </AvatarFallback>
-                         </Avatar>
-                       )}
-                       <motion.div
-                         className={`rounded-3xl p-3 max-w-[80%] lg:max-w-md ${
-                           message.msgSenderUid === currentUserId
-                             ? 'bg-[#2f27ce] text-white min-w-[40%] rounded-tl-lg rounded-bl-lg rounded-tr-lg break-words'
-                             : 'bg-[#dedcff] text-text min-w-[40%] rounded-tl-lg rounded-br-lg rounded-tr-lg break-words'
-                         }`}
-                       >
-                        {message.chatFile != null &&
-                          imgsExtensions.some((ext) => message.chatFile.endsWith(ext)) && (
-                            <Image
-                              key={`${message.chatFile}-${message.id}`}  // Combine chatFile and message.id for a unique key
-                              className="cursor-pointer pb-4 rounded max-h-[250px] min-h-[200px] object-cover"
-                              width={200}
-                              height={200}
-                              src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}
-                              alt={`${message.message}`}
-                              onClick={() => {
-                                setLopen(true);
-                                setFile(
-                                  `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`
-                                );
-                                setModalType('img');
-                              }}
-                            />
-                        )}
-
-                        {message.chatFile != null && message.chatFile.endsWith('.mp4') && (
-                          <MediaThemeYt>
-                            <video
-                              key={`${message.chatFile}-${message.id}`}  // Combine chatFile and message.id for a unique key
-                              playsInline
-                              slot="media"
-                              crossOrigin
-                              onClick={() => {
-                                setLopen(true);
-                                setFile(
-                                  `https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`
-                                );
-                                setModalType('video');
-                              }}
-                              className="object-cover pb-4 w-full h-24 max-h-[250px] min-h-[200px] rounded-md"
-                              src={`https://giyrlrcehqsypefjoayv.supabase.co/storage/v1/object/public/images/chatFiles/${message.chatFile}`}
-                            />
-                          </MediaThemeYt>
-                        )}
-
-                         {
-                          message.replyTo != null && (
-                            <div className="flex flex-col justify-normal border-l  border-gray-300  p-3 rounded-sm gap-2 bg-gray-accent/80">
-                              <p className="text-xs text-gray-500 ">Replying to:</p>
-                              <p className="text-xs text-gray-300  font-poppins">{message.replyTo}</p>
-                            </div>
-                          )
-                         }
-                         <p
-                           id="theMessage"
-                           className="whitespace-pre-wrap max-w-full pt-4 font-medium font-poopins"
-                         >
-                           {message.message}
-                         </p>
-                         <p
-                           className={`text-xs  mt-1 ${
-                             message.msgSenderUid === currentUserId
-                               ? 'text-gray-300 text-sm'
-                               : 'text-sm text-slate-700'
-                           }`}
-                         >
-                           {message.time}
-                         </p>
-                         {message.msgSenderUid === currentUserId && (
-                           <button
-                             onClick={() => {
-                               deleteMessage(message.id);
-                             }}
-                             className="float-right text-white bg-red-400 rounded flex justify-center items-center mt-2 w-7 p-1 hover:bg-red-600"
-                           >
-                             <RiDeleteBinLine className="h-5 w-5" />
-                           </button>
-                         )}
-                       </motion.div>
-                       {message.msgSenderUid !== currentUserId && message.message && (
-                         <Image
-                           width={20}
-                           height={20}
-                           alt="ai icon"
-                           className="relative bottom-10 cursor-pointer"
-                           src="/ass/ai.png"
-                           onClick={() => {
-                             setAiClicked(true);
-                             setAiPrompt(`Help me to write a reply for this message: ${message.message}`);
-                           }}
-                         />
-                       )}
-                     </motion.div>
-                     
-                      ))}
-                    <div ref={messagesEndRef} />
+                    className={`rounded-lg p-3 ${
+                      message.msgSenderUid === currentUserId
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted'
+                    }`}
+                  >
+                    <p className="text-sm">{message.message}</p>
+                    <time className="text-xs opacity-70">
+                      {new Date(message.time).toLocaleTimeString()}
+                    </time>
                   </div>
-                  {/* Message Input */}
-                  <form
-                    onSubmit={(e)=>{e.preventDefault();sendMessage();setAiClicked(false)}} 
-                    className="p-4 sticky  bottom-0   dark:bg-gray-900 dark:text-white ">
-                     
-                     
-                      {
-                        msgStatu && (
-                          <div className='w-full bg-red-500  p-2'  >
-                              Sending...
-                          </div>
-                        )
-                      }
-                      {
-                        chatFile &&  (
-                          <div className='flex gap-2 p-3 items-center'>
-                            <Image key={chatFile} src={chatFile} width={40} height={40} alt='img' className='w-20 h-20 rounded'  />
-                          </div>
-                        )
-                      }
-                      {/* <div className='w-full border border-red-400 p-2' >
-                        <Image src={'/ass/logo.png'} width={40} height={40} alt='tst'  />
-                      </div> */}
-                      {
-                        replyToMessage && (
-                          <div className='flex flex-col gap-2 p-3 border-t justify-center'>
-                            <div className='flex justify-between items-center' >
-                            <p>Replying to:</p>
-                            <IoClose onClick={()=>{setReplyToMessage(null)}} className='h-6 w-6 hover:rotate-180 transition-all duration-300 dark:text-secondary hover:text-red-400 '  />
-                            </div>
-                            <p className='font-bold  p-1 line-clamp-1'>{replyToMessage}</p>
-                          </div>
-                        )
-                      }
-                    <div className="flex gap-2 border-b border-accent p-1  rounded  items-center">
-                    <input onChange={(e)=>{
-                      const img = e.target.files[0];
-                      const imgUrl = URL.createObjectURL(img);
-                      if(img && img.type.startsWith('image/')) {
-                        setchatFileFile(img); 
-                        setchatFileName(img.name);
-                        setchatFile(imgUrl);
-                      }
-                      else if(!img.type.startsWith('image/')) {
-                        toast({ statusCode: 500, error: 'Server Error', message: 'Something went wrong' });
-                      }
-                    }} id='msgImg' type="file" hidden />
-                    <div className='flex justify-between items-center '  >
-                       <div className='flex justify-center  p-2 text-accent ' style={{
-                        
-                        transform : 'scale(1.5)',
-                       }} >
-                        {/* <ArrowBigDown  onClick={()=>{scrollToBottom()}}  className='w-5 h-5 border border-accent  rounded  cursor-pointer  ' size={100} /> */}
-                      </div>
-                    <Button
-                        onClick={()=>{
-                          document.getElementById('msgImg').click();
-                        }}
-                        type="button"
-                        size="icon"
-                        className="ml-2  bg-white text-accent  hover:text-white ">
-                        <MdAttachFile className="h-5 w-5" />
-                        <span className="sr-only">Send image</span>
-                      </Button>
-                      </div>
-                      <Input
-                        type="text"
-                        placeholder="Type a message..."
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        className="flex-1 border-none text-md dark:text-black focus:outline-none outline-none  " />
-                        <div className='flex p-1 p-x-3 gap-2 '  >
-                         {/* <div className='flex p-2 justify-center text-accent ' style={{
-                          transform: 'scale(1.5)',
-                         }} >
-                        <ArrowBigLeftIcon onClick={()=>{firstMessage()}}  className='w-5 h-5 rotate-90 border border-accent  cursor-pointer  rounded  ' size={100}  />
-                      </div> */}
-                       <motion.button 
-                      initial={{
-                        opacity: 0,
-                        x: -200
-                      }}
-                      animate={{
-                        opacity: 1,
-                        x: 0
-                      }}
-                      transition={{
-                        delay: 1.5,
-                      }}
-                      onClick={() => {
-                        setAiClicked(true);
-                      }}
-                      type='button'
-                       >
-                         <Image width={40} height={40} alt={'ai icon'} src='/ass/ai.png' / >
-                      </motion.button>
-                      <Button
-                        type="submit"
-                        size="icon"
-                        className=" bg-[#2f27ce] tedark:bg-gray-900 dark:text-white hover:bg-[#433bff]">
-                        <SendIcon className="h-5 w-5 text-white" />
-                        <span className="sr-only">Send message</span>
-                      </Button>
-                      </div>
-                    </div>
-                  </form>
                 </div>
-          ) : (
-            <>
-              {/* {
-                type != 'mainPage' && (
-                  <div className='flex p-2 rounded ' >
-                    <h4 className='text-center text-red-400 h-min p-1 border border-red-400 rounded font-poppins ' >No Chat Avaialabel with this id</h4>
-                    {
-                      setTimeout(()=>{
-                        router.push('/chat');
-                      },2000)
-                    }
-                </div>
-                )
-              } */}
-            </>
-          )
-      }
-      
-      
-      {/* Friend Suggestion Overlay */}
-      <AnimatePresence>
-        {/* {showSuggestion && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.5 }}
-            className="fixed bottom-4 right-4 dark:bg-gray-500 dark:text-white p-4 rounded-lg shadow-lg border border-[#dedcff]">
-            <div className="flex justify-between items-start mb-2">
-              <h4 className="font-semibold text-[#050315]">New Friend Suggestion</h4>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowSuggestion(false)}
-                className="text-[#050315]">
-                <XIcon className="h-4 w-4" />
-              </Button>
-            </div>
-            <div className="flex items-center">
-              <Avatar className="h-12 w-12">
-                <AvatarImage src="https://api.dicebear.com/6.x/micah/svg?seed=Elena" alt="Elena" />
-                <AvatarFallback>E</AvatarFallback>
-              </Avatar>
-              <div className="ml-4">
-                <p className="font-medium text-[#050315]">Elena, 27</p>
-                <p className="text-sm text-[#050315]">Loves hiking and local cuisine</p>
               </div>
+            </article>
+          ))}
+          {isTyping && currentFriend && (
+            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <Avatar className="h-8 w-8">
+                <AvatarImage 
+                  src={currentFriend.avatar_url} 
+                  alt={`${currentFriend.full_name}'s avatar`}
+                />
+                <AvatarFallback>{currentFriend.full_name?.[0]}</AvatarFallback>
+              </Avatar>
+              <span>{currentFriend.full_name} is typing...</span>
             </div>
-            <div className="mt-4 flex justify-end space-x-2">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setShowSuggestion(false)}
-                className="border-[#dedcff] text-[#050315] hover:bg-[#dedcff]">
-                Skip
-              </Button>
-              <Button size="sm" className="bg-[#2f27ce] tedark:bg-gray-900 dark:text-white hover:bg-[#433bff]">
-                <HeartIcon className="h-4 w-4 mr-2" />
-                Connect
-              </Button>
-            </div>
-          </motion.div>
-        )} */}
-      </AnimatePresence>
-    </div>
+          )}
+        </section>
+      </ScrollArea>
+
+      <footer className="border-t p-4" role="contentinfo">
+        <form onSubmit={(e)=>{e.preventDefault();sendMessage();setAiClicked(false)}} className="flex gap-2">
+          <Input
+            type="text"
+            placeholder="Type a message..."
+            value={message}
+            onChange={handleMessageChange}
+            aria-label="Message input"
+            className="flex-1"
+          />
+          <Button 
+            type="submit" 
+            size="icon"
+            aria-label="Send message"
+            disabled={!message.trim()}
+          >
+            <SendIcon className="h-4 w-4" />
+          </Button>
+        </form>
+      </footer>
+    </main>
   )
-  );
 }

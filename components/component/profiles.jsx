@@ -456,11 +456,12 @@ useEffect(() => {
    
 
   }, [])
+
   const bottom = () => {
       const bottomDiv = document.getElementById('bottom');
       if (bottomDiv) {
         bottomDiv.scrollIntoView({ behavior: 'smooth' });
-      }
+      }  
     }
     // bottom();
 
