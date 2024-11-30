@@ -71,9 +71,9 @@ export default function Template({ children }) {
     return (
       <ClerkLoaded>
         <>
-         <nav className="bg-primary font-poppins fixed top-0 left-0    w-full" style={{zIndex:'999'}}  >
-      <div className=" p-2 gap-2 ">
-        <div className="relative flex h-16 items-center justify-center ">
+         <nav className={`bg-primary font-poppins fixed ${isClient && window.location.pathname !== '/' ? 'sm:top-0 sm:left-0 sm:w-full top-0 left-0 h-full w-[250px] transform transition-transform duration-300 ease-in-out' : 'top-0 left-0 w-full'} ${isOpen ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}`} style={{zIndex:'999'}}  >
+      <div className="p-2 gap-2">
+        <div className={`relative flex ${isClient && window.location.pathname !== '/' ? 'sm:h-16 h-screen sm:flex-row flex-col' : 'h-16'} items-center justify-center`}>
           {
             isClient && window.location.pathname != '/' && (
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
