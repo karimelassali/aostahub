@@ -62,6 +62,7 @@ export default  function Chat({type,msgsId}) {
   
   const [lopen,setLopen] = useState(false);
   const [file,setFile] = useState('');
+  //this test
 
   const [chatFile,setchatFile] = useState(null);
   const [chatFileName,setchatFileName] = useState(null);
@@ -250,12 +251,14 @@ useEffect(() => {
     }
   }
    //search function 
-   async function search(){
-    const {data,error} = await supabase
-    .from('friends')
-    .select('*')
-    .textSearch('userName',userSearch)
-  }
+  //  async function search(){
+  //   const {data,error} = await supabase
+  //   .from('friends')
+  //   .select('*')
+  //   .textSearch('userName',userSearch)
+  // }
+  
+
     //--------------
 
   useEffect(() => {
@@ -453,7 +456,8 @@ useEffect(() => {
       toast.success("Message deleted");
     }
   };
-
+//Add a chat to the database
+  
   
   return (
     (
@@ -462,7 +466,7 @@ useEffect(() => {
          
         {
           aiClicked && (
-            <div className='flex backdrop-blur-lg  text-black p-3  bg-black justify-center items-center  bg-opacity-45  w-full h-full  z-40 absolute '  >
+            <div className='flex backdrop-blur-lg  text-black p-2  bg-black justify-center items-center  bg-opacity-45  w-full h-full  z-40 absolute '  >
               
              <div className='flex flex-col dark:bg-gray-900  gap-4  max-sm:min-w-[90%] max-lg:min-w-[70%] lg:max-w-[70%]  min-h-[50%] bg-white  rounded-lg p-4'>
                <div className="flex p-2 justify-arround gap-1">

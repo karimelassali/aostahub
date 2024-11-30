@@ -22,6 +22,7 @@ import { createClient } from "../utils/supabase/client";
 import { useUser } from '@clerk/nextjs';
 import NotificationModalInfo from '../components/notification-modal';
 import { ThemeProvider } from "@/components/ui/theme-provider"
+import { Bot } from 'lucide-react';
 
 export default function Template({ children }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -112,7 +113,11 @@ export default function Template({ children }) {
                   <Link href="/explore" className="rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
                   <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
                   <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link>
-                            <Link href="/friends" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white  ">Friends  <FaUserFriends /></Link>
+                  <Link href="/rosta" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">
+                    <span className="relative">Rosta</span>
+                    <Bot className="w-4 h-4" />
+                  </Link>
+                  <Link href="/friends" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white  ">Friends  <FaUserFriends /></Link>
                             {
                               console.log(notificationss.length)
                             }
@@ -163,6 +168,10 @@ export default function Template({ children }) {
               <Link href="/explore" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Home <IoMdHome /></Link>
               <Link href="/create" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Create <IoIosCreate /></Link>
               <Link href="/chat" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Chat <IoChatbox /></Link> 
+              <Link href="/rosta" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">
+                <span className="relative">Rosta</span>
+                <Bot className="w-4 h-4" />
+              </Link>
               <Link href="/friends" className="rounded-md flex gap-1  items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Friends <FaUserFriends /></Link> 
               <Link href="/account" className="rounded-md flex gap-1 items-center px-3 py-2 text-sm font-medium text-gray-300 hover:bg-accent hover:text-white">Account <Settings2 /></Link>
 
@@ -197,4 +206,3 @@ export default function Template({ children }) {
         </ClerkLoaded>
     );
 }
-  
