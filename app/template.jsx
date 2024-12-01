@@ -192,14 +192,31 @@ export default function Template({ children }) {
             {
               children
             }
-             </ThemeProvider>
-
+             <footer className="mt-auto py-4 bg-background border-t">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
+          <div className="mb-4 sm:mb-0">
+            <p className="text-sm text-muted-foreground"> 2024 AostaHub. All rights reserved.</p>
+          </div>
+          <div className="flex gap-6">
+            <Link href="/privacy-policy" className="text-sm text-muted-foreground hover:text-foreground">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground">
+              Terms of Service
+            </Link>
+            <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground">
+              Contact Us
+            </Link>
+          </div>
+        </div>
+      </footer>
             {
               notificationss.length > 0  && notificationss[0] && (
                 <NotificationModalInfo notificationText={notificationss[0].type} receiver={currentUserUid} />
               )
             }
 
+          </ThemeProvider>
           </div>
 
         </>
