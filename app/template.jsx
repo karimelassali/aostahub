@@ -196,5 +196,6 @@ export default function Template({ children }) {
         </>
         </ClerkLoaded>
     );
+    
 }
   
